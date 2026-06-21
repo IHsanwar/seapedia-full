@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { Badge } from './ui/badge';
-import { ShoppingBag, Menu, X } from 'lucide-react';
+import { ShoppingBag, Menu, X, ShoppingCart } from 'lucide-react';
 export default function Navbar() {
   const { user, isAuthenticated, activeRole } = useAuth();
   const navigate = useNavigate();
@@ -42,6 +42,11 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           {isAuthenticated ? (
             <div className="flex items-center gap-3">
+              {activeRole === 'buyer' && (
+                <Link to="/buyer/cart" className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground relative transition-colors mr-1" aria-label="View Cart">
+                  <ShoppingCart className="h-5 w-5" />
+                </Link>
+              )}
               {activeRole && activeRole !== 'none' && (
                 <Badge variant="secondary" className="hidden sm:inline-flex capitalize">
                   {activeRole}

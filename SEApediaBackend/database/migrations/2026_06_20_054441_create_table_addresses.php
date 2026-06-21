@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('postal_code');
             $table->string('province');
             $table->boolean('is_default')->default(false);
-            $table-text('notes')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

@@ -27,6 +27,11 @@ import StoreFormPage from '../pages/seller/StoreFormPage';
 import ProductFormPage from '../pages/seller/ProductFormPage';
 import ProductManagementPage from '../pages/seller/ProductManagementPage';
 
+// Pages - Buyer
+import WalletPage from '../pages/buyer/WalletPage';
+import AddressPage from '../pages/buyer/AddressPage';
+import CartPage from '../pages/buyer/CartPage';
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -49,6 +54,12 @@ export default function AppRoutes() {
           <Route path="/seller/store/edit" element={<StoreFormPage />} />
           <Route path="/seller/products/create" element={<ProductFormPage />} />
           <Route path="/seller/products/:id/edit" element={<ProductFormPage />} />
+        </Route>
+
+        <Route element={<ProtectedRoute requireRole={true} allowedRoles={['buyer']} />}>
+          <Route path="/buyer/wallet" element={<WalletPage />} />
+          <Route path="/buyer/addresses" element={<AddressPage />} />
+          <Route path="/buyer/cart" element={<CartPage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

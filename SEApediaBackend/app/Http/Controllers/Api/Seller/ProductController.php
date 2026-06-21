@@ -32,50 +32,53 @@ class ProductController extends Controller
         ]);
     }
 
-    public function store(StoreStoreRequest $request)
-{
-    if (auth()->user()->store) {
+    public function store(StoreProductRequest $request)
+    {
+        $store = Auth::user()->store;
+
+        if (!$store) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Store not found.',
+            ], 404);
+        }
+
+        $thumbnail = null;
+
+        if ($request->hasFile('thumbnail_image')) {
+            $thumbnail = $request->file('thumbnail_image')
+                ->store('products/thumbnail', 'public');
+        }
+
+        $product = Product::create([
+            'store_id' => $store->id,
+            'name' => $request->name,
+            'slug' => $this->makeUniqueSlug($request->name),
+            'description' => $request->description,
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'thumbnail_image' => $thumbnail,
+            'is_active' => true,
+        ]);
+
         return response()->json([
-            'success' => false,
-            'message' => 'Store already exists.',
-        ], 422);
+            'success' => true,
+            'message' => 'Product created successfully.',
+            'data' => new ProductResource($product),
+        ], 201);
     }
 
-    $logo = null;
-    $banner = null;
-
-    if ($request->hasFile('logo')) {
-        $logo = $request->file('logo')->store('stores/logo', 'public');
-    }
-
-    if ($request->hasFile('banner')) {
-        $banner = $request->file('banner')->store('stores/banner', 'public');
-    }
-
-    $store = Store::create([
-        'user_id' => auth()->id(),
-        'store_name' => $request->store_name,
-        'slug' => Str::slug($request->store_name),
-        'description' => $request->description,
-        'logo' => $logo,
-        'banner' => $banner,
-    ]);
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Store created successfully.',
-        'data' => new StoreResource($store),
-    ], 201);
-}
     public function show(string $id)
     {
         $store = Auth::user()->store;
-        $product = Product::find($id);
 
-        if (!$store || !$product || $product->store_id !== $store->id) {
+        $product = Product::where('store_id', $store?->id)
+            ->find($id);
+
+        if (!$product) {
             return response()->json([
                 'success' => false,
-                'message' => 'Product not found or unauthorized.',
+                'message' => 'Product not found.',
             ], 404);
         }
 
@@ -85,60 +88,72 @@ class ProductController extends Controller
         ]);
     }
 
-    public function update(UpdateStoreRequest $request)
-{
-    $store = auth()->user()->store;
+    public function update(UpdateProductRequest $request, string $id)
+    {
+        $store = Auth::user()->store;
 
-    if (!$store) {
+        $product = Product::where('store_id', $store?->id)
+            ->find($id);
+
+        if (!$product) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found.',
+            ], 404);
+        }
+
+        $data = $request->only([
+            'name',
+            'description',
+            'price',
+            'stock',
+        ]);
+
+        if ($request->filled('name')) {
+            $data['slug'] = $this->makeUniqueSlug(
+                $request->name,
+                $product->id
+            );
+        }
+
+        if ($request->hasFile('thumbnail_image')) {
+
+            if ($product->thumbnail_image) {
+                Storage::disk('public')
+                    ->delete($product->thumbnail_image);
+            }
+
+            $data['thumbnail_image'] = $request
+                ->file('thumbnail_image')
+                ->store('products/thumbnail', 'public');
+        }
+
+        $product->update($data);
+
         return response()->json([
-            'success' => false,
-            'message' => 'Store not found',
-        ], 404);
+            'success' => true,
+            'message' => 'Product updated successfully.',
+            'data' => new ProductResource($product->fresh()),
+        ]);
     }
 
-    $data = [
-        'store_name' => $request->store_name,
-        'slug' => Str::slug($request->store_name),
-        'description' => $request->description,
-        'is_active' => $request->boolean('is_active'),
-    ];
-
-    if ($request->hasFile('logo')) {
-
-        if ($store->logo) {
-            Storage::disk('public')->delete($store->logo);
-        }
-
-        $data['logo'] = $request->file('logo')->store('stores/logo', 'public');
-    }
-
-    if ($request->hasFile('banner')) {
-
-        if ($store->banner) {
-            Storage::disk('public')->delete($store->banner);
-        }
-
-        $data['banner'] = $request->file('banner')->store('stores/banner', 'public');
-    }
-
-    $store->update($data);
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Store updated successfully.',
-        'data' => new StoreResource($store->fresh()),
-    ]);
-}
     public function destroy(string $id)
     {
         $store = Auth::user()->store;
-        $product = Product::find($id);
 
-        if (!$store || !$product || $product->store_id !== $store->id) {
+        $product = Product::where('store_id', $store?->id)
+            ->find($id);
+
+        if (!$product) {
             return response()->json([
                 'success' => false,
-                'message' => 'Product not found or unauthorized.',
+                'message' => 'Product not found.',
             ], 404);
+        }
+
+        if ($product->thumbnail_image) {
+            Storage::disk('public')
+                ->delete($product->thumbnail_image);
         }
 
         $product->delete();
@@ -155,9 +170,14 @@ class ProductController extends Controller
         $slug = $baseSlug;
         $counter = 2;
 
-        while (Product::where('slug', $slug)
-            ->when($ignoreId, fn ($query) => $query->where('id', '!=', $ignoreId))
-            ->exists()) {
+        while (
+            Product::where('slug', $slug)
+                ->when(
+                    $ignoreId,
+                    fn ($query) => $query->where('id', '!=', $ignoreId)
+                )
+                ->exists()
+        ) {
             $slug = "{$baseSlug}-{$counter}";
             $counter++;
         }

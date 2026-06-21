@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { authAPI } from '../api/auth';
+import { walletAPI } from '../api/wallet';
+import { addressAPI } from '../api/address';
 import {
   Card, CardContent, CardDescription, CardHeader, CardTitle,
 } from '../components/ui/card';
@@ -10,7 +12,7 @@ import { Button } from '../components/ui/button';
 import {
   ShoppingBag, Store, Truck, ShieldCheck,
   Loader2, RefreshCw, Wallet, TrendingUp, Package,
-  MapPin, Users, LayoutDashboard, ExternalLink, Plus,
+  MapPin, Users, LayoutDashboard, ExternalLink, Plus, ShoppingCart
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 
@@ -46,14 +48,15 @@ function StatCard({ icon: Icon, label, value, color, bg, comingSoon = false }) {
 }
 
 // ─── Role-specific cards ────────────────────────────────────────────────────
-function BuyerCards({ financial }) {
+function BuyerCards({ financial, addressCount }) {
   return (
     <>
       <StatCard icon={Wallet} label="Saldo Wallet"
         value={`Rp ${(financial?.wallet_balance ?? 0).toLocaleString('id-ID')}`}
         color="text-blue-600" bg="bg-blue-50 dark:bg-blue-950" />
-      <StatCard icon={ShoppingBag} label="Total Pesanan" value="—" color="text-blue-600" bg="bg-blue-50 dark:bg-blue-950" comingSoon />
-      <StatCard icon={MapPin} label="Alamat Tersimpan" value="—" color="text-blue-600" bg="bg-blue-50 dark:bg-blue-950" comingSoon />
+      <StatCard icon={MapPin} label="Alamat Tersimpan" 
+        value={addressCount}
+        color="text-blue-600" bg="bg-blue-50 dark:bg-blue-950" />
     </>
   );
 }
@@ -102,6 +105,7 @@ export default function DashboardPage() {
   const [switching, setSwitching]     = useState(null);
   const [autoSwitching, setAutoSwitching] = useState(false);
   const [registering, setRegistering] = useState(false);
+  const [addressCount, setAddressCount] = useState(0);
 
   // Sync role from URL parameters with current session activeRole
   useEffect(() => {
@@ -149,6 +153,12 @@ export default function DashboardPage() {
       .then((res) => setDashboard(res?.data ?? res))
       .catch(() => {})
       .finally(() => setLoadingDash(false));
+
+    if (activeRole === 'buyer') {
+      addressAPI.getAddresses()
+        .then((res) => setAddressCount(res?.data?.length ?? 0))
+        .catch(() => setAddressCount(0));
+    }
   }, [activeRole, role]);
 
   const handleSwitch = async (targetRole) => {
@@ -242,6 +252,7 @@ export default function DashboardPage() {
   const meta    = ROLE_META[activeRole] ?? ROLE_META.buyer;
   const RoleIcon = meta.icon;
   const financial = dashboard?.financial_summaries ?? null;
+  const financialData = dashboard?.financial_summaries ?? null;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
@@ -268,9 +279,9 @@ export default function DashboardPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          {activeRole === 'buyer'  && <BuyerCards  financial={financial} />}
-          {activeRole === 'seller' && <SellerCards financial={financial} />}
-          {activeRole === 'driver' && <DriverCards financial={financial} />}
+          {activeRole === 'buyer'  && <BuyerCards  financial={financialData} addressCount={addressCount} />}
+          {activeRole === 'seller' && <SellerCards financial={financialData} />}
+          {activeRole === 'driver' && <DriverCards financial={financialData} />}
           {activeRole === 'admin'  && <AdminCards />}
           {(!activeRole || activeRole === 'none') && (
             <div className="col-span-3 text-center py-8 text-muted-foreground text-sm border rounded-xl border-dashed">
@@ -316,11 +327,38 @@ export default function DashboardPage() {
               </Button>
             </div>
           )}
-          {activeRole !== 'seller' && (
+          {activeRole === 'buyer' && (
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button
+                className="flex-1 font-medium"
+                onClick={() => navigate('/buyer/wallet')}
+              >
+                <Wallet className="h-4 w-4 mr-2" />
+                Kelola Wallet
+                <ExternalLink className="h-3.5 w-3.5 ml-2 opacity-70" />
+              </Button>
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => navigate('/buyer/addresses')}
+              >
+                <MapPin className="h-4 w-4 mr-2" />
+                Kelola Alamat
+              </Button>
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => navigate('/buyer/cart')}
+              >
+                <ShoppingCart className="h-4 w-4 mr-2" />
+                Keranjang Belanja
+              </Button>
+            </div>
+          )}
+          {activeRole !== 'seller' && activeRole !== 'buyer' && (
             <div className="text-sm text-muted-foreground bg-background rounded-lg p-4 border">
-              {activeRole === 'buyer'  && 'Keranjang belanja, riwayat pesanan, dan manajemen alamat pengiriman akan muncul di sini.'}
               {activeRole === 'driver' && 'Job pengiriman tersedia, rute aktif, dan riwayat pengiriman akan muncul di sini.'}
-              {activeRole === 'admin'  && 'Panel monitoring marketplace, manajemen user, dan kontrol operasional akan muncul di sini.'}
+              {activeRole === 'admin'  && 'Panel monitoring marketplace, manajemen用户, dan kontrol operasional akan muncul di sini.'}
               {(!activeRole || activeRole === 'none') && 'Silakan pilih role aktif terlebih dahulu.'}
             </div>
           )}

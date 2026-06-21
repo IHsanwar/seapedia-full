@@ -45,11 +45,13 @@ class ProfileController extends Controller
 
         $ownedRoles = $user->roles->pluck('name')->toArray();
 
-        // Placeholders for future levels
+        $wallet = $user->wallet;
+        $walletBalance = $wallet ? (float) $wallet->balance : 0;
+
         $financialSummaries = [
-            'wallet_balance' => 0,   // For Buyer
-            'seller_income' => 0,    // For Seller
-            'driver_earnings' => 0,  // For Driver
+            'wallet_balance' => $walletBalance,
+            'seller_income' => 0,
+            'driver_earnings' => 0,
         ];
 
         return $this->success([
@@ -96,24 +98,5 @@ class ProfileController extends Controller
         return $this->success([
             'user' => new UserResource($user->fresh()->load('roles')),
         ], 'Profile updated successfully.');
-    }
-            }
-        }
-
-        $ownedRoles = $user->roles->pluck('name')->toArray();
-
-        // Placeholders for future levels
-        $financialSummaries = [
-            'wallet_balance' => 0,   // For Buyer
-            'seller_income' => 0,    // For Seller
-            'driver_earnings' => 0,  // For Driver
-        ];
-
-        return $this->success([
-            'user' => new UserResource($user),
-            'active_role' => $activeRole,
-            'owned_roles' => $ownedRoles,
-            'financial_summaries' => $financialSummaries,
-        ], 'Dashboard summary retrieved successfully.');
     }
 }

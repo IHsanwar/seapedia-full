@@ -1,10 +1,10 @@
 import api from './axiosInstance';
 
 export const productsAPI = {
-  // GET /api/v1/products — public catalogue listing
+  // GET /api/v1/catalogue/products — public catalogue listing
   getProducts: async (params = {}) => {
     try {
-      const response = await api.get('/api/v1/products', { params });
+      const response = await api.get('/api/v1/catalogue/products', { params });
       return response.data;
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -15,11 +15,11 @@ export const productsAPI = {
     }
   },
 
-  // GET /api/v1/products/{id}-{slug} — public product detail
+  // GET /api/v1/catalogue/products/{id}-{slug} — public product detail
   // productSlug format: "{id}-{slug}" e.g. "2-kaos-seapedia"
   getProductBySlug: async (productSlug) => {
     try {
-      const response = await api.get(`/api/v1/products/${productSlug}`);
+      const response = await api.get(`/api/v1/catalogue/products/${productSlug}`);
       return response.data;
     } catch (error) {
       console.error(`Error fetching product ${productSlug}:`, error);
@@ -27,10 +27,10 @@ export const productsAPI = {
     }
   },
 
-  // GET /api/v1/stores/{slug} — public store detail
+  // GET /api/v1/catalogue/stores/{slug} — public store detail
   getStoreBySlug: async (storeSlug) => {
     try {
-      const response = await api.get(`/api/v1/stores/${storeSlug}`);
+      const response = await api.get(`/api/v1/catalogue/stores/${storeSlug}`);
       return response.data;
     } catch (error) {
       console.error(`Error fetching store ${storeSlug}:`, error);

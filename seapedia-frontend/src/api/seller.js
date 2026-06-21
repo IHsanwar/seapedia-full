@@ -1,66 +1,66 @@
-﻿import api from './axiosInstance';
+import api from './axiosInstance';
 
 // Store API
 export const storeAPI = {
-  /** Get the current seller's store (GET /api/store) */
+  /** Get the current seller's store (GET /api/v1/seller/store) */
   getStore: async () => {
-    const response = await api.get('/api/store');
+    const response = await api.get('/api/v1/seller/store');
     return response.data;
   },
 
-  /** Create a new store (POST /api/store) - accepts JSON or FormData */
+  /** Create a new store (POST /api/v1/seller/store) - accepts JSON or FormData */
   createStore: async (data) => {
     const isFormData = data instanceof FormData;
-    const response = await api.post('/api/store', data, {
+    const response = await api.post('/api/v1/seller/store', data, {
       headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : {},
     });
     return response.data;
   },
 
   /**
-   * Update store (PUT /api/store with JSON).
+   * Update store (PUT /api/v1/seller/store with JSON).
    * If a logo/banner file needs to be sent, pass FormData - we add _method=PUT for spoofing.
    */
   updateStore: async (data) => {
     if (data instanceof FormData) {
       data.append('_method', 'PUT');
-      const response = await api.post('/api/store', data, {
+      const response = await api.post('/api/v1/seller/store', data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       return response.data;
     }
-    const response = await api.put('/api/store', data);
+    const response = await api.put('/api/v1/seller/store', data);
     return response.data;
   },
 
-  /** Delete store (DELETE /api/store) */
+  /** Delete store (DELETE /api/v1/seller/store) */
   deleteStore: async () => {
-    const response = await api.delete('/api/store');
+    const response = await api.delete('/api/v1/seller/store');
     return response.data;
   },
 };
 
 // Seller Product API
 export const sellerProductAPI = {
-  /** List seller's products (GET /api/v1/product/products) */
+  /** List seller's products (GET /api/v1/seller/products) */
   getProducts: async () => {
-    const response = await api.get('/api/v1/product/products');
+    const response = await api.get('/api/v1/seller/products');
     return response.data;
   },
 
-  /** Get single product (GET /api/v1/product/product/:id) */
+  /** Get single product (GET /api/v1/seller/products/:id) */
   getProduct: async (id) => {
-    const response = await api.get(`/api/v1/product/product/${id}`);
+    const response = await api.get(`/api/v1/seller/products/${id}`);
     return response.data;
   },
 
   /**
-   * Create product (POST /api/v1/product/product).
+   * Create product (POST /api/v1/seller/products).
    * Pass a FormData to include thumbnail_image.
    */
   createProduct: async (data) => {
     const isFormData = data instanceof FormData;
-    const response = await api.post('/api/v1/product/product', data, {
+    const response = await api.post('/api/v1/seller/products', data, {
       headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : {},
     });
     return response.data;
@@ -74,18 +74,18 @@ export const sellerProductAPI = {
   updateProduct: async (id, data) => {
     if (data instanceof FormData) {
       data.append('_method', 'PUT');
-      const response = await api.post(`/api/v1/product/product/${id}`, data, {
+      const response = await api.post(`/api/v1/seller/products/${id}`, data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       return response.data;
     }
-    const response = await api.put(`/api/v1/product/product/${id}`, data);
+    const response = await api.put(`/api/v1/seller/products/${id}`, data);
     return response.data;
   },
 
-  /** Delete product (DELETE /api/v1/product/product/:id) */
+  /** Delete product (DELETE /api/v1/seller/products/:id) */
   deleteProduct: async (id) => {
-    const response = await api.delete(`/api/v1/product/product/${id}`);
+    const response = await api.delete(`/api/v1/seller/products/${id}`);
     return response.data;
   },
 };
