@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Seller\StoreController;
 use App\Http\Controllers\Api\Seller\ProductController;
+use App\Http\Controllers\Api\Seller\OrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum', 'role:seller'])->prefix('v1/seller')->group(function () {
@@ -17,4 +18,9 @@ Route::middleware(['auth:sanctum', 'role:seller'])->prefix('v1/seller')->group(f
     Route::post('/products', [ProductController::class, 'store']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+
+    // Order routes
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::get('/orders/{id}', [OrderController::class, 'show']);
+    Route::post('/orders/process', [OrderController::class, 'process']);
 });

@@ -26,11 +26,19 @@ import SellerDashboardPage from '../pages/seller/SellerDashboardPage';
 import StoreFormPage from '../pages/seller/StoreFormPage';
 import ProductFormPage from '../pages/seller/ProductFormPage';
 import ProductManagementPage from '../pages/seller/ProductManagementPage';
+import SellerOrdersPage from '../pages/seller/SellerOrdersPage';
+import SellerOrderDetailPage from '../pages/seller/SellerOrderDetailPage';
 
 // Pages - Buyer
 import WalletPage from '../pages/buyer/WalletPage';
 import AddressPage from '../pages/buyer/AddressPage';
 import CartPage from '../pages/buyer/CartPage';
+import CheckoutPage from '../pages/buyer/CheckoutPage';
+import OrderHistoryPage from '../pages/buyer/OrderHistoryPage';
+import OrderDetailPage from '../pages/buyer/OrderDetailPage';
+
+// Pages - Admin
+import VoucherManagementPage from '../pages/admin/VoucherManagementPage';
 
 export default function AppRoutes() {
   return (
@@ -54,12 +62,21 @@ export default function AppRoutes() {
           <Route path="/seller/store/edit" element={<StoreFormPage />} />
           <Route path="/seller/products/create" element={<ProductFormPage />} />
           <Route path="/seller/products/:id/edit" element={<ProductFormPage />} />
+          <Route path="/seller/orders" element={<SellerOrdersPage />} />
+          <Route path="/seller/orders/:id" element={<SellerOrderDetailPage />} />
         </Route>
 
         <Route element={<ProtectedRoute requireRole={true} allowedRoles={['buyer']} />}>
           <Route path="/buyer/wallet" element={<WalletPage />} />
           <Route path="/buyer/addresses" element={<AddressPage />} />
           <Route path="/buyer/cart" element={<CartPage />} />
+          <Route path="/buyer/checkout" element={<CheckoutPage />} />
+          <Route path="/buyer/orders" element={<OrderHistoryPage />} />
+          <Route path="/buyer/orders/:id" element={<OrderDetailPage />} />
+        </Route>
+
+        <Route element={<ProtectedRoute requireRole={true} allowedRoles={['admin']} />}>
+          <Route path="/admin/vouchers" element={<VoucherManagementPage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

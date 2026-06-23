@@ -32,7 +32,7 @@ export const authAPI = {
   },
   
   getDashboard: async () => {
-    const response = await api.get('/api/profile/dashboard');
+    const response = await api.get('/api/v1/profile/dashboard');
     return response.data;
   }
 };

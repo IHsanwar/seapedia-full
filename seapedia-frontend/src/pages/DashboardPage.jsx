@@ -12,7 +12,7 @@ import { Button } from '../components/ui/button';
 import {
   ShoppingBag, Store, Truck, ShieldCheck,
   Loader2, RefreshCw, Wallet, TrendingUp, Package,
-  MapPin, Users, LayoutDashboard, ExternalLink, Plus, ShoppingCart
+  MapPin, Users, LayoutDashboard, ExternalLink, Plus, ShoppingCart, Tag
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 
@@ -320,6 +320,15 @@ export default function DashboardPage() {
               <Button
                 variant="outline"
                 className="flex-1"
+                onClick={() => navigate('/seller/orders')}
+              >
+                <ShoppingBag className="h-4 w-4 mr-2" />
+                Pesanan Masuk
+                <ExternalLink className="h-3.5 w-3.5 ml-2 opacity-70" />
+              </Button>
+              <Button
+                variant="outline"
+                className="flex-1"
                 onClick={() => navigate('/seller/products/create')}
               >
                 <Plus className="h-4 w-4 mr-2" />
@@ -352,6 +361,27 @@ export default function DashboardPage() {
               >
                 <ShoppingCart className="h-4 w-4 mr-2" />
                 Keranjang Belanja
+              </Button>
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => navigate('/buyer/orders')}
+              >
+                <Package className="h-4 w-4 mr-2" />
+                Riwayat Pesanan
+                <ExternalLink className="h-3.5 w-3.5 ml-2 opacity-70" />
+              </Button>
+            </div>
+          )}
+          {activeRole === 'admin' && (
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button
+                className="flex-1 font-medium"
+                onClick={() => navigate('/admin/vouchers')}
+              >
+                <Tag className="h-4 w-4 mr-2" />
+                Kelola Voucher
+                <ExternalLink className="h-3.5 w-3.5 ml-2 opacity-70" />
               </Button>
             </div>
           )}

@@ -18,10 +18,14 @@ class WalletController extends Controller
 
     public function index()
     {
-        $wallet = Auth::user()->wallet;
+        $user = Auth::user();
+        $wallet = $user->wallet;
 
         if (!$wallet) {
-            return $this->error('Wallet not found.', null, 404);
+            $wallet = Wallet::create([
+                'user_id' => $user->id,
+                'balance' => 0,
+            ]);
         }
 
         return $this->success(
@@ -32,10 +36,14 @@ class WalletController extends Controller
 
     public function show()
     {
-        $wallet = Auth::user()->wallet;
+        $user = Auth::user();
+        $wallet = $user->wallet;
 
         if (!$wallet) {
-            return $this->error('Wallet not found.', null, 404);
+            $wallet = Wallet::create([
+                'user_id' => $user->id,
+                'balance' => 0,
+            ]);
         }
 
         return $this->success(
@@ -46,10 +54,14 @@ class WalletController extends Controller
 
     public function transactions()
     {
-        $wallet = Auth::user()->wallet;
+        $user = Auth::user();
+        $wallet = $user->wallet;
 
         if (!$wallet) {
-            return $this->error('Wallet not found.', null, 404);
+            $wallet = Wallet::create([
+                'user_id' => $user->id,
+                'balance' => 0,
+            ]);
         }
 
         $transactions = $wallet->transactions()->latest()->get();

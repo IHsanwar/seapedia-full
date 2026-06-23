@@ -46,7 +46,9 @@ export default function RegisterPage() {
       const res = await authRegister(data);
       toast.success('Account created! Welcome to SEAPEDIA.');
       // Register auto-assigns buyer role → single role → go straight to dashboard
-      if (res?.roles?.length > 1) {
+      if (res?.roles?.includes('buyer')) {
+        navigate('/dashboard');
+      } else if (res?.roles?.length > 1) {
         navigate('/select-role');
       } else {
         navigate('/dashboard');

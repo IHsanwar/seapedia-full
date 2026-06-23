@@ -30,6 +30,12 @@ class AuthController extends Controller
             $user->roles()->attach($buyerRole);
         }
 
+        // Create wallet for the buyer
+        \App\Models\Wallet::create([
+            'user_id' => $user->id,
+            'balance' => 0,
+        ]);
+
         $token = $user->createToken('auth_token', ['role:buyer'])->plainTextToken;
 
         return $this->success([
@@ -65,9 +71,13 @@ class AuthController extends Controller
         if ($isAdmin) {
             $abilities = ['role:admin'];
         } else {
-            $nonAdminRoles = array_diff($roles, ['admin']);
-            if (count($nonAdminRoles) === 1) {
-                $abilities = ['role:' . reset($nonAdminRoles)];
+            if (in_array('buyer', $roles)) {
+                $abilities = ['role:buyer'];
+            } else {
+                $nonAdminRoles = array_diff($roles, ['admin']);
+                if (count($nonAdminRoles) === 1) {
+                    $abilities = ['role:' . reset($nonAdminRoles)];
+                }
             }
         }
 
@@ -166,6 +176,12 @@ class AuthController extends Controller
 
         if (!$user->hasRole($roleName)) {
             $user->roles()->attach($role);
+            if ($roleName === 'buyer' && !$user->wallet) {
+                \App\Models\Wallet::create([
+                    'user_id' => $user->id,
+                    'balance' => 0,
+                ]);
+            }
         }
 
         return $this->success([

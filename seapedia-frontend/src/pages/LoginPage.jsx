@@ -34,8 +34,10 @@ export default function LoginPage() {
       const res = await login(data);
       toast.success('Login successful!');
 
-      // If user owns more than 1 role → pick a role first
-      if (res?.roles?.length > 1) {
+      // If user is a buyer, go straight to dashboard. Otherwise, if multiple roles, pick first.
+      if (res?.roles?.includes('buyer')) {
+        navigate('/dashboard');
+      } else if (res?.roles?.length > 1) {
         navigate('/select-role');
       } else {
         navigate('/dashboard');

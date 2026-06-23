@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { cartAPI } from '../../api/cart';
 import {
   Card, CardContent, CardDescription, CardHeader, CardTitle,
@@ -12,6 +12,7 @@ import {
 import { toast } from 'react-toastify';
 
 export default function CartPage() {
+  const navigate = useNavigate();
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(null); // stores item ID currently being updated/deleted
@@ -83,7 +84,11 @@ export default function CartPage() {
   };
 
   const handleCheckout = () => {
-    toast.info('Fitur Checkout & Pembayaran akan diimplementasikan pada Milestone berikutnya!');
+    if (!hasItems) {
+      toast.error('Keranjang Anda kosong');
+      return;
+    }
+    navigate('/buyer/checkout');
   };
 
   if (loading) {
