@@ -9,3 +9,5 @@ require __DIR__.'/api/seller.php';
 require __DIR__.'/api/buyer.php';
 require __DIR__.'/api/profile.php';
 require __DIR__.'/api/catalogue.php';
+require __DIR__.'/api/driver.php';
+

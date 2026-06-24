@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 
 const STATUS_COLORS = {
   'Sedang Dikemas': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-  'Menunggu Pengirim': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+  'Menunggu Pengiriman': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
   'Sedang Dikirim': 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
   'Pesanan Selesai': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
   'Dikembalikan': 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
@@ -21,7 +21,7 @@ const STATUS_COLORS = {
 
 const STATUS_ICONS = {
   'Sedang Dikemas': '📦',
-  'Menunggu Pengirim': '🚚',
+  'Menunggu Pengiriman': '🚚',
   'Sedang Dikirim': '🚛',
   'Pesanan Selesai': '✅',
   'Dikembalikan': '↩️',

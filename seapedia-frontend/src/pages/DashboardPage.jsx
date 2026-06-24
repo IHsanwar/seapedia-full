@@ -12,7 +12,7 @@ import { Button } from '../components/ui/button';
 import {
   ShoppingBag, Store, Truck, ShieldCheck,
   Loader2, RefreshCw, Wallet, TrendingUp, Package,
-  MapPin, Users, LayoutDashboard, ExternalLink, Plus, ShoppingCart, Tag
+  MapPin, Users, LayoutDashboard, ExternalLink, Plus, ShoppingCart, Tag,Clock
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 
@@ -200,11 +200,18 @@ export default function DashboardPage() {
   if (role && ['buyer', 'seller', 'driver'].includes(role) && !roles.includes(role)) {
     const meta = ROLE_META[role] ?? ROLE_META.buyer;
     const Icon = meta.icon;
+    
+    // Driver requires special registration flow with vehicle data
+    if (role === 'driver') {
+      navigate('/driver/register');
+      return null;
+    }
+    
     return (
       <div className="container mx-auto px-4 py-16 max-w-md">
         <Card className="border-2 shadow-lg">
           <CardHeader className="text-center pb-4">
-            <div className={`mx-auto ${meta.bg} ${meta.color} p-4 rounded-2xl mb-4 w-fit`}>
+            <div className={`mx-auto ${meta.bg} ${meta.color.color} p-4 rounded-2xl mb-4 w-fit`}>
               <Icon className="h-10 w-10" />
             </div>
             <CardTitle className="text-2xl font-bold">Daftar sebagai {meta.label}?</CardTitle>
@@ -373,6 +380,34 @@ export default function DashboardPage() {
               </Button>
             </div>
           )}
+          {activeRole === 'driver' && (
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button
+                className="flex-1 font-medium"
+                onClick={() => navigate('/driver/jobs')}
+              >
+                <Truck className="h-4 w-4 mr-2" />
+                Cari Job Pengiriman
+                <ExternalLink className="h-3.5 w-3.5 ml-2 opacity-70" />
+              </Button>
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => navigate('/driver/my-jobs')}
+              >
+                <Package className="h-4 w-4 mr-2" />
+                Job Aktif
+              </Button>
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => navigate('/driver/history')}
+              >
+                <Clock className="h-4 w-4 mr-2" />
+                Riwayat Pengiriman
+              </Button>
+            </div>
+          )}
           {activeRole === 'admin' && (
             <div className="flex flex-col sm:flex-row gap-3">
               <Button
@@ -385,7 +420,7 @@ export default function DashboardPage() {
               </Button>
             </div>
           )}
-          {activeRole !== 'seller' && activeRole !== 'buyer' && (
+          {activeRole !== 'seller' && activeRole !== 'buyer' && activeRole !== 'driver' && (
             <div className="text-sm text-muted-foreground bg-background rounded-lg p-4 border">
               {activeRole === 'driver' && 'Job pengiriman tersedia, rute aktif, dan riwayat pengiriman akan muncul di sini.'}
               {activeRole === 'admin'  && 'Panel monitoring marketplace, manajemen用户, dan kontrol operasional akan muncul di sini.'}

@@ -15,6 +15,7 @@ class CheckoutRequest extends FormRequest
     {
         return [
             'voucher_code' => 'nullable|string|exists:vouchers,code',
+            'promo_code' => 'nullable|string|exists:promos,code',
             'address_id' => 'required|integer|exists:addresses,id',
             'delivery_method' => 'required|in:instant,next_day,regular',
         ];

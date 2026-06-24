@@ -57,7 +57,8 @@ class OrderController extends Controller
                 $user->id,
                 $request->address_id,
                 $request->delivery_method,
-                $request->voucher_code ?? null
+                $request->voucher_code ?? null,
+                $request->promo_code ?? null
             );
 
             return $this->success(

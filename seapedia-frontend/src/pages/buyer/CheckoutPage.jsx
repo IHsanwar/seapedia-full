@@ -15,6 +15,7 @@ import {
   ShoppingCart, ArrowLeft, Loader2, MapPin, Truck, Wallet, CheckCircle, AlertCircle, Package, Tag, X
 } from 'lucide-react';
 import { toast } from 'react-toastify';
+import DiscountSelector from '../../components/checkout/DiscountSelector';
 
 const DELIVERY_METHODS = [
   { id: 'instant', name: 'Instant Delivery', description: 'Pengiriman hari ini', fee: 15000, icon: '🚀' },
@@ -33,12 +34,9 @@ export default function CheckoutPage() {
   
   const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState('regular');
-
-  // Voucher states
-  const [voucherCode, setVoucherCode] = useState('');
-  const [appliedVoucher, setAppliedVoucher] = useState(null);
-  const [discount, setDiscount] = useState(0);
-  const [applyingVoucher, setApplyingVoucher] = useState(false);
+  
+  // Discount states
+  const [appliedDiscount, setAppliedDiscount] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -75,52 +73,22 @@ export default function CheckoutPage() {
     
     const subtotal = parseFloat(cart?.summary?.subtotal || 0);
     const deliveryFee = selectedDelivery.fee;
+    const discount = appliedDiscount?.discount || 0;
     const tax = subtotal * 0.12;
     const total = subtotal + deliveryFee + tax - discount;
-
+    
     return { subtotal, deliveryFee, discount, tax, total };
   };
 
   const totals = calculateTotals();
   const hasSufficientBalance = wallet && totals && wallet.balance >= totals.total;
 
-  const handleApplyVoucher = async () => {
-    if (!voucherCode.trim()) {
-      toast.error('Silakan masukkan kode voucher');
-      return;
-    }
-
-    if (!cart?.summary?.subtotal) {
-      toast.error('Keranjang belanja kosong');
-      return;
-    }
-
-    setApplyingVoucher(true);
-    try {
-      const response = await orderAPI.applyVoucher({
-        voucher_code: voucherCode.trim(),
-        subtotal: cart.summary.subtotal,
-      });
-
-      const { voucher, discount: discountAmount } = response.data;
-      setAppliedVoucher(voucher);
-      setDiscount(discountAmount);
-      toast.success(`Voucher berhasil! Anda hemat Rp ${discountAmount.toLocaleString('id-ID')}`);
-    } catch (error) {
-      const message = error.response?.data?.message || 'Gagal menerapkan voucher';
-      toast.error(message);
-      setAppliedVoucher(null);
-      setDiscount(0);
-    } finally {
-      setApplyingVoucher(false);
-    }
+  const handleApplyDiscount = (discount) => {
+    setAppliedDiscount(discount);
   };
 
-  const handleRemoveVoucher = () => {
-    setAppliedVoucher(null);
-    setDiscount(0);
-    setVoucherCode('');
-    toast.info('Voucher dihapus');
+  const handleRemoveDiscount = () => {
+    setAppliedDiscount(null);
   };
 
   const handleCheckout = async () => {
@@ -141,9 +109,13 @@ export default function CheckoutPage() {
         delivery_method: selectedDeliveryMethod,
       };
 
-      // Add voucher code if applied
-      if (appliedVoucher) {
-        checkoutData.voucher_code = appliedVoucher.code;
+      // Add discount code if applied
+      if (appliedDiscount) {
+        if (appliedDiscount.type === 'voucher') {
+          checkoutData.voucher_code = appliedDiscount.code;
+        } else if (appliedDiscount.type === 'promo') {
+          checkoutData.promo_code = appliedDiscount.code;
+        }
       }
 
       const res = await orderAPI.checkout(checkoutData);
@@ -200,7 +172,7 @@ export default function CheckoutPage() {
       <Link to="/buyer/cart" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6 transition-colors">
         <ArrowLeft className="h-4 w-4 mr-1" /> Kembali ke Keranjang
       </Link>
-
+      
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
@@ -353,7 +325,7 @@ export default function CheckoutPage() {
         </div>
 
         {/* Right Column - Order Summary */}
-        <div className="space-y-4">
+        <div className="space-y-6">
           <Card className="shadow-md sticky top-4">
             <CardHeader>
               <CardTitle className="text-xl">Ringkasan Pembayaran</CardTitle>
@@ -372,8 +344,8 @@ export default function CheckoutPage() {
                     </div>
                     <div className="flex justify-between text-muted-foreground">
                       <span>Diskon</span>
-                      <span className={`font-medium ${discount > 0 ? 'text-green-600' : 'text-foreground'}`}>
-                        {discount > 0 ? '-' : ''}Rp {(discount || 0).toLocaleString('id-ID')}
+                      <span className={`font-medium ${totals.discount > 0 ? 'text-green-600' : 'text-foreground'}`}>
+                        {totals.discount > 0 ? '-' : ''}Rp {(totals.discount || 0).toLocaleString('id-ID')}
                       </span>
                     </div>
                     <div className="flex justify-between text-muted-foreground">
@@ -406,64 +378,15 @@ export default function CheckoutPage() {
                     )}
                   </div>
 
-                  {/* Voucher Section */}
-                  <div className="p-4 rounded-lg bg-muted/30 space-y-3">
-                    <div className="flex items-center gap-2 text-sm">
-                      <Tag className="h-4 w-4 text-primary" />
-                      <span className="font-medium">Voucher Diskon</span>
-                    </div>
+                  {/* Discount Section */}
+                  <DiscountSelector
+                    subtotal={cart?.summary?.subtotal || 0}
+                    onApplyDiscount={handleApplyDiscount}
+                    appliedDiscount={appliedDiscount}
+                    onRemoveDiscount={handleRemoveDiscount}
+                  />
 
-                    {appliedVoucher ? (
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <CheckCircle className="h-4 w-4 text-green-600" />
-                            <div>
-                              <p className="font-medium text-green-800 text-sm">{appliedVoucher.code}</p>
-                              <p className="text-xs text-green-600">Hemat Rp {discount.toLocaleString('id-ID')}</p>
-                            </div>
-                          </div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={handleRemoveVoucher}
-                            className="text-red-500 hover:text-red-700 h-8 w-8 p-0"
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <div className="flex gap-2">
-                          <Input
-                            placeholder="Masukkan kode voucher"
-                            value={voucherCode}
-                            onChange={(e) => setVoucherCode(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                e.preventDefault();
-                                handleApplyVoucher();
-                              }
-                            }}
-                            className="flex-1"
-                          />
-                          <Button
-                            onClick={handleApplyVoucher}
-                            disabled={!voucherCode.trim() || applyingVoucher}
-                            variant="outline"
-                          >
-                            {applyingVoucher ? (
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                              'Terapkan'
-                            )}
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
+                  {/* Checkout Button */}
                   <Button
                     onClick={handleCheckout}
                     disabled={!selectedAddressId || !hasSufficientBalance || processing}

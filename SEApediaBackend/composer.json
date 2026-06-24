@@ -50,6 +50,15 @@
             "@php artisan config:clear --ansi @no_additional_args",
             "@php artisan test"
         ],
+        "seed": [
+            "@php artisan db:seed --ansi"
+        ],
+        "migrate-seed": [
+            "@php artisan migrate:fresh --seed --ansi"
+        ],
+        "docs:generate": [
+            "@php artisan scribe:generate --ansi"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

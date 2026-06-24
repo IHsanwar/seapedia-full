@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Seller\StoreController;
 use App\Http\Controllers\Api\Seller\ProductController;
 use App\Http\Controllers\Api\Seller\OrderController;
+use App\Http\Controllers\Api\Seller\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum', 'role:seller'])->prefix('v1/seller')->group(function () {
@@ -23,4 +24,11 @@ Route::middleware(['auth:sanctum', 'role:seller'])->prefix('v1/seller')->group(f
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/orders/{id}', [OrderController::class, 'show']);
     Route::post('/orders/process', [OrderController::class, 'process']);
+
+    // Report routes
+    Route::prefix('reports')->group(function () {
+        Route::get('/income', [ReportController::class, 'incomeReport']);
+        Route::get('/orders', [ReportController::class, 'orderList']);
+        Route::get('/processed-orders', [ReportController::class, 'processedOrders']);
+    });
 });

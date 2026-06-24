@@ -66,4 +66,9 @@ class Order extends Model
     {
         return $this->belongsTo(Promo::class);
     }
+
+    public function delivery()
+    {
+        return $this->hasOne(Delivery::class);
+    }
 }

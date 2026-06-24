@@ -28,6 +28,7 @@ import ProductFormPage from '../pages/seller/ProductFormPage';
 import ProductManagementPage from '../pages/seller/ProductManagementPage';
 import SellerOrdersPage from '../pages/seller/SellerOrdersPage';
 import SellerOrderDetailPage from '../pages/seller/SellerOrderDetailPage';
+import SellerReportsPage from '../pages/seller/SellerReportsPage';
 
 // Pages - Buyer
 import WalletPage from '../pages/buyer/WalletPage';
@@ -36,9 +37,16 @@ import CartPage from '../pages/buyer/CartPage';
 import CheckoutPage from '../pages/buyer/CheckoutPage';
 import OrderHistoryPage from '../pages/buyer/OrderHistoryPage';
 import OrderDetailPage from '../pages/buyer/OrderDetailPage';
+import BuyerReportsPage from '../pages/buyer/BuyerReportsPage';
 
 // Pages - Admin
 import VoucherManagementPage from '../pages/admin/VoucherManagementPage';
+
+// Pages - Driver
+import DriverRegisterPage from '../pages/driver/DriverRegisterPage';
+import DriverJobsPage from '../pages/driver/DriverJobsPage';
+import DriverMyJobsPage from '../pages/driver/DriverMyJobsPage';
+import DriverHistoryPage from '../pages/driver/DriverHistoryPage';
 
 export default function AppRoutes() {
   return (
@@ -53,6 +61,7 @@ export default function AppRoutes() {
           <Route path="/dashboard" element={<DashboardRedirect />} />
           <Route path="/:role/dashboard" element={<DashboardPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/driver/register" element={<DriverRegisterPage />} />
         </Route>
 
         <Route element={<ProtectedRoute requireRole={true} allowedRoles={['seller']} />}>
@@ -64,6 +73,7 @@ export default function AppRoutes() {
           <Route path="/seller/products/:id/edit" element={<ProductFormPage />} />
           <Route path="/seller/orders" element={<SellerOrdersPage />} />
           <Route path="/seller/orders/:id" element={<SellerOrderDetailPage />} />
+          <Route path="/seller/reports" element={<SellerReportsPage />} />
         </Route>
 
         <Route element={<ProtectedRoute requireRole={true} allowedRoles={['buyer']} />}>
@@ -73,6 +83,13 @@ export default function AppRoutes() {
           <Route path="/buyer/checkout" element={<CheckoutPage />} />
           <Route path="/buyer/orders" element={<OrderHistoryPage />} />
           <Route path="/buyer/orders/:id" element={<OrderDetailPage />} />
+          <Route path="/buyer/reports" element={<BuyerReportsPage />} />
+        </Route>
+
+        <Route element={<ProtectedRoute requireRole={true} allowedRoles={['driver']} />}>
+          <Route path="/driver/jobs" element={<DriverJobsPage />} />
+          <Route path="/driver/my-jobs" element={<DriverMyJobsPage />} />
+          <Route path="/driver/history" element={<DriverHistoryPage />} />
         </Route>
 
         <Route element={<ProtectedRoute requireRole={true} allowedRoles={['admin']} />}>

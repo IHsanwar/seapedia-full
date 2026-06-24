@@ -4,11 +4,13 @@ namespace App\Services;
 
 use App\Models\Address;
 use App\Models\Cart;
+use App\Models\Delivery;
 use App\Models\Order;
 use App\Models\OrderDiscount;
 use App\Models\OrderItem;
 use App\Models\OrderStatusHistory;
 use App\Models\Product;
+use App\Models\Promo;
 use App\Models\Voucher;
 use App\Models\Wallet;
 use App\Models\WalletTransaction;
@@ -20,9 +22,9 @@ class CheckoutService
     {
     }
 
-    public function processCheckout(int $userId, int $addressId, string $deliveryMethod, ?string $voucherCode = null)
+    public function processCheckout(int $userId, int $addressId, string $deliveryMethod, ?string $voucherCode = null, ?string $promoCode = null)
     {
-        return DB::transaction(function () use ($userId, $addressId, $deliveryMethod, $voucherCode) {
+        return DB::transaction(function () use ($userId, $addressId, $deliveryMethod, $voucherCode, $promoCode) {
             $cart = Cart::with(['items.product', 'store'])->where('user_id', $userId)->first();
 
             if (!$cart || $cart->items->isEmpty()) {
@@ -70,7 +72,7 @@ class CheckoutService
             $deliveryFee = $this->getDeliveryFee($deliveryMethod);
 
             // Process voucher if provided
-            $discount = 0;
+            $voucherDiscount = 0;
             $voucher = null;
             $voucherId = null;
 
@@ -78,13 +80,40 @@ class CheckoutService
                 $voucher = Voucher::where('code', $voucherCode)->first();
 
                 if ($voucher && $this->validateVoucher($voucher, $subtotal)) {
-                    $discount = $this->calculateDiscount($voucher, $subtotal);
+                    $voucherDiscount = $this->calculateDiscount($voucher, $subtotal);
                     $voucherId = $voucher->id;
 
                     // Decrement remaining usage
                     if ($voucher->remaining_usage !== null) {
                         $voucher->decrement('remaining_usage');
                     }
+                }
+            }
+
+            // Process promo if provided
+            $promoDiscount = 0;
+            $promo = null;
+            $promoId = null;
+
+            if ($promoCode) {
+                $promo = Promo::where('code', $promoCode)->first();
+
+                if ($promo && $this->validatePromo($promo, $subtotal)) {
+                    $promoDiscount = $this->calculatePromoDiscount($promo, $subtotal);
+                    $promoId = $promo->id;
+                }
+            }
+
+            // Calculate total discount (Voucher and Promo cannot be combined - use the larger one)
+            $discount = max($voucherDiscount, $promoDiscount);
+
+            // Store which discount was applied
+            $appliedDiscountType = null;
+            if ($discount > 0) {
+                if ($voucherDiscount > $promoDiscount) {
+                    $appliedDiscountType = 'voucher';
+                } else {
+                    $appliedDiscountType = 'promo';
                 }
             }
 
@@ -122,12 +151,20 @@ class CheckoutService
                 'voucher_id' => $voucherId,
             ]);
 
-            // Create order discount record if voucher was used
-            if ($voucher && $discount > 0) {
+            Delivery::create([
+                'order_id' => $order->id,
+                'method' => $deliveryMethod,
+                'fee' => $deliveryFee,
+                'status' => 'waiting_driver',
+            ]);
+
+            // Create order discount record if voucher or promo was used
+            if ($discount > 0) {
+                $discountCode = $appliedDiscountType === 'voucher' ? $voucher->code : $promo->code;
                 OrderDiscount::create([
                     'order_id' => $order->id,
-                    'discount_type' => 'voucher',
-                    'discount_code' => $voucher->code,
+                    'discount_type' => $appliedDiscountType,
+                    'discount_code' => $discountCode,
                     'discount_value' => $discount,
                 ]);
             }
@@ -224,6 +261,29 @@ class CheckoutService
     }
 
     /**
+     * Validate promo for checkout
+     */
+    private function validatePromo(Promo $promo, float $subtotal): bool
+    {
+        // Check if promo is active
+        if (!$promo->is_active) {
+            return false;
+        }
+
+        // Check expiration
+        if ($promo->expired_at < now()) {
+            return false;
+        }
+
+        // Check minimum purchase
+        if ($promo->minimum_purchase && $subtotal < $promo->minimum_purchase) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Calculate discount based on voucher type and value
      */
     private function calculateDiscount(Voucher $voucher, float $subtotal): float
@@ -238,6 +298,27 @@ class CheckoutService
             // Apply max_discount limit if set
             if ($voucher->max_discount && $discount > $voucher->max_discount) {
                 $discount = $voucher->max_discount;
+            }
+
+            return min($discount, $subtotal);
+        }
+    }
+
+    /**
+     * Calculate discount based on promo type and value
+     */
+    private function calculatePromoDiscount(Promo $promo, float $subtotal): float
+    {
+        if ($promo->type === 'fixed') {
+            // Fixed amount discount
+            return min($promo->value, $subtotal);
+        } else {
+            // Percentage discount
+            $discount = ($promo->value / 100) * $subtotal;
+
+            // Apply max_discount limit if set
+            if ($promo->max_discount && $discount > $promo->max_discount) {
+                $discount = $promo->max_discount;
             }
 
             return min($discount, $subtotal);

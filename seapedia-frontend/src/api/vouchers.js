@@ -21,9 +21,18 @@ export const voucherAPI = {
   },
 
   /**
-   * Apply voucher to calculate discount (in orders.js)
-   * Kept here for reference, actual implementation is in orders.js
+   * Apply voucher to calculate discount
+   * @param {string} code - Voucher code
+   * @param {number} subtotal - Order subtotal
+   * @returns {Promise} - Discount calculation result
    */
+  applyVoucher: async (code, subtotal) => {
+    const response = await api.post('/api/v1/buyer/orders/apply-voucher', {
+      voucher_code: code,
+      subtotal,
+    });
+    return response.data;
+  },
 };
 
 // Admin voucher management
