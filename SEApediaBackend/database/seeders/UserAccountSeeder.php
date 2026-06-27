@@ -105,7 +105,6 @@ class UserAccountSeeder extends Seeder
             ['user_id' => $user->id],
             [
                 'balance' => 1000000, // 1 Million starting balance
-                'is_active' => true,
             ]
         );
     }
