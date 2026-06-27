@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { driverAPI } from '../../api/driver';
+import { authAPI } from '../../api/auth';
 import {
   Card, CardContent, CardDescription, CardHeader, CardTitle,
 } from '../../components/ui/card';
@@ -116,16 +117,30 @@ export default function DriverHistoryPage() {
         });
       }
       
+      // Hitung completed jobs dari halaman saat ini untuk tampilan
       const completed = jobsData.filter(j => j.status === 'completed');
       setCompletedJobs(completed.length);
-      const totalEarnings = completed.reduce((sum, job) => sum + Number(job.fee), 0);
-      setEarnings(totalEarnings);
+      // Catatan: earnings diambil dari dashboard API (total semua waktu),
+      // bukan dihitung dari halaman ini saja
     } catch (err) {
       toast.error(err.response?.data?.message || 'Gagal memuat riwayat');
       setJobs([]);
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  // Ambil total earnings dari endpoint dashboard (akurat untuk semua halaman)
+  useEffect(() => {
+    authAPI.getDashboard()
+      .then((res) => {
+        const data = res?.data?.data ?? res?.data ?? res;
+        const dashEarnings = data?.financial_summaries?.driver_earnings ?? 0;
+        setEarnings(dashEarnings);
+      })
+      .catch(() => {
+        // Fallback: earnings tetap 0 jika gagal
+      });
   }, []);
 
   useEffect(() => {

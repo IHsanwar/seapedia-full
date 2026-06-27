@@ -14,10 +14,10 @@ import {
 import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'react-toastify';
 
-// Backend accepts email OR username in the `login` field
+// Backend menerima email ATAU username di field `login`
 const loginSchema = z.object({
-  login:    z.string().min(1, { message: 'Email or username is required' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  login:    z.string().min(1, { message: 'Email atau username wajib diisi' }),
+  password: z.string().min(6, { message: 'Password minimal 6 karakter' }),
 });
 
 export default function LoginPage() {
@@ -32,9 +32,9 @@ export default function LoginPage() {
   const onSubmit = async (data) => {
     try {
       const res = await login(data);
-      toast.success('Login successful!');
+      toast.success('Login berhasil!');
 
-      // If user is a buyer, go straight to dashboard. Otherwise, if multiple roles, pick first.
+      // Jika user adalah buyer, langsung ke dashboard. Jika multi-role, pilih role dulu.
       if (res?.roles?.includes('buyer')) {
         navigate('/dashboard');
       } else if (res?.roles?.length > 1) {
@@ -44,7 +44,7 @@ export default function LoginPage() {
       }
     } catch (err) {
       toast.error(
-        err.response?.data?.message || 'Login failed. Please check your credentials.'
+        err.response?.data?.message || 'Login gagal. Periksa kembali email dan password kamu.'
       );
     }
   };
@@ -52,9 +52,9 @@ export default function LoginPage() {
   return (
     <Card className="shadow-lg border-primary/20">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl text-center">Welcome back</CardTitle>
+        <CardTitle className="text-2xl text-center">Selamat datang kembali</CardTitle>
         <CardDescription className="text-center">
-          Enter your email (or username) and password to sign in
+          Masukkan email atau username dan password kamu
         </CardDescription>
       </CardHeader>
 
@@ -62,7 +62,7 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* login field (email or username) */}
           <div className="space-y-2">
-            <Label htmlFor="login">Email or Username</Label>
+            <Label htmlFor="login">Email atau Username</Label>
             <Input
               id="login"
               type="text"
@@ -102,16 +102,16 @@ export default function LoginPage() {
 
           <Button type="submit" className="w-full" disabled={isSubmitting}>
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Sign In
+            Masuk
           </Button>
         </form>
       </CardContent>
 
       <CardFooter>
         <p className="text-sm text-center text-muted-foreground w-full">
-          Don&apos;t have an account?{' '}
+          Belum punya akun?{' '}
           <Link to="/register" className="text-primary hover:underline">
-            Register here
+            Daftar di sini
           </Link>
         </p>
       </CardFooter>

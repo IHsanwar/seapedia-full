@@ -71,6 +71,20 @@ export default function RoleSelectPage() {
     try {
       await authAPI.addRole(role);
       await fetchMe();
+
+      // Driver memerlukan langkah tambahan: isi data kendaraan
+      if (role === 'driver') {
+        // Switch ke role driver dulu agar token memiliki ability role:driver
+        try {
+          await switchRole('driver');
+        } catch {
+          // Jika switchRole gagal, fetchMe sudah cukup untuk update state
+        }
+        toast.success('Role driver berhasil ditambahkan! Silakan lengkapi data kendaraan.');
+        navigate('/driver/register');
+        return;
+      }
+
       await switchRole(role);
       toast.success(`Berhasil daftar dan masuk sebagai ${ROLE_META[role]?.label ?? role}!`);
       navigate(`/${role}/dashboard`);

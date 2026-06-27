@@ -33,16 +33,18 @@ class UserResource extends JsonResource
         }
 
         return [
-            'id'         => $this->id,
-            'name'       => $this->name,
-            'username'   => $this->username,
-            'email'      => $this->email,
-            'phone'      => $this->phone,
-            'avatar_url' => $this->avatar_url,
-            'active_role'=> $activeRole,
-            'roles'      => $this->whenLoaded('roles', fn () => $this->roles->pluck('name')->values()),
-            'created_at' => $this->created_at?->toDateTimeString(),
-            'updated_at' => $this->updated_at?->toDateTimeString(),
+            'id'                 => $this->id,
+            'name'               => $this->name,
+            'username'           => $this->username,
+            'email'              => $this->email,
+            'phone'              => $this->phone,
+            'avatar_url'         => $this->avatar_url,
+            'active_role'        => $activeRole,
+            'roles'              => $this->whenLoaded('roles', fn () => $this->roles->pluck('name')->values()),
+            // Flag untuk frontend: apakah user sudah terdaftar di tabel drivers
+            'has_driver_profile' => $this->driver !== null,
+            'created_at'         => $this->created_at?->toDateTimeString(),
+            'updated_at'         => $this->updated_at?->toDateTimeString(),
         ];
     }
 }

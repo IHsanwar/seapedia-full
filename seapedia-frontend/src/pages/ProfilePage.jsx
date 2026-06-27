@@ -38,7 +38,7 @@ export default function ProfilePage() {
           avatar_url: userData.avatar_url || '',
         });
       } catch (err) {
-        toast.error('Failed to load profile: ' + (err.response?.data?.message || err.message));
+        toast.error('Gagal memuat profil: ' + (err.response?.data?.message || err.message));
       } finally {
         setIsLoading(false);
       }
@@ -59,10 +59,10 @@ export default function ProfilePage() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      toast.info('Profile update feature coming soon!');
+      toast.info('Fitur pembaruan profil segera hadir!');
       setIsEditing(false);
     } catch (err) {
-      toast.error('Failed to update profile: ' + (err.response?.data?.message || err.message.message));
+      toast.error('Gagal memperbarui profil: ' + (err.response?.data?.message || err.message.message));
     } finally {
       setIsSaving(false);
     }
@@ -87,10 +87,10 @@ export default function ProfilePage() {
         <Card className="max-w-md mx-auto">
           <CardContent className="p-8">
             <Shield className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-4">Authentication Required</h2>
-            <p className="text-muted-foreground mb-6">Please login to view your profile.</p>
+            <h2 className="text-2xl font-bold mb-4">Autentikasi Diperlukan</h2>
+            <p className="text-muted-foreground mb-6">Silakan login untuk melihat profil kamu.</p>
             <Button asChild className="w-full">
-              <Link to="/login">Login</Link>
+              <Link to="/login">Masuk</Link>
             </Button>
           </CardContent>
         </Card>
@@ -109,7 +109,7 @@ export default function ProfilePage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <Link to="/dashboard" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6">
-        <ArrowLeft className="h-4 w-4 mr-1" /> Back to dashboard
+        <ArrowLeft className="h-4 w-4 mr-1" /> Kembali ke dashboard
       </Link>
 
       <div className="space-y-6">
@@ -140,12 +140,12 @@ export default function ProfilePage() {
               {!isEditing ? (
                 <Button onClick={() => setIsEditing(true)}>
                   <Eye className="h-4 w-4 mr-2" />
-                  Edit Profile
+                  Edit Profil
                 </Button>
               ) : (
                 <div className="flex gap-2">
                   <Button variant="outline" onClick={handleCancel} disabled={isSaving}>
-                    Cancel
+                    Batal
                   </Button>
                   <Button onClick={handleSave} disabled={isSaving}>
                     {isSaving ? (
@@ -153,7 +153,7 @@ export default function ProfilePage() {
                     ) : (
                       <Save className="h-4 w-4 mr-2" />
                     )}
-                    Save Changes
+                    Simpan Perubahan
                   </Button>
                 </div>
               )}
@@ -164,15 +164,15 @@ export default function ProfilePage() {
         {/* Profile Information */}
         <Card>
           <CardHeader>
-            <CardTitle>Profile Information</CardTitle>
+            <CardTitle>Informasi Profil</CardTitle>
             <CardDescription>
-              {isEditing ? 'Update your personal information' : 'Your personal information'}
+              {isEditing ? 'Perbarui informasi pribadi kamu' : 'Informasi pribadi kamu'}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
+                <Label htmlFor="name">Nama Lengkap</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
@@ -234,7 +234,7 @@ export default function ProfilePage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="avatar_url">Avatar URL</Label>
+              <Label htmlFor="avatar_url">URL Avatar</Label>
               <div className="relative">
                 <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -254,8 +254,8 @@ export default function ProfilePage() {
         {/* Roles Information */}
         <Card>
           <CardHeader>
-            <CardTitle>Your Roles</CardTitle>
-            <CardDescription>Roles and permissions you have access to</CardDescription>
+            <CardTitle>Role Kamu</CardTitle>
+            <CardDescription>Role dan izin yang kamu miliki</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-3">
@@ -271,16 +271,16 @@ export default function ProfilePage() {
                     {role === 'driver' && <Truck className="h-4 w-4 mr-1" />}
                     {role === 'admin' && <Shield className="h-4 w-4 mr-1" />}
                     <span className="capitalize">{role}</span>
-                    {role === activeRole && <span className="ml-2 text-xs">(Active)</span>}
+                    {role === activeRole && <span className="ml-2 text-xs">(Aktif)</span>}
                   </Badge>
                 ))
               ) : (
-                <p className="text-muted-foreground">No roles assigned yet.</p>
+                <p className="text-muted-foreground">Belum ada role yang ditetapkan.</p>
               )}
             </div>
             {profile?.roles && profile.roles.length > 1 && (
               <p className="text-sm text-muted-foreground mt-4">
-                You have multiple roles. Switch your active role from the dashboard to access different features.
+                Kamu memiliki beberapa role. Ganti role aktif dari dashboard untuk mengakses fitur yang berbeda.
               </p>
             )}
           </CardContent>

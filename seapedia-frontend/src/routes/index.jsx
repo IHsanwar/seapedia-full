@@ -41,6 +41,12 @@ import BuyerReportsPage from '../pages/buyer/BuyerReportsPage';
 
 // Pages - Admin
 import VoucherManagementPage from '../pages/admin/VoucherManagementPage';
+import AdminDashboardPage from '../pages/admin/AdminDashboardPage';
+import AdminOrdersPage from '../pages/admin/AdminOrdersPage';
+import AdminStoresPage from '../pages/admin/AdminStoresPage';
+import AdminDeliveriesPage from '../pages/admin/AdminDeliveriesPage';
+import AdminOverduePage from '../pages/admin/AdminOverduePage';
+import PromoManagementPage from '../pages/admin/PromoManagementPage';
 
 // Pages - Driver
 import DriverRegisterPage from '../pages/driver/DriverRegisterPage';
@@ -93,7 +99,13 @@ export default function AppRoutes() {
         </Route>
 
         <Route element={<ProtectedRoute requireRole={true} allowedRoles={['admin']} />}>
+          <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
           <Route path="/admin/vouchers" element={<VoucherManagementPage />} />
+          <Route path="/admin/promos" element={<PromoManagementPage />} />
+          <Route path="/admin/orders" element={<AdminOrdersPage />} />
+          <Route path="/admin/stores" element={<AdminStoresPage />} />
+          <Route path="/admin/deliveries" element={<AdminDeliveriesPage />} />
+          <Route path="/admin/overdue" element={<AdminOverduePage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

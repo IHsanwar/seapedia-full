@@ -26,7 +26,7 @@ class DriverController extends Controller
 
         $driver = $user->driver()->create([
             'name' => $user->name,
-            'phone_number' => $user->phone_number,
+            'phone_number' => $user->phone ?? '',
             'vehicle_type' => $validated['vehicle_type'],
             'vehicle_plate_number' => $validated['vehicle_plate_number'],
             'is_active' => true,

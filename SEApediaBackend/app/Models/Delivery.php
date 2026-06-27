@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Delivery extends Model
 {
@@ -23,6 +24,6 @@ class Delivery extends Model
 
     public function driver()
     {
-        return $this->belongsTo(Driver::class);
+        return $this->belongsTo(User::class, 'driver_id');
     }
 }

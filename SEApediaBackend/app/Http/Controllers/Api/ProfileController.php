@@ -30,7 +30,7 @@ class ProfileController extends Controller
      */
     public function dashboard(Request $request)
     {
-        $user = $request->user()->load('roles');
+        $user = $request->user()->load(['roles', 'driver', 'wallet']);
         
         $activeRole = null;
         if ($user->currentAccessToken()) {
@@ -48,18 +48,40 @@ class ProfileController extends Controller
         $wallet = $user->wallet;
         $walletBalance = $wallet ? (float) $wallet->balance : 0;
 
+        $driverEarnings = 0;
+        $driverStats = null;
+
+        try {
+            if ($user->driver) {
+                $driverEarnings = $user->driver->calculateEarnings();
+                $driverStats = [
+                    'completed_jobs' => $user->driver->completedDeliveries()->count(),
+                    'active_jobs' => $user->driver->activeDeliveries()->count(),
+                ];
+            }
+        } catch (\Exception $e) {
+            $driverEarnings = 0;
+            $driverStats = null;
+        }
+
         $financialSummaries = [
             'wallet_balance' => $walletBalance,
             'seller_income' => 0,
-            'driver_earnings' => 0,
+            'driver_earnings' => $driverEarnings,
         ];
 
-        return $this->success([
+        $response = [
             'user' => new UserResource($user),
             'active_role' => $activeRole,
             'owned_roles' => $ownedRoles,
             'financial_summaries' => $financialSummaries,
-        ], 'Dashboard summary retrieved successfully.');
+        ];
+
+        if ($driverStats) {
+            $response['driver_stats'] = $driverStats;
+        }
+
+        return $this->success($response, 'Dashboard summary retrieved successfully.');
     }
 
     /**
@@ -69,7 +91,7 @@ class ProfileController extends Controller
      */
     public function show(Request $request)
     {
-        $user = $request->user()->load('roles');
+        $user = $request->user()->load('roles', 'driver');
         
         return $this->success([
             'user' => new UserResource($user),
@@ -96,7 +118,7 @@ class ProfileController extends Controller
         $user->update($validated);
 
         return $this->success([
-            'user' => new UserResource($user->fresh()->load('roles')),
+            'user' => new UserResource($user->fresh()->load('roles', 'driver')),
         ], 'Profile updated successfully.');
     }
 }

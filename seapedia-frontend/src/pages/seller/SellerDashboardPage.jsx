@@ -13,6 +13,7 @@ import {
 } from '../../components/ui/dialog';
 import {
   Store, Package, Plus, Pencil, Trash2, Loader2, AlertTriangle, ImageIcon, LayoutGrid,
+  ShoppingBag, TrendingUp, ExternalLink,
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 
@@ -232,7 +233,38 @@ export default function SellerDashboardPage() {
             </div>
           </div>
         </CardContent>
-      </Card>      <div className="flex items-center justify-between mb-6">
+      </Card>      {/* Quick Action Panel */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+        <Button
+          className="flex items-center justify-between h-14 px-5 bg-green-600 hover:bg-green-700"
+          onClick={() => navigate('/seller/orders')}
+        >
+          <div className="flex items-center gap-3">
+            <ShoppingBag className="h-5 w-5" />
+            <div className="text-left">
+              <p className="font-semibold text-sm">Kelola Pesanan</p>
+              <p className="text-xs opacity-80">Proses pesanan masuk</p>
+            </div>
+          </div>
+          <ExternalLink className="h-4 w-4 opacity-70" />
+        </Button>
+        <Button
+          variant="outline"
+          className="flex items-center justify-between h-14 px-5 border-green-200 dark:border-green-800 hover:bg-green-50 dark:hover:bg-green-950"
+          onClick={() => navigate('/seller/reports')}
+        >
+          <div className="flex items-center gap-3">
+            <TrendingUp className="h-5 w-5 text-green-600" />
+            <div className="text-left">
+              <p className="font-semibold text-sm">Laporan &amp; Penghasilan</p>
+              <p className="text-xs text-muted-foreground">Ringkasan pendapatan toko</p>
+            </div>
+          </div>
+          <ExternalLink className="h-4 w-4 text-muted-foreground" />
+        </Button>
+      </div>
+
+      <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-lg font-bold flex items-center gap-2">
             <Package className="h-5 w-5 text-green-600" />

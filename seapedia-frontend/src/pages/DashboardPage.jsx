@@ -73,14 +73,30 @@ function SellerCards({ financial }) {
   );
 }
 
-function DriverCards({ financial }) {
+function DriverCards({ financial, driverStats }) {
   return (
     <>
-      <StatCard icon={Wallet} label="Penghasilan Driver"
+      <StatCard 
+        icon={Wallet} 
+        label="Penghasilan Driver"
         value={`Rp ${(financial?.driver_earnings ?? 0).toLocaleString('id-ID')}`}
-        color="text-orange-600" bg="bg-orange-50 dark:bg-orange-950" />
-      <StatCard icon={Truck} label="Job Selesai" value="—" color="text-orange-600" bg="bg-orange-50 dark:bg-orange-950" comingSoon />
-      <StatCard icon={MapPin} label="Job Aktif" value="—" color="text-orange-600" bg="bg-orange-50 dark:bg-orange-950" comingSoon />
+        color="text-orange-600" 
+        bg="bg-orange-50 dark:bg-orange-950" 
+      />
+      <StatCard 
+        icon={Truck} 
+        label="Job Selesai" 
+        value={driverStats?.completed_jobs ?? 0}
+        color="text-orange-600" 
+        bg="bg-orange-50 dark:bg-orange-950" 
+      />
+      <StatCard 
+        icon={MapPin} 
+        label="Job Aktif" 
+        value={driverStats?.active_jobs ?? 0}
+        color="text-orange-600" 
+        bg="bg-orange-50 dark:bg-orange-950" 
+      />
     </>
   );
 }
@@ -144,21 +160,66 @@ export default function DashboardPage() {
     }
   }, [role, activeRole, roles, navigate, switchRole]);
 
+  // Redirect driver to registration if they lack a driver profile
+  useEffect(() => {
+    if (role === 'driver' && user && user.has_driver_profile === false) {
+      navigate('/driver/register', { replace: true });
+    }
+  }, [role, user, navigate]);
+
   useEffect(() => {
     if (!activeRole || activeRole === 'none') return;
     if (role && role !== activeRole) return;
 
-    Promise.resolve().then(() => setLoadingDash(true));
-    authAPI.getDashboard()
-      .then((res) => setDashboard(res?.data ?? res))
-      .catch(() => {})
-      .finally(() => setLoadingDash(false));
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    setLoadingDash(true);
+
+    authAPI.getDashboard({ signal })
+      .then((res) => {
+        // Backend: { success, message, data: { user, financial_summaries, driver_stats } }
+        // res dari axios = HTTP response object, res.data = body JSON
+        // Maka data ada di res.data.data (nested karena ApiResponse wrapper)
+        const data = res?.data?.data ?? res?.data ?? res;
+        if (data && typeof data === 'object') {
+          setDashboard({
+            financial_summaries: data.financial_summaries ?? null,
+            driver_stats: data.driver_stats ?? null
+          });
+        } else {
+          setDashboard(null);
+        }
+      })
+      .catch((err) => {
+        if (err.name !== 'AbortError') {
+          toast.error(err.response?.data?.message || 'Gagal memuat data dashboard');
+          setDashboard(null);
+        }
+      })
+      .finally(() => {
+        if (!signal.aborted) {
+          setLoadingDash(false);
+        }
+      });
 
     if (activeRole === 'buyer') {
-      addressAPI.getAddresses()
-        .then((res) => setAddressCount(res?.data?.length ?? 0))
-        .catch(() => setAddressCount(0));
+      addressAPI.getAddresses({ signal })
+        .then((res) => {
+          const addresses = res?.data ?? [];
+          setAddressCount(Array.isArray(addresses) ? addresses.length : 0);
+        })
+        .catch((err) => {
+          if (err.name !== 'AbortError') {
+            toast.error(err.response?.data?.message || 'Gagal memuat alamat');
+            setAddressCount(0);
+          }
+        });
     }
+
+    return () => {
+      abortController.abort();
+    };
   }, [activeRole, role]);
 
   const handleSwitch = async (targetRole) => {
@@ -177,8 +238,22 @@ export default function DashboardPage() {
   const handleRegisterRole = async () => {
     setRegistering(true);
     try {
-      await authAPI.addRole(role);
+      const res = await authAPI.addRole(role);
       await fetchMe();
+      
+      // Driver memerlukan step tambahan: isi data kendaraan
+      if (role === 'driver') {
+        // Coba switch ke driver role dulu (sudah di-attach oleh addRole)
+        try {
+          await switchRole('driver');
+        } catch {
+          // Jika gagal, fetchMe sudah update state
+        }
+        toast.success('Role driver berhasil ditambahkan! Silakan lengkapi data kendaraan.');
+        navigate('/driver/register', { replace: true });
+        return;
+      }
+
       await switchRole(role);
       toast.success(`Berhasil daftar dan masuk sebagai ${ROLE_META[role]?.label ?? role}!`);
     } catch (err) {
@@ -195,6 +270,11 @@ export default function DashboardPage() {
       navigate('/select-role');
     }
   };
+
+  // Jika user memiliki role driver tapi belum memiliki profil driver (kendaraan) → arahkan ke registrasi (di-handle oleh useEffect)
+  if (role === 'driver' && user?.has_driver_profile === false) {
+    return null;
+  }
 
   // If user does not own this role (and it's a registerable role), display registration prompt
   if (role && ['buyer', 'seller', 'driver'].includes(role) && !roles.includes(role)) {
@@ -258,8 +338,8 @@ export default function DashboardPage() {
 
   const meta    = ROLE_META[activeRole] ?? ROLE_META.buyer;
   const RoleIcon = meta.icon;
-  const financial = dashboard?.financial_summaries ?? null;
-  const financialData = dashboard?.financial_summaries ?? null;
+  const { financial_summaries = null, driver_stats = null } = dashboard ?? {};
+  const financialData = financial_summaries;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
@@ -288,7 +368,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           {activeRole === 'buyer'  && <BuyerCards  financial={financialData} addressCount={addressCount} />}
           {activeRole === 'seller' && <SellerCards financial={financialData} />}
-          {activeRole === 'driver' && <DriverCards financial={financialData} />}
+          {activeRole === 'driver' && <DriverCards financial={financial_summaries} driverStats={driver_stats} />}
           {activeRole === 'admin'  && <AdminCards />}
           {(!activeRole || activeRole === 'none') && (
             <div className="col-span-3 text-center py-8 text-muted-foreground text-sm border rounded-xl border-dashed">
@@ -409,14 +489,56 @@ export default function DashboardPage() {
             </div>
           )}
           {activeRole === 'admin' && (
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-wrap gap-3">
               <Button
-                className="flex-1 font-medium"
+                className="font-medium"
+                onClick={() => navigate('/admin/dashboard')}
+              >
+                <LayoutDashboard className="h-4 w-4 mr-2" />
+                Dashboard Monitoring
+                <ExternalLink className="h-3.5 w-3.5 ml-2 opacity-70" />
+              </Button>
+              <Button
+                variant="outline"
                 onClick={() => navigate('/admin/vouchers')}
               >
                 <Tag className="h-4 w-4 mr-2" />
                 Kelola Voucher
-                <ExternalLink className="h-3.5 w-3.5 ml-2 opacity-70" />
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => navigate('/admin/promos')}
+              >
+                <Tag className="h-4 w-4 mr-2" />
+                Kelola Promo
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => navigate('/admin/orders')}
+              >
+                <ShoppingBag className="h-4 w-4 mr-2" />
+                Monitor Orders
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => navigate('/admin/stores')}
+              >
+                <Store className="h-4 w-4 mr-2" />
+                Monitor Stores
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => navigate('/admin/deliveries')}
+              >
+                <Truck className="h-4 w-4 mr-2" />
+                Monitor Deliveries
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => navigate('/admin/overdue')}
+              >
+                <Clock className="h-4 w-4 mr-2" />
+                Overdue Handling
               </Button>
             </div>
           )}

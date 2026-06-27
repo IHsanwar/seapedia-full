@@ -22,7 +22,7 @@ import { toast } from 'react-toastify';
 
 const STATUS_COLORS = {
   'Sedang Dikemas': 'bg-blue-100 text-blue-800',
-  'Menunggu Pengiriman': 'bg-yellow-100 text-yellow-800',
+  'Menunggu Pengirim': 'bg-yellow-100 text-yellow-800',
   'Sedang Dikirim': 'bg-purple-100 text-purple-800',
   'Pesanan Selesai': 'bg-green-100 text-green-800',
   'Dikembalikan': 'bg-red-100 text-red-800',

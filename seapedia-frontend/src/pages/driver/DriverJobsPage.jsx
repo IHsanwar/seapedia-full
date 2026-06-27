@@ -40,7 +40,7 @@ function JobCard({ job, onTake, taking }) {
               {store?.store_name || 'Unknown Store'}
             </CardTitle>
             <CardDescription className="text-xs mt-1">
-              {order?.items?.length || 0} item(s) • Rp {Number(job.fee).toLocaleString('id-ID')} delivery fee
+              {order?.items?.length || 0} item &bull; Rp {Number(job.fee).toLocaleString('id-ID')} biaya pengiriman
             </CardDescription>
           </div>
         </div>
@@ -50,7 +50,7 @@ function JobCard({ job, onTake, taking }) {
           <div className="flex items-start gap-2 text-sm">
             <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
             <div className="flex-1">
-              <p className="font-medium">Delivery Address</p>
+              <p className="font-medium">Alamat Pengiriman</p>
               <p className="text-xs text-muted-foreground line-clamp-2">
                 {address?.address_line_1}, {address?.city}, {address?.province}
               </p>
@@ -213,10 +213,10 @@ export default function DriverJobsPage() {
             disabled={pagination.current_page === 1}
             onClick={() => fetchJobs(pagination.current_page - 1)}
           >
-            Previous
+            Sebelumnya
           </Button>
           <span className="text-sm text-muted-foreground">
-            Page {pagination.current_page} of {pagination.last_page}
+            Halaman {pagination.current_page} dari {pagination.last_page}
           </span>
           <Button
             variant="outline"
@@ -224,7 +224,7 @@ export default function DriverJobsPage() {
             disabled={pagination.current_page === pagination.last_page}
             onClick={() => fetchJobs(pagination.current_page + 1)}
           >
-            Next
+            Berikutnya
           </Button>
         </div>
       )}

@@ -8,21 +8,18 @@ import {
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
-import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from '../../components/ui/select';
-import { Truck, Loader2, AlertCircle } from 'lucide-react';
+import { Truck, Loader2, AlertCircle, ChevronDown } from 'lucide-react';
 import { toast } from 'react-toastify';
 
 const VEHICLE_TYPES = [
   { value: 'motor', label: 'Motor' },
   { value: 'mobil', label: 'Mobil' },
   { value: 'van', label: 'Van' },
-  { value: 'truck', label: 'Truck' },
+  { value: 'truck', label: 'Truk' },
 ];
 
 export default function DriverRegisterPage() {
-  const { user } = useAuth();
+  const { user, fetchMe, switchRole } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -35,15 +32,15 @@ export default function DriverRegisterPage() {
     const newErrors = {};
 
     if (!formData.vehicle_type) {
-      newErrors.vehicle_type = 'Vehicle type is required';
+      newErrors.vehicle_type = 'Jenis kendaraan wajib dipilih';
     }
 
     if (!formData.vehicle_plate_number.trim()) {
-      newErrors.vehicle_plate_number = 'License plate is required';
+      newErrors.vehicle_plate_number = 'Nomor plat wajib diisi';
     } else if (formData.vehicle_plate_number.length < 5) {
-      newErrors.vehicle_plate_number = 'License plate must be at least 5 characters';
+      newErrors.vehicle_plate_number = 'Nomor plat minimal 5 karakter';
     } else if (formData.vehicle_plate_number.length > 15) {
-      newErrors.vehicle_plate_number = 'License plate must not exceed 15 characters';
+      newErrors.vehicle_plate_number = 'Nomor plat maksimal 15 karakter';
     }
 
     setErrors(newErrors);
@@ -62,13 +59,21 @@ export default function DriverRegisterPage() {
       const response = await driverAPI.register(formData);
 
       if (response.success) {
-        toast.success('Driver registration successful!');
-        navigate('/driver/dashboard');
+        toast.success('Pendaftaran driver berhasil!');
+        // Refresh user data agar has_driver_profile = true
+        await fetchMe();
+        // Switch ke role driver untuk mendapatkan token dengan ability role:driver
+        try {
+          await switchRole('driver');
+        } catch {
+          // Jika switchRole gagal, fetchMe sudah cukup untuk update state
+        }
+        navigate('/driver/dashboard', { replace: true });
       } else {
-        toast.error(response.message || 'Registration failed');
+        toast.error(response.message || 'Pendaftaran gagal');
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Registration failed. Please try again.');
+      toast.error(error.response?.data?.message || 'Pendaftaran gagal. Silakan coba lagi.');
     } finally {
       setLoading(false);
     }
@@ -83,36 +88,37 @@ export default function DriverRegisterPage() {
               <Truck className="h-8 w-8 text-orange-600 dark:text-orange-400" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold">Driver Registration</CardTitle>
+          <CardTitle className="text-2xl font-bold">Pendaftaran Driver</CardTitle>
           <CardDescription>
-            Complete your driver profile to start delivering orders
+            Lengkapi profil driver kamu untuk mulai mengantarkan pesanan
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Jenis Kendaraan – native select agar lebih kompatibel */}
             <div className="space-y-2">
-              <Label htmlFor="vehicle_type">Vehicle Type</Label>
-              <Select
-                value={formData.vehicle_type}
-                onValueChange={(value) => {
-                  setFormData({ ...formData, vehicle_type: value });
-                  setErrors({ ...errors, vehicle_type: '' });
-                }}
-              >
-                <SelectTrigger
+              <Label htmlFor="vehicle_type">Jenis Kendaraan</Label>
+              <div className="relative">
+                <select
                   id="vehicle_type"
-                  className={errors.vehicle_type ? 'border-red-500' : ''}
+                  value={formData.vehicle_type}
+                  onChange={(e) => {
+                    setFormData({ ...formData, vehicle_type: e.target.value });
+                    setErrors({ ...errors, vehicle_type: '' });
+                  }}
+                  className={`flex h-10 w-full appearance-none rounded-md border bg-background px-3 py-2 pr-9 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+                    errors.vehicle_type ? 'border-red-500' : 'border-input'
+                  }`}
                 >
-                  <SelectValue placeholder="Select vehicle type" />
-                </SelectTrigger>
-                <SelectContent>
+                  <option value="" disabled>Pilih jenis kendaraan</option>
                   {VEHICLE_TYPES.map((type) => (
-                    <SelectItem key={type.value} value={type.value}>
+                    <option key={type.value} value={type.value}>
                       {type.label}
-                    </SelectItem>
+                    </option>
                   ))}
-                </SelectContent>
-              </Select>
+                </select>
+                <ChevronDown className="pointer-events-none absolute right-3 top-3 h-4 w-4 text-muted-foreground" />
+              </div>
               {errors.vehicle_type && (
                 <p className="text-xs text-red-500 flex items-center gap-1">
                   <AlertCircle className="h-3 w-3" />
@@ -122,11 +128,11 @@ export default function DriverRegisterPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="vehicle_plate_number">License Plate Number</Label>
+              <Label htmlFor="vehicle_plate_number">Nomor Plat Kendaraan</Label>
               <Input
                 id="vehicle_plate_number"
                 type="text"
-                placeholder="e.g., B 1234 ABC"
+                placeholder="Contoh: B 1234 ABC"
                 value={formData.vehicle_plate_number}
                 onChange={(e) => {
                   setFormData({ ...formData, vehicle_plate_number: e.target.value.toUpperCase() });
@@ -151,10 +157,10 @@ export default function DriverRegisterPage() {
               {loading ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Registering...
+                  Mendaftarkan...
                 </>
               ) : (
-                'Register as Driver'
+                'Daftar sebagai Driver'
               )}
             </Button>
           </form>

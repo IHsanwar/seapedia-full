@@ -71,12 +71,12 @@ class OrderController extends Controller
 
         return DB::transaction(function () use ($order) {
             $order->update([
-                'status' => 'Menunggu Pengiriman',
+                'status' => 'Menunggu Pengirim',
             ]);
 
             OrderStatusHistory::create([
                 'order_id' => $order->id,
-                'status' => 'Menunggu Pengiriman',
+                'status' => 'Menunggu Pengirim',
                 'note' => 'Order processed by seller',
             ]);
 
