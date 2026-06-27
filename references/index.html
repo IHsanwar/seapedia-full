@@ -1,0 +1,1316 @@
+<!-- SEAPEDIA General Marketplace Home -->
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SEAPEDIA - General Marketplace</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#983c00",
+                      "secondary-container": "#6df5e1",
+                      "surface-tint": "#115cb9",
+                      "tertiary-fixed-dim": "#ffb694",
+                      "on-primary-container": "#bbd0ff",
+                      "outline": "#727784",
+                      "surface-bright": "#f8f9ff",
+                      "surface-dim": "#ccdbf4",
+                      "surface": "#f8f9ff",
+                      "on-secondary-fixed": "#00201c",
+                      "on-primary": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-low": "#eff4ff",
+                      "inverse-on-surface": "#ebf1ff",
+                      "on-primary-fixed-variant": "#004491",
+                      "error": "#ba1a1a",
+                      "on-secondary": "#ffffff",
+                      "surface-variant": "#d5e3fd",
+                      "secondary-fixed-dim": "#4fdbc8",
+                      "on-surface": "#0d1c2f",
+                      "on-tertiary-fixed": "#351000",
+                      "on-tertiary-fixed-variant": "#7b2f00",
+                      "on-tertiary-container": "#ffc2a7",
+                      "outline-variant": "#c2c6d4",
+                      "primary-fixed": "#d7e2ff",
+                      "primary": "#003f87",
+                      "error-container": "#ffdad6",
+                      "on-background": "#0d1c2f",
+                      "primary-container": "#0056b3",
+                      "on-secondary-fixed-variant": "#005048",
+                      "inverse-primary": "#acc7ff",
+                      "surface-container": "#e6eeff",
+                      "secondary-fixed": "#71f8e4",
+                      "background": "#f8f9ff",
+                      "tertiary": "#722b00",
+                      "on-secondary-container": "#006f64",
+                      "surface-container-highest": "#d5e3fd",
+                      "on-error": "#ffffff",
+                      "secondary": "#006b5f",
+                      "primary-fixed-dim": "#acc7ff",
+                      "surface-container-high": "#dde9ff",
+                      "inverse-surface": "#233144",
+                      "on-error-container": "#93000a",
+                      "on-surface-variant": "#424752",
+                      "tertiary-fixed": "#ffdbcc",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed": "#001a40"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-desktop": "24px",
+                      "base": "4px",
+                      "container-max": "1280px",
+                      "stack-sm": "8px",
+                      "stack-md": "16px",
+                      "margin-mobile": "16px",
+                      "stack-xs": "4px",
+                      "gutter": "20px",
+                      "stack-lg": "32px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .cat-icon {
+            width: 32px;
+            height: 32px;
+            background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDMWWeVa3jiWet2a1uGwFTV0HeZH3ygagWhG97BycmmWWv85zu9MryRWvfSyRaXX0CuEfi0SVQJptXfJSTqTKteEYYa3WD8hEY7CPd0hUIQya52IGVSGsrVZ1ucwLu-3jfw9WDp_pkJzwXTkT6KsYxd4yDzbUJDR-50z7wHhUWvWOUIYF4P_-_udz7TPIbdwhTTlRShFss2787wvRoPzeRK-mCq01xuaa5FDRQ4poACBbjWBC0JFWsvFPHdiUMG5ZxHt_Yyr2piVCEM');
+            background-size: 300% 300%;
+        }
+        
+        .cat-electronics { background-position: 0 0; }
+        .cat-fashion { background-position: 50% 0; }
+        .cat-homeliving { background-position: 50% 50%; }
+        .cat-beauty { background-position: 100% 50%; }
+        .cat-sports { background-position: 0 100%; }
+        .cat-groceries { background-position: 100% 100%; }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface font-body-md antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-background border-b border-outline-variant dark:border-outline w-full sticky top-0 z-50">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+<!-- Brand -->
+<a class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed" href="#">SEAPEDIA</a>
+<!-- Navigation Links (Web) -->
+<nav class="hidden md:flex items-center gap-6">
+<a class="font-body-md text-body-md text-primary dark:text-secondary-fixed border-b-2 border-primary dark:border-secondary-fixed pb-1" href="#">Beranda</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-secondary-fixed transition-colors" href="#"><br></a>
+
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-secondary-fixed transition-colors" href="#">Produk</a>
+</nav>
+<!-- Search (Central on Web) -->
+<div class="hidden md:flex flex-1 max-w-md mx-6">
+<div class="relative w-full">
+<input class="w-full h-[40px] pl-4 pr-12 border border-outline-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-sm text-body-sm bg-surface-container-lowest text-on-surface" placeholder="Cari produk gaya hidup..." type="text">
+<button class="absolute right-0 top-0 h-full px-3 bg-secondary text-on-secondary rounded-r hover:opacity-90 flex items-center justify-center transition-opacity">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</button>
+</div>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center p-2 rounded-full hover:bg-surface-variant">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center p-2 rounded-full hover:bg-surface-variant">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+<button class="md:hidden text-on-surface-variant p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+<!-- Mobile Search (Under nav) -->
+<div class="md:hidden px-margin-mobile pb-4">
+<div class="relative w-full">
+<input class="w-full h-[44px] pl-4 pr-12 border border-outline-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-sm text-body-sm bg-surface-container-lowest text-on-surface" placeholder="Cari produk gaya hidup..." type="text">
+<button class="absolute right-0 top-0 h-full px-4 bg-secondary text-on-secondary rounded-r hover:opacity-90 flex items-center justify-center transition-opacity">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 max-w-container-max mx-auto w-full px-margin-mobile md:px-margin-desktop py-stack-lg space-y-stack-lg">
+<!-- Hero Section -->
+<section class="relative w-full h-[300px] md:h-[400px] rounded overflow-hidden border border-outline-variant bg-surface-container flex items-center justify-start">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Modern lifestyle e-commerce hero banner showing a variety of general consumer goods." style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBplQ-wqbgHSy84KqB_h2ORUvKEcHXa6Fy2xVBFWS7OfcJC0qoc1lWjpiG6afGIf8EhlXJivNW4-4mFoo4Le26CJpQX-iHV0yn-qW8dbM8vN2FEBcQdBgwF31g7sXbPk51YYMBslrG-OqTIvkKQwgJ9Q97eElbX67Tit7TfcI43KdwBph_w29QFMqceGoqMPQMeX7GAGzQWYLhdh1TXV7_knuKngWnKr6wJC_n3T-geyIfV2OeRR9G5IPVoyi0ypJ50vSvwGa4zOlfC&quot;);"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-on-surface/80 to-transparent"></div>
+<div class="relative z-10 p-6 md:p-12 max-w-lg">
+<span class="inline-block px-2 py-1 bg-secondary text-on-secondary font-label-sm text-label-sm rounded mb-4 uppercase tracking-wider">New Arrival</span>
+<h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-surface-container-lowest font-bold mb-4 leading-tight">Segala Keperluan ada di 1 Aplikasi!</h1>
+<p class="font-body-md text-body-md text-surface-container-low mb-6">Temukan berbagai produk pilihan mulai dari elektronik terkini hingga fashion trendi untuk melengkapi aktivitas harian Anda.</p>
+<button class="h-[44px] md:h-[40px] px-6 bg-primary-container text-on-primary rounded font-label-md text-label-md hover:bg-primary transition-colors flex items-center gap-2">
+                    Belanja Sekarang
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Category Grid -->
+<section class="py-4">
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface mb-6">Jelajahi Kategori</h2>
+<div class="grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-gutter">
+<!-- Category Item -->
+<a class="flex flex-col items-center gap-3 p-4 border border-outline-variant rounded hover:border-primary transition-colors bg-surface group" href="#">
+<div class="w-16 h-16 rounded bg-surface-container-low flex items-center justify-center text-primary-container group-hover:bg-primary-container group-hover:text-on-primary transition-colors overflow-hidden">
+<div class="cat-icon cat-electronics filter sepia hue-rotate-[190deg] saturate-200 contrast-125 group-hover:brightness-0 group-hover:invert"></div>
+</div>
+<span class="font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Elektronik</span>
+</a>
+<!-- Category Item -->
+<a class="flex flex-col items-center gap-3 p-4 border border-outline-variant rounded hover:border-primary transition-colors bg-surface group" href="#">
+<div class="w-16 h-16 rounded bg-surface-container-low flex items-center justify-center text-primary-container group-hover:bg-primary-container group-hover:text-on-primary transition-colors overflow-hidden">
+<div class="cat-icon cat-fashion filter sepia hue-rotate-[190deg] saturate-200 contrast-125 group-hover:brightness-0 group-hover:invert"></div>
+</div>
+<span class="font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Fashion</span>
+</a>
+<!-- Category Item -->
+<a class="flex flex-col items-center gap-3 p-4 border border-outline-variant rounded hover:border-primary transition-colors bg-surface group" href="#">
+<div class="w-16 h-16 rounded bg-surface-container-low flex items-center justify-center text-primary-container group-hover:bg-primary-container group-hover:text-on-primary transition-colors overflow-hidden">
+<div class="cat-icon cat-homeliving filter sepia hue-rotate-[190deg] saturate-200 contrast-125 group-hover:brightness-0 group-hover:invert"></div>
+</div>
+<span class="font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Rumah Tangga</span>
+</a>
+<!-- Category Item -->
+<a class="flex flex-col items-center gap-3 p-4 border border-outline-variant rounded hover:border-primary transition-colors bg-surface group" href="#">
+<div class="w-16 h-16 rounded bg-surface-container-low flex items-center justify-center text-primary-container group-hover:bg-primary-container group-hover:text-on-primary transition-colors overflow-hidden">
+<div class="cat-icon cat-beauty filter sepia hue-rotate-[190deg] saturate-200 contrast-125 group-hover:brightness-0 group-hover:invert"></div>
+</div>
+<span class="font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Kecantikan</span>
+</a>
+<!-- Category Item -->
+<a class="flex flex-col items-center gap-3 p-4 border border-outline-variant rounded hover:border-primary transition-colors bg-surface group" href="#">
+<div class="w-16 h-16 rounded bg-surface-container-low flex items-center justify-center text-primary-container group-hover:bg-primary-container group-hover:text-on-primary transition-colors overflow-hidden">
+<div class="cat-icon cat-sports filter sepia hue-rotate-[190deg] saturate-200 contrast-125 group-hover:brightness-0 group-hover:invert"></div>
+</div>
+<span class="font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Olahraga</span>
+</a>
+<!-- Category Item -->
+<a class="flex flex-col items-center gap-3 p-4 border border-outline-variant rounded hover:border-primary transition-colors bg-surface group" href="#">
+<div class="w-16 h-16 rounded bg-surface-container-low flex items-center justify-center text-primary-container group-hover:bg-primary-container group-hover:text-on-primary transition-colors overflow-hidden">
+<div class="cat-icon cat-groceries filter sepia hue-rotate-[190deg] saturate-200 contrast-125 group-hover:brightness-0 group-hover:invert"></div>
+</div>
+<span class="font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Sembako</span>
+</a>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline full-width mt-stack-lg">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop py-stack-lg max-w-container-max mx-auto">
+<!-- Brand Column -->
+<div class="flex flex-col gap-4">
+<span class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed">SEAPEDIA</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Destinasi belanja utama Anda untuk produk gaya hidup berkualitas, memenuhi segala kebutuhan sehari-hari dengan mudah dan terpercaya.</p>
+</div>
+<!-- Links Columns -->
+<div class="flex flex-col gap-2">
+<span class="font-label-md text-label-md text-on-surface font-bold mb-2">Perusahaan</span>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:underline text-primary dark:hover:text-secondary-fixed transition-colors" href="#">Tentang Kami</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:underline text-primary dark:hover:text-secondary-fixed transition-colors" href="#">Jualan di Seapedia</a>
+</div>
+<div class="flex flex-col gap-2">
+<span class="font-label-md text-label-md text-on-surface font-bold mb-2">Dukungan</span>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:underline text-primary dark:hover:text-secondary-fixed transition-colors" href="#">Kebijakan Pengiriman</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:underline text-primary dark:hover:text-secondary-fixed transition-colors" href="#">Kebijakan Privasi</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:underline text-primary dark:hover:text-secondary-fixed transition-colors" href="#">Hubungi Kami</a>
+</div>
+<div class="flex flex-col gap-2">
+<span class="font-label-md text-label-md text-on-surface font-bold mb-2">Connect</span>
+<div class="flex gap-4">
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">mail</span></a>
+</div>
+</div>
+</div>
+<div class="px-margin-desktop py-4 border-t border-outline-variant/50 max-w-container-max mx-auto text-center md:text-left">
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-on-surface-variant">© 2024 SEAPEDIA General Marketplace. All rights reserved.</p>
+</div>
+</footer>
+
+
+
+
+</body></html>
+
+<!-- Dashboard Admin SEAPEDIA -->
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SEAPEDIA Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#003f87",
+                        "tertiary-container": "#983c00",
+                        "surface-tint": "#115cb9",
+                        "surface-bright": "#f8f9ff",
+                        "secondary-fixed": "#71f8e4",
+                        "on-surface": "#0d1c2f",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#ebf1ff",
+                        "surface-container-high": "#dde9ff",
+                        "secondary-fixed-dim": "#4fdbc8",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffdbcc",
+                        "outline-variant": "#c2c6d4",
+                        "on-tertiary-fixed": "#351000",
+                        "on-secondary-fixed": "#00201c",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#acc7ff",
+                        "on-primary-container": "#bbd0ff",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#eff4ff",
+                        "surface": "#f8f9ff",
+                        "on-tertiary-container": "#ffc2a7",
+                        "on-secondary": "#ffffff",
+                        "outline": "#727784",
+                        "primary-fixed-dim": "#acc7ff",
+                        "on-surface-variant": "#424752",
+                        "surface-container": "#e6eeff",
+                        "secondary-container": "#6df5e1",
+                        "on-primary": "#ffffff",
+                        "secondary": "#006b5f",
+                        "on-primary-fixed-variant": "#004491",
+                        "inverse-surface": "#233144",
+                        "primary-fixed": "#d7e2ff",
+                        "on-background": "#0d1c2f",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#001a40",
+                        "tertiary": "#722b00",
+                        "surface-container-highest": "#d5e3fd",
+                        "on-secondary-fixed-variant": "#005048",
+                        "surface-dim": "#ccdbf4",
+                        "tertiary-fixed-dim": "#ffb694",
+                        "on-secondary-container": "#006f64",
+                        "surface-variant": "#d5e3fd",
+                        "primary-container": "#0056b3",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "background": "#f8f9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-xs": "4px",
+                        "margin-desktop": "24px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "gutter": "20px",
+                        "container-max": "1280px",
+                        "stack-lg": "32px",
+                        "base": "4px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop h-16 bg-surface-container-lowest border-b border-outline-variant">
+<div class="flex items-center gap-stack-md">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">SEAPEDIA</span>
+<div class="hidden md:flex gap-6 ml-10">
+<a class="font-body-md text-body-md text-primary font-bold border-b-2 border-primary pb-1" href="#">Marketplace</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Orders</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Inventory</a>
+</div>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a corporate administrator in a modern office environment. The lighting is crisp and natural, highlighting a clean-shaven face and professional attire. The aesthetic is bright and high-trust, aligning with the Marine Commerce Framework's blue and white primary color palette. High quality, sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfOW_dSMY-HvfiAZe0tMINxch7zy7wePKgJZ1eBYrOGrqe2G26awt8nbZed-JVcUASej4zuGtDInJhC4dnM3ASjw-JT0v6aZRgvD7B10uXJAG6HP89H4ORAesXC85Xa_PJ22QofzqyGYwBRQbS85NoHAqU0JZkh5qPDcw5U7SkVuPWKgm0pTneW8Ic-5l2KUMeTczxEfSqrCKPN7iAyd-QAOzHXJTklEyOP5uLBtFjZ7BdPigHlx4HHLmJ40PO6_T_wQj_uXyXbBja"/>
+</div>
+</div>
+</header>
+<div class="flex min-h-screen pt-16">
+<!-- Side Navigation Bar -->
+<aside class="fixed left-0 top-16 bottom-0 w-64 bg-surface-container-low border-r border-outline-variant hidden md:flex flex-col py-stack-md">
+<div class="px-6 mb-stack-lg">
+<h2 class="font-headline-sm text-headline-sm text-primary">Seller Center</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Premium Account</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="bg-secondary-container text-on-secondary-container rounded-lg mx-2 my-1 px-4 py-2 flex items-center gap-3 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg mx-2 my-1 px-4 py-2 flex items-center gap-3 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Sales Analytics</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg mx-2 my-1 px-4 py-2 flex items-center gap-3 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-md text-label-md">Product Catalog</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg mx-2 my-1 px-4 py-2 flex items-center gap-3 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-label-md text-label-md">Order Management</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg mx-2 my-1 px-4 py-2 flex items-center gap-3 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined">support_agent</span>
+<span class="font-label-md text-label-md">Customer Support</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg mx-2 my-1 px-4 py-2 flex items-center gap-3 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-2 space-y-1">
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-2 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Help Center</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-2 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 p-6 bg-surface-bright min-h-screen">
+<div class="max-w-container-max mx-auto">
+<header class="mb-stack-lg">
+<h1 class="font-headline-lg text-headline-lg text-primary">Admin Dashboard</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Selamat datang kembali, Administrator. Berikut adalah ringkasan performa platform hari ini.</p>
+</header>
+<!-- Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-stack-md mb-stack-lg">
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-lg">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Total GMV</p>
+<h3 class="font-headline-md text-headline-md text-primary">Rp 4.28B</h3>
+</div>
+<span class="material-symbols-outlined text-secondary bg-secondary-container/20 p-2 rounded">payments</span>
+</div>
+<p class="mt-4 text-secondary font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">trending_up</span> +12.5% vs bulan lalu
+                        </p>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-lg">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Pengguna Baru Hari Ini</p>
+<h3 class="font-headline-md text-headline-md text-primary">1,284</h3>
+</div>
+<span class="material-symbols-outlined text-primary bg-primary-container/20 p-2 rounded">person_add</span>
+</div>
+<p class="mt-4 text-primary font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">groups</span> 82 pengguna aktif saat ini
+                        </p>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-lg">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Toko Menunggu Verifikasi</p>
+<h3 class="font-headline-md text-headline-md text-tertiary">42</h3>
+</div>
+<span class="material-symbols-outlined text-tertiary bg-tertiary-fixed/30 p-2 rounded">storefront</span>
+</div>
+<p class="mt-4 text-tertiary font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">priority_high</span> Butuh tindakan segera
+                        </p>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md rounded-lg">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Laporan Keluhan</p>
+<h3 class="font-headline-md text-headline-md text-error">12</h3>
+</div>
+<span class="material-symbols-outlined text-error bg-error-container/40 p-2 rounded">report</span>
+</div>
+<p class="mt-4 text-error font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">assignment_late</span> 4 keluhan kritis
+                        </p>
+</div>
+</div>
+<!-- Main Grid: Charts & Tables -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-stack-lg">
+<!-- Sales Chart Section -->
+<div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-lg p-stack-md">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-sm text-headline-sm text-primary">Volume Transaksi Bulanan</h2>
+<select class="bg-surface-container-low border border-outline-variant rounded px-3 py-1 font-label-sm text-label-sm focus:ring-primary">
+<option>Tahun 2024</option>
+<option>Tahun 2023</option>
+</select>
+</div>
+<!-- Bar Chart Visualization -->
+<div class="h-64 flex items-end justify-between gap-2 px-4 pb-4">
+<div class="w-full flex flex-col items-center">
+<div class="w-full bg-primary-container rounded-t h-[40%]" title="Jan: 120M"></div>
+<span class="text-[10px] text-on-surface-variant mt-2">Jan</span>
+</div>
+<div class="w-full flex flex-col items-center">
+<div class="w-full bg-primary-container rounded-t h-[55%]" title="Feb: 165M"></div>
+<span class="text-[10px] text-on-surface-variant mt-2">Feb</span>
+</div>
+<div class="w-full flex flex-col items-center">
+<div class="w-full bg-primary-container rounded-t h-[45%]" title="Mar: 135M"></div>
+<span class="text-[10px] text-on-surface-variant mt-2">Mar</span>
+</div>
+<div class="w-full flex flex-col items-center">
+<div class="w-full bg-primary-container rounded-t h-[75%]" title="Apr: 220M"></div>
+<span class="text-[10px] text-on-surface-variant mt-2">Apr</span>
+</div>
+<div class="w-full flex flex-col items-center">
+<div class="w-full bg-primary-container rounded-t h-[60%]" title="Mei: 180M"></div>
+<span class="text-[10px] text-on-surface-variant mt-2">Mei</span>
+</div>
+<div class="w-full flex flex-col items-center">
+<div class="w-full bg-primary-container rounded-t h-[90%]" title="Jun: 270M"></div>
+<span class="text-[10px] text-on-surface-variant mt-2">Jun</span>
+</div>
+<div class="w-full flex flex-col items-center">
+<div class="w-full bg-primary rounded-t h-[100%]" title="Jul: 300M"></div>
+<span class="text-[10px] text-on-surface-variant mt-2">Jul</span>
+</div>
+<div class="w-full flex flex-col items-center">
+<div class="w-full bg-primary-container rounded-t h-[80%]" title="Agu: 240M"></div>
+<span class="text-[10px] text-on-surface-variant mt-2">Agu</span>
+</div>
+<div class="w-full flex flex-col items-center">
+<div class="w-full bg-primary-container rounded-t h-[65%]" title="Sep: 195M"></div>
+<span class="text-[10px] text-on-surface-variant mt-2">Sep</span>
+</div>
+<div class="w-full flex flex-col items-center">
+<div class="w-full bg-primary-container rounded-t h-[70%]" title="Okt: 210M"></div>
+<span class="text-[10px] text-on-surface-variant mt-2">Okt</span>
+</div>
+<div class="w-full flex flex-col items-center">
+<div class="w-full bg-primary-container rounded-t h-[85%]" title="Nov: 255M"></div>
+<span class="text-[10px] text-on-surface-variant mt-2">Nov</span>
+</div>
+<div class="w-full flex flex-col items-center">
+<div class="w-full bg-primary-container rounded-t h-[95%]" title="Des: 285M"></div>
+<span class="text-[10px] text-on-surface-variant mt-2">Des</span>
+</div>
+</div>
+</div>
+<!-- Store Verification List -->
+<div class="lg:col-span-1 bg-surface-container-lowest border border-outline-variant rounded-lg p-stack-md">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-sm text-headline-sm text-primary">Verifikasi Toko</h2>
+<a class="text-primary font-label-sm text-label-sm hover:underline" href="#">Lihat Semua</a>
+</div>
+<div class="space-y-4">
+<!-- Store Item -->
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg border border-transparent hover:border-outline-variant transition-all">
+<div class="w-12 h-12 rounded bg-surface-container-high flex-shrink-0">
+<img class="w-full h-full object-cover rounded" data-alt="A professional logo for a marine hardware store named Neptune Parts. The design uses nautical elements like an anchor or trident, styled with clean, modern lines in shades of deep blue and teal. High-density, professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFveL1_0AiotBQF_zbIYwedgDstQ_ev6NFntSEnM80l5vkudy9EdtVn3RN80waCTCMwHtK0_cEGhUq6qLp8ORzPV01R3P0ugiOYO7w6MxdxZWo6Z0ZNGHEj4Omxuo0kdfgkQiEhCQlcfWz0iNzI2kUUBfQSLZcJYF0SMI1gVd7Uq4XazhILIovLZtp52Z4E8eHOExKrykAlzX5demiT0qRLKNTtko90rNQpOmio44wavhXaN7VRDW6ivF_YlWELKoKbFahzVCU_2UU"/>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-label-md text-label-md text-on-surface truncate">Neptune Parts</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Suku Cadang</p>
+</div>
+<div class="flex flex-col gap-1">
+<button class="bg-primary text-on-primary text-[10px] px-2 py-1 rounded font-bold hover:bg-primary-container transition-colors">APPROVE</button>
+<button class="bg-outline-variant text-on-surface-variant text-[10px] px-2 py-1 rounded font-bold hover:bg-surface-container-high transition-colors">REVIEW</button>
+</div>
+</div>
+<!-- Store Item -->
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg border border-transparent hover:border-outline-variant transition-all">
+<div class="w-12 h-12 rounded bg-surface-container-high flex-shrink-0">
+<img class="w-full h-full object-cover rounded" data-alt="A professional minimalist logo for a fishing gear retailer called DeepSea Tackle. Features a stylized fish hook integrated with a modern font. Color scheme of ocean blue and silver. Professional, high-trust marine business branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxVL0-WW347zH-3iCLcNfUDJRhOCETQulxzedK70wJKlqWp4zlyn87VFbxjzjc0hEQUkxtpEo87ttAD95Rym1cw_ukuPk-OGZgVEi6v2Rr30xBsXTdS8EsX9csu_QuGxv4R_XY-nPwPlm9AMmml7oR-MHd9IjtuKMIR2p7e0sIkIDpIPAZIuKgerqRD55Yw1Qp2EBBoQB1Ff8ycDY1nuKIRRvxk5MnpfZ3lZu8zvVyKiwdE6adZsLeaQDXFci-_q7aJsVwNKcRsW19"/>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-label-md text-label-md text-on-surface truncate">DeepSea Tackle</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Alat Pancing</p>
+</div>
+<div class="flex flex-col gap-1">
+<button class="bg-primary text-on-primary text-[10px] px-2 py-1 rounded font-bold hover:bg-primary-container transition-colors">APPROVE</button>
+<button class="bg-outline-variant text-on-surface-variant text-[10px] px-2 py-1 rounded font-bold hover:bg-surface-container-high transition-colors">REVIEW</button>
+</div>
+</div>
+<!-- Store Item -->
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg border border-transparent hover:border-outline-variant transition-all">
+<div class="w-12 h-12 rounded bg-surface-container-high flex-shrink-0">
+<img class="w-full h-full object-cover rounded" data-alt="A modern corporate logo for 'BlueWave Logistics,' specializing in marine transportation. The logo incorporates a wave motif and a shipping container silhouette in professional navy blue and seaglass teal colors. Sharp, industrial feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuOKE1XCziBrv9Nt8cEOLfeypTWN7Dr6fhsTpk6QCf5B_3SHnv49pZhq_ZTeEXG7fhE3teVEtSOSq2AQ5EGpeHi3B2IP9YFU2CIRRvdLqGwmsL_ELZRszxXJE0OWasvbIGp9rTXSJWmqZ5liI1fObWl5NXpV-AU46kd9Ur0D4-Kg5bvLUCU3cUSgnplED0h_Oq_XOuVo33mDEazeDOt64ENu3XTlTCIe63zl4I3fuakMGMMbHuBION5eJHiJFkaBaBWA4j8XDnaaMM"/>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-label-md text-label-md text-on-surface truncate">BlueWave Logistik</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Logistik</p>
+</div>
+<div class="flex flex-col gap-1">
+<button class="bg-primary text-on-primary text-[10px] px-2 py-1 rounded font-bold hover:bg-primary-container transition-colors">APPROVE</button>
+<button class="bg-outline-variant text-on-surface-variant text-[10px] px-2 py-1 rounded font-bold hover:bg-surface-container-high transition-colors">REVIEW</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activities / Financial Reports Table -->
+<div class="mt-stack-lg bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden">
+<div class="p-stack-md border-b border-outline-variant flex justify-between items-center">
+<h2 class="font-headline-sm text-headline-sm text-primary">Laporan Keuangan Terbaru</h2>
+<button class="bg-secondary text-on-secondary px-4 py-2 rounded font-label-md text-label-md flex items-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm">download</span> Ekspor CSV
+                        </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="p-4 font-label-md text-label-md text-on-surface">ID Transaksi</th>
+<th class="p-4 font-label-md text-label-md text-on-surface">Tanggal</th>
+<th class="p-4 font-label-md text-label-md text-on-surface">Toko</th>
+<th class="p-4 font-label-md text-label-md text-on-surface">Nominal</th>
+<th class="p-4 font-label-md text-label-md text-on-surface">Status</th>
+<th class="p-4 font-label-md text-label-md text-on-surface">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-4 font-body-sm text-body-sm text-primary font-bold">#TRX-99281</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface-variant">12 Jul 2024, 14:20</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface">Samudera Parts Official</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface">Rp 12.500.000</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-secondary-container text-on-secondary-container">SUCCESS</span>
+</td>
+<td class="p-4">
+<button class="text-primary hover:text-surface-tint"><span class="material-symbols-outlined">visibility</span></button>
+</td>
+</tr>
+<tr class="bg-surface-container-low/30 hover:bg-surface-container transition-colors">
+<td class="p-4 font-body-sm text-body-sm text-primary font-bold">#TRX-99282</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface-variant">12 Jul 2024, 15:05</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface">Jala Tech Indonesia</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface">Rp 8.200.000</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-tertiary-fixed text-on-tertiary-fixed">PENDING</span>
+</td>
+<td class="p-4">
+<button class="text-primary hover:text-surface-tint"><span class="material-symbols-outlined">visibility</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-4 font-body-sm text-body-sm text-primary font-bold">#TRX-99283</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface-variant">12 Jul 2024, 16:12</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface">Marine Anchor Co.</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface">Rp 45.000.000</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-secondary-container text-on-secondary-container">SUCCESS</span>
+</td>
+<td class="p-4">
+<button class="text-primary hover:text-surface-tint"><span class="material-symbols-outlined">visibility</span></button>
+</td>
+</tr>
+<tr class="bg-surface-container-low/30 hover:bg-surface-container transition-colors">
+<td class="p-4 font-body-sm text-body-sm text-primary font-bold">#TRX-99284</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface-variant">12 Jul 2024, 16:45</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface">Toko Nelayan Sejahtera</td>
+<td class="p-4 font-body-sm text-body-sm text-on-surface">Rp 1.450.000</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-error-container text-on-error-container">FAILED</span>
+</td>
+<td class="p-4">
+<button class="text-primary hover:text-surface-tint"><span class="material-symbols-outlined">visibility</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer Section -->
+<footer class="w-full py-stack-lg px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-stack-md bg-surface-container-highest border-t border-outline-variant">
+<div class="flex flex-col items-center md:items-start">
+<span class="font-label-md text-label-md font-bold text-primary">SEAPEDIA</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2">© 2024 SEAPEDIA Marine Marketplace. All rights reserved.</p>
+</div>
+<div class="flex gap-stack-md">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Shipping Info</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Contact Us</a>
+</div>
+</footer>
+<!-- Interactive Layer: Notification Modal Placeholder -->
+<div class="fixed bottom-6 right-6 translate-y-20 opacity-0 bg-inverse-surface text-inverse-on-surface px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 transition-all duration-300 z-[100]" id="notification-toast">
+<span class="material-symbols-outlined text-secondary-fixed">check_circle</span>
+<span class="font-body-md text-body-md">Data berhasil diekspor ke CSV.</span>
+</div>
+<script>
+        // Micro-interactions
+        const exportBtn = document.querySelector('button:contains("Ekspor CSV")') || document.querySelectorAll('button')[2]; 
+        // Note: querySelector:contains isn't standard, using specific index for demo
+        const toast = document.getElementById('notification-toast');
+
+        document.querySelectorAll('button').forEach(btn => {
+            if(btn.innerText.includes('Ekspor CSV')) {
+                btn.addEventListener('click', () => {
+                    toast.classList.remove('translate-y-20', 'opacity-0');
+                    setTimeout(() => {
+                        toast.classList.add('translate-y-20', 'opacity-0');
+                    }, 3000);
+                });
+            }
+        });
+
+        // Simple Chart Hover Effects (Console logging for demo)
+        document.querySelectorAll('.bg-primary-container, .bg-primary').forEach(bar => {
+            bar.addEventListener('mouseenter', function() {
+                this.classList.add('opacity-80');
+            });
+            bar.addEventListener('mouseleave', function() {
+                this.classList.remove('opacity-80');
+            });
+        });
+    </script>
+</body></html>
+
+<!-- Dashboard Penjual SEAPEDIA -->
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SEAPEDIA Seller Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#003f87",
+                    "tertiary-container": "#983c00",
+                    "surface-tint": "#115cb9",
+                    "surface-bright": "#f8f9ff",
+                    "secondary-fixed": "#71f8e4",
+                    "on-surface": "#0d1c2f",
+                    "on-error": "#ffffff",
+                    "inverse-on-surface": "#ebf1ff",
+                    "surface-container-high": "#dde9ff",
+                    "secondary-fixed-dim": "#4fdbc8",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#ffdbcc",
+                    "outline-variant": "#c2c6d4",
+                    "on-tertiary-fixed": "#351000",
+                    "on-secondary-fixed": "#00201c",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "inverse-primary": "#acc7ff",
+                    "on-primary-container": "#bbd0ff",
+                    "error": "#ba1a1a",
+                    "surface-container-low": "#eff4ff",
+                    "surface": "#f8f9ff",
+                    "on-tertiary-container": "#ffc2a7",
+                    "on-secondary": "#ffffff",
+                    "outline": "#727784",
+                    "primary-fixed-dim": "#acc7ff",
+                    "on-surface-variant": "#424752",
+                    "surface-container": "#e6eeff",
+                    "secondary-container": "#6df5e1",
+                    "on-primary": "#ffffff",
+                    "secondary": "#006b5f",
+                    "on-primary-fixed-variant": "#004491",
+                    "inverse-surface": "#233144",
+                    "primary-fixed": "#d7e2ff",
+                    "on-background": "#0d1c2f",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed": "#001a40",
+                    "tertiary": "#722b00",
+                    "surface-container-highest": "#d5e3fd",
+                    "on-secondary-fixed-variant": "#005048",
+                    "surface-dim": "#ccdbf4",
+                    "tertiary-fixed-dim": "#ffb694",
+                    "on-secondary-container": "#006f64",
+                    "surface-variant": "#d5e3fd",
+                    "primary-container": "#0056b3",
+                    "on-tertiary-fixed-variant": "#7b2f00",
+                    "background": "#f8f9ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-xs": "4px",
+                    "margin-desktop": "24px",
+                    "stack-sm": "8px",
+                    "stack-md": "16px",
+                    "gutter": "20px",
+                    "container-max": "1280px",
+                    "stack-lg": "32px",
+                    "base": "4px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8f9ff;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #c2c6d4;
+        border-radius: 10px;
+      }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop h-16 bg-surface-container-lowest border-b border-outline-variant">
+<div class="flex items-center gap-stack-lg">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">SEAPEDIA</span>
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg w-80 focus:ring-2 focus:ring-primary focus:border-primary text-body-sm outline-none transition-all" placeholder="Cari di dashboard..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
+<div class="text-right hidden sm:block">
+<p class="font-label-md text-label-md text-on-surface leading-tight">Samudra Pratama</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Admin Toko</p>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-primary bg-surface-container-high flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a confident male shop owner in a clean white maritime-themed polo shirt. The background is a soft, blurred marine environment with subtle blue and teal accents, following the high-contrast professional aesthetic of the SEAPEDIA brand. The lighting is bright and airy, emphasizing trust and reliability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8wRABWhw5oGA2S2rFQD9Ozt91_ZbIbOZMo8bs6wWUljl2md-ytAHgDVRJCTEcRspm3grcNfjMKbczfPxjBV-j5Kn6gNw32mLca1qzKKiBHB3UqcEp2mMWXi5zcQYrsTwDFHUtGDcP1uy4UVOMyLUjJg2NPZrLtCMbVf-YWYESd1BXBZ_BnWP8vg-ymeiIWCLikQd2jVdVIqkbXZsNrRT4fM3jsSuwJ3Zusg7DIGkzVVro7ccNEtNH4CCpMMk3t4fJ0jI_mAhXD1qx"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Side Navigation Bar -->
+<aside class="fixed left-0 top-16 bottom-0 w-64 flex flex-col py-stack-md bg-surface-container-low border-r border-outline-variant hidden md:flex">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm">anchor</span>
+</div>
+<p class="font-headline-sm text-headline-sm text-primary">Seller Center</p>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant px-1">Premium Account</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="bg-secondary-container text-on-secondary-container rounded-lg mx-2 my-1 px-4 py-2 flex items-center gap-3 active:scale-95 duration-150 transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Overview</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg mx-2 my-1 px-4 py-2 flex items-center gap-3 active:scale-95 duration-150 transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span>Sales Analytics</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg mx-2 my-1 px-4 py-2 flex items-center gap-3 active:scale-95 duration-150 transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span>Product Catalog</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg mx-2 my-1 px-4 py-2 flex items-center gap-3 active:scale-95 duration-150 transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span>Order Management</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg mx-2 my-1 px-4 py-2 flex items-center gap-3 active:scale-95 duration-150 transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">support_agent</span>
+<span>Customer Support</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg mx-2 my-1 px-4 py-2 flex items-center gap-3 active:scale-95 duration-150 transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-2 space-y-1">
+<button class="w-full bg-primary text-white rounded-lg px-4 py-3 flex items-center justify-center gap-2 mb-4 hover:opacity-90 active:scale-95 transition-all font-label-md">
+<span class="material-symbols-outlined">add</span>
+<span>Add New Product</span>
+</button>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-2 flex items-center gap-3 transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>Help Center</span>
+</a>
+<a class="text-error hover:bg-error-container/10 rounded-lg px-4 py-2 flex items-center gap-3 transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-64 pt-16 min-h-screen">
+<div class="max-w-container-max mx-auto p-margin-desktop space-y-stack-lg">
+<!-- Greeting & Header -->
+<section class="flex flex-col md:flex-row md:items-center justify-between gap-stack-md">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary">Halo, Samudra Pratama!</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Berikut ringkasan performa tokomu hari ini.</p>
+</div>
+<div class="flex items-center gap-stack-sm bg-white p-1 rounded-lg border border-outline-variant">
+<button class="px-4 py-2 rounded-lg bg-primary text-white font-label-sm transition-all shadow-sm">30 Hari Terakhir</button>
+<button class="px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low font-label-sm transition-all">Minggu Ini</button>
+</div>
+</section>
+<!-- Summary Cards -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-stack-md">
+<!-- Card 1 -->
+<div class="bg-white border border-outline-variant p-stack-md rounded-lg flex flex-col justify-between hover:border-primary transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined p-2 bg-primary/10 text-primary rounded-lg">payments</span>
+<span class="text-secondary font-label-sm flex items-center gap-1">+12% <span class="material-symbols-outlined text-[14px]">trending_up</span></span>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant">Total Penjualan Bulan Ini</p>
+<p class="font-headline-md text-headline-md mt-1">Rp 45.820.000</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white border border-outline-variant p-stack-md rounded-lg flex flex-col justify-between hover:border-primary transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined p-2 bg-tertiary/10 text-tertiary rounded-lg">package_2</span>
+<span class="text-tertiary font-label-sm">8 tertunda</span>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant">Pesanan Perlu Diproses</p>
+<p class="font-headline-md text-headline-md mt-1">24 Pesanan</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white border border-outline-variant p-stack-md rounded-lg flex flex-col justify-between hover:border-primary transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined p-2 bg-error/10 text-error rounded-lg">warning</span>
+<span class="text-error font-label-sm">Butuh Stok</span>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant">Produk Habis</p>
+<p class="font-headline-md text-headline-md mt-1">5 Produk</p>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-white border border-outline-variant p-stack-md rounded-lg flex flex-col justify-between hover:border-primary transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined p-2 bg-secondary-container/30 text-secondary rounded-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-on-surface-variant font-label-sm">230 Review</span>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant">Rating Toko</p>
+<p class="font-headline-md text-headline-md mt-1">4.8 / 5.0</p>
+</div>
+</div>
+</section>
+<!-- Chart & Activity -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-stack-md">
+<!-- Sales Trend Chart -->
+<div class="lg:col-span-2 bg-white border border-outline-variant rounded-lg p-stack-md">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-sm text-headline-sm">Tren Penjualan (30 Hari Terakhir)</h2>
+<button class="text-primary font-label-sm hover:underline">Lihat Detail</button>
+</div>
+<div class="h-64 w-full relative flex items-end justify-between gap-1 group">
+<!-- Mockup Line Chart -->
+<div class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
+
+</div>
+<div class="flex-1 bg-surface-container h-[40%] rounded-t-sm hover:bg-primary transition-all relative group/bar">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover/bar:opacity-100 transition-opacity">Rp 1.2M</div>
+</div>
+<div class="flex-1 bg-surface-container h-[55%] rounded-t-sm hover:bg-primary transition-all relative group/bar"></div>
+<div class="flex-1 bg-surface-container h-[45%] rounded-t-sm hover:bg-primary transition-all relative group/bar"></div>
+<div class="flex-1 bg-surface-container h-[70%] rounded-t-sm hover:bg-primary transition-all relative group/bar"></div>
+<div class="flex-1 bg-surface-container h-[60%] rounded-t-sm hover:bg-primary transition-all relative group/bar"></div>
+<div class="flex-1 bg-surface-container h-[85%] rounded-t-sm hover:bg-primary transition-all relative group/bar"></div>
+<div class="flex-1 bg-surface-container h-[65%] rounded-t-sm hover:bg-primary transition-all relative group/bar"></div>
+<div class="flex-1 bg-surface-container h-[50%] rounded-t-sm hover:bg-primary transition-all relative group/bar"></div>
+<div class="flex-1 bg-primary h-[90%] rounded-t-sm relative group/bar">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded">Hari Ini</div>
+</div>
+<div class="flex-1 bg-surface-container h-[75%] rounded-t-sm hover:bg-primary transition-all relative group/bar"></div>
+</div>
+<div class="flex justify-between mt-4 text-label-sm text-on-surface-variant px-1 border-t border-outline-variant pt-2">
+<span>01 Nov</span>
+<span>10 Nov</span>
+<span>20 Nov</span>
+<span>30 Nov</span>
+</div>
+</div>
+<!-- Quick Actions / Activity Feed -->
+<div class="bg-white border border-outline-variant rounded-lg p-stack-md flex flex-col">
+<h2 class="font-headline-sm text-headline-sm mb-4">Aktivitas Toko</h2>
+<div class="space-y-4 flex-1">
+<div class="flex gap-3">
+<div class="min-w-[8px] h-8 rounded bg-primary-container"></div>
+<div>
+<p class="font-label-md text-label-md">Pesanan Baru #ORD-9921</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Bpk. Haryanto - Suku Cadang Mesin Tempel</p>
+<p class="text-[10px] text-outline mt-1 uppercase font-bold">2 Menit yang lalu</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="min-w-[8px] h-8 rounded bg-secondary-container"></div>
+<div>
+<p class="font-label-md text-label-md">Review Baru ⭐⭐⭐⭐⭐</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">"Pengiriman cepat, packing kayu aman."</p>
+<p class="text-[10px] text-outline mt-1 uppercase font-bold">1 Jam yang lalu</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="min-w-[8px] h-8 rounded bg-tertiary-fixed"></div>
+<div>
+<p class="font-label-md text-label-md">Pencairan Dana Berhasil</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Dana Rp 12.450.000 masuk ke Rekening BCA</p>
+<p class="text-[10px] text-outline mt-1 uppercase font-bold">5 Jam yang lalu</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-2 text-primary font-label-md border border-primary rounded-lg hover:bg-primary/5 transition-all">
+                        Semua Aktivitas
+                    </button>
+</div>
+</section>
+<!-- Recent Orders Table -->
+<section class="bg-white border border-outline-variant rounded-lg overflow-hidden">
+<div class="p-stack-md border-b border-outline-variant flex justify-between items-center bg-surface-container-low/30">
+<h2 class="font-headline-sm text-headline-sm">Pesanan Terbaru</h2>
+<div class="flex gap-stack-sm">
+<button class="p-2 border border-outline-variant rounded hover:bg-white transition-all"><span class="material-symbols-outlined text-sm">filter_list</span></button>
+<button class="p-2 border border-outline-variant rounded hover:bg-white transition-all"><span class="material-symbols-outlined text-sm">download</span></button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-label-sm text-on-surface-variant uppercase tracking-wider">
+<th class="px-6 py-4 font-bold">Order ID</th>
+<th class="px-6 py-4 font-bold">Nama Pelanggan</th>
+<th class="px-6 py-4 font-bold">Status</th>
+<th class="px-6 py-4 font-bold">Total Pembayaran</th>
+<th class="px-6 py-4 font-bold">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant font-body-sm">
+<tr class="hover:bg-surface-container-low/50 transition-all">
+<td class="px-6 py-4 font-mono font-bold text-primary">#ORD-2024-9912</td>
+<td class="px-6 py-4">Budi Setiawan</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-bold uppercase">Diproses</span>
+</td>
+<td class="px-6 py-4">Rp 2.450.000</td>
+<td class="px-6 py-4">
+<button class="text-primary hover:underline font-label-sm">Detail</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-all bg-surface-container-low/10">
+<td class="px-6 py-4 font-mono font-bold text-primary">#ORD-2024-9911</td>
+<td class="px-6 py-4">Susi Susanti</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-surface-container text-on-surface-variant text-[11px] font-bold uppercase">Dikirim</span>
+</td>
+<td class="px-6 py-4">Rp 8.200.000</td>
+<td class="px-6 py-4">
+<button class="text-primary hover:underline font-label-sm">Lacak</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-all">
+<td class="px-6 py-4 font-mono font-bold text-primary">#ORD-2024-9910</td>
+<td class="px-6 py-4">Anto Wijaya</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-bold uppercase">Diproses</span>
+</td>
+<td class="px-6 py-4">Rp 450.000</td>
+<td class="px-6 py-4">
+<button class="text-primary hover:underline font-label-sm">Detail</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-all bg-surface-container-low/10">
+<td class="px-6 py-4 font-mono font-bold text-primary">#ORD-2024-9909</td>
+<td class="px-6 py-4">Marina Jaya Permai</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-on-primary-container text-white text-[11px] font-bold uppercase">Selesai</span>
+</td>
+<td class="px-6 py-4">Rp 15.700.000</td>
+<td class="px-6 py-4">
+<button class="text-primary hover:underline font-label-sm">Invoice</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-outline-variant flex justify-center bg-surface-container-low/20">
+<button class="text-primary font-label-md flex items-center gap-1 hover:gap-2 transition-all">
+                        Lihat Semua Pesanan <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</section>
+</div>
+<!-- Footer -->
+<footer class="w-full py-stack-lg px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-stack-md bg-surface-container-highest border-t border-outline-variant mt-stack-lg">
+<div class="flex flex-col items-center md:items-start gap-2">
+<span class="font-label-md text-label-md font-bold text-primary uppercase">SEAPEDIA Marine Marketplace</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 SEAPEDIA Marine Marketplace. All rights reserved.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-stack-md">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Shipping Info</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contact Us</a>
+</div>
+</footer>
+</main>
+<!-- Mobile Navigation Bar -->
+<nav class="md:hidden fixed bottom-0 w-full h-16 bg-surface-container-lowest border-t border-outline-variant flex justify-around items-center z-50">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="text-[10px] font-bold">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-[10px]">Produk</span>
+</a>
+<div class="relative -top-4">
+<button class="w-12 h-12 rounded-full bg-primary text-white shadow-lg flex items-center justify-center">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="text-[10px]">Pesanan</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px]">Profil</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for cards
+        document.querySelectorAll('section div[class*="bg-white"]').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('shadow-md');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('shadow-md');
+            });
+        });
+
+        // Search bar focus effect
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput?.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('scale-105');
+        });
+        searchInput?.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('scale-105');
+        });
+    </script>
+</body></html>
