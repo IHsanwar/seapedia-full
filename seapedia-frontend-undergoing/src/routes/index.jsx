@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 // Layouts
 import PublicLayout from '../layouts/PublicLayout';
@@ -21,6 +21,7 @@ import ProfilePage from '../pages/ProfilePage';
 import DashboardRedirect from '../components/DashboardRedirect';
 import LogoutPage from '../pages/LogoutPage';
 import NotFoundPage from '../pages/NotFoundPage';
+import VideoDemoPage from '../pages/VideoDemoPage';
 
 // Pages - Seller
 import SellerDashboardPage from '../pages/seller/SellerDashboardPage';
@@ -64,6 +65,7 @@ export default function AppRoutes() {
         <Route path="/products" element={<ProductListPage />} />
         <Route path="/products/:productSlug" element={<ProductDetailPage />} />
         <Route path="/stores/:storeSlug" element={<StoreDetailPage />} />
+        <Route path="/video-demo" element={<VideoDemoPage />} />
       </Route>
 
       {/* Protected Routes with Dashboard Layout (Sidebar) */}
@@ -72,6 +74,10 @@ export default function AppRoutes() {
           {/* Common Dashboard */}
           <Route path="/dashboard" element={<DashboardRedirect />} />
           <Route path="/:role/dashboard" element={<DashboardPage />} />
+          <Route path="/buyer" element={<Navigate to="/buyer/dashboard" replace />} />
+          <Route path="/seller" element={<Navigate to="/seller/dashboard" replace />} />
+          <Route path="/driver" element={<Navigate to="/driver/dashboard" replace />} />
+          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/driver/register" element={<DriverRegisterPage />} />
 

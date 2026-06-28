@@ -556,32 +556,6 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Switch role */}
-      {roles.length > 1 && (
-        <div>
-          <p className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
-            <RefreshCw className="h-3.5 w-3.5" />
-            Beralih ke role lain
-          </p>
-          <div className="flex flex-wrap gap-3">
-            {roles.filter((r) => r !== activeRole).map((role) => {
-              const m = ROLE_META[role] ?? ROLE_META.buyer;
-              const Icon = m.icon;
-              return (
-                <Button key={role} variant="outline" size="sm"
-                  disabled={switching !== null}
-                  onClick={() => handleSwitch(role)}
-                  className="capitalize border-[#003f87] text-[#003f87] hover:bg-[#003f87] hover:text-white rounded-sm">
-                  {switching === role
-                    ? <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />
-                    : <Icon className="h-3.5 w-3.5 mr-1.5" />}
-                  {m.label}
-                </Button>
-              );
-            })}
-          </div>
-        </div>
-      )}
-    </div>
+      </div>
   );
 }

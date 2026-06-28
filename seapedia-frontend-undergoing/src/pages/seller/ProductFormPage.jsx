@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { sellerProductAPI } from '../../api/seller';
 import {
@@ -46,7 +46,7 @@ export default function ProductFormPage() {
           setExistingThumb(
             thumb.startsWith('http')
               ? thumb
-              : `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}/storage/${thumb}`
+              : `${import.meta.env.VITE_API_BASE_URL}/storage/${thumb}`
           );
         }
       } catch {

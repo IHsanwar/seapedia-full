@@ -178,14 +178,14 @@ endpoints:
         name: id
         description: 'The ID of the user.'
         required: true
-        example: 31
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      id: 31
+      id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -233,14 +233,14 @@ endpoints:
         name: id
         description: 'The ID of the user.'
         required: true
-        example: 31
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      id: 31
+      id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -350,14 +350,14 @@ endpoints:
         name: id
         description: 'The ID of the user.'
         required: true
-        example: 31
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      id: 31
+      id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

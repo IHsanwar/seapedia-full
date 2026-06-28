@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuGroup, 
 } from "@/components/ui/dropdown-menu";
 import {
   Menu,
@@ -24,7 +25,20 @@ import {
   HelpCircle,
   ChevronDown,
   X,
+  Wallet,
+  MapPin,
+  ShoppingBag,
+  Package,
+  BarChart3,
+  Truck,
+  ClipboardList,
+  History,
+  Ticket,
+  Tag,
+  Building2,
+  ArrowLeftRight,
 } from "lucide-react";
+
 
 /**
  * @typedef {Object} BreadcrumbItem
@@ -106,6 +120,7 @@ export function TopHeader({
   userEmail = "user@example.com",
   userAvatar,
   userRole = "buyer",
+  roles = [],
   notificationCount = 5,
   onLogout,
   className,
@@ -113,12 +128,38 @@ export function TopHeader({
 }) {
   const [searchOpen, setSearchOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
+  const navigate = useNavigate();
+
+  const roleMenuItems = {
+    buyer: [
+      { label: "Wallet", href: "/buyer/wallet", icon: Wallet },
+      { label: "Addresses", href: "/buyer/addresses", icon: MapPin },
+      { label: "Orders", href: "/buyer/orders", icon: ShoppingBag },
+    ],
+    seller: [
+      { label: "Products", href: "/seller/products", icon: Package },
+      { label: "Orders", href: "/seller/orders", icon: ShoppingBag },
+      { label: "Reports", href: "/seller/reports", icon: BarChart3 },
+    ],
+    driver: [
+      { label: "Jobs", href: "/driver/jobs", icon: Truck },
+      { label: "My Jobs", href: "/driver/my-jobs", icon: ClipboardList },
+      { label: "History", href: "/driver/history", icon: History },
+    ],
+    admin: [
+      { label: "Vouchers", href: "/admin/vouchers", icon: Ticket },
+      { label: "Promos", href: "/admin/promos", icon: Tag },
+      { label: "Stores", href: "/admin/stores", icon: Building2 },
+    ],
+  };
+
+  const currentRoleItems = roleMenuItems[userRole] || [];
 
   return (
     <>
       <header
         className={cn(
-          "sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-white px-4 shadow-sm",
+          "sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b bg-white px-4 shadow-sm",
           className
         )}
         {...props}
@@ -170,108 +211,88 @@ export function TopHeader({
 
           {/* Notifications */}
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="relative h-9 w-9 text-slate-600 hover:bg-slate-100"
-              >
-                <Bell className="h-5 w-5" />
-                {notificationCount > 0 && (
-                  <span className="absolute right-1.5 top-1.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-medium text-white">
-                    {notificationCount > 99 ? "99+" : notificationCount}
-                  </span>
-                )}
-                <span className="sr-only">Notifications</span>
-              </Button>
+            <DropdownMenuTrigger className="relative inline-flex items-center justify-center h-9 w-9 rounded-md text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-80">
-              <DropdownMenuLabel className="flex items-center justify-between">
-                <span>Notifications</span>
-                <Button variant="ghost" size="sm" className="h-auto py-0 text-xs text-blue-600">
-                  Mark all read
-                </Button>
-              </DropdownMenuLabel>
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+              </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <div className="max-h-72 overflow-y-auto">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <DropdownMenuItem key={i} className="flex flex-col items-start gap-1 p-3 cursor-pointer">
-                    <p className="text-sm font-medium">New order received</p>
-                    <p className="text-xs text-slate-500">Order #1234 - $299.99</p>
-                    <p className="text-xs text-slate-400">2 minutes ago</p>
-                  </DropdownMenuItem>
-                ))}
+              <div className="p-4 text-center text-sm text-muted-foreground">
+                Tidak ada notifikasi
               </div>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="justify-center">
-                <Link to="/notifications" className="text-sm text-blue-600 hover:underline">
-                  View all notifications
-                </Link>
-              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
           {/* User Menu */}
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant="ghost" className="relative h-9 gap-2 pl-0 pr-2 hover:bg-slate-100">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={userAvatar} alt={userName} />
-                  <AvatarFallback className="bg-blue-600 text-white text-xs">
-                    {userName
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")
-                      .toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="hidden flex-col items-start md:flex">
-                  <span className="text-sm font-medium text-slate-900">{userName}</span>
-                  <span className="text-xs text-slate-500 capitalize">{userRole}</span>
-                </div>
-                <ChevronDown className="hidden h-4 w-4 text-slate-400 md:block" />
-              </Button>
+            <DropdownMenuTrigger className="relative inline-flex items-center h-9 gap-2 pl-0 pr-2 rounded-md hover:bg-slate-100 transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={userAvatar} alt={userName} />
+                <AvatarFallback className="bg-blue-600 text-white text-xs">
+                  {userName
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className="hidden flex-col items-start md:flex">
+                <span className="text-sm font-medium text-slate-900">{userName}</span>
+                <span className="text-xs text-slate-500 capitalize">{userRole}</span>
+              </div>
+              <ChevronDown className="hidden h-4 w-4 text-slate-400 md:block" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium">{userName}</p>
-                  <p className="text-xs text-slate-500">{userEmail}</p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link to="/profile" className="cursor-pointer">
-                  <User className="mr-2 h-4 w-4" />
-                  Profile
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/settings" className="cursor-pointer">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Settings
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/billing" className="cursor-pointer">
-                  <CreditCard className="mr-2 h-4 w-4" />
-                  Billing
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="cursor-pointer text-red-600 focus:text-red-600"
-                onClick={onLogout}
-              >
-                <LogOut className="mr-2 h-4 w-4" />
-                Log out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel className="font-normal">
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium">{userName}</p>
+                        <p className="text-xs text-slate-500">{userEmail}</p>
+                      </div>
+                    </DropdownMenuLabel>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  {currentRoleItems.map((item) => (
+                    <DropdownMenuItem key={item.href} asChild>
+                      <Link to={item.href} className="cursor-pointer">
+                        <item.icon className="mr-2 h-4 w-4" />
+                        {item.label}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                  {roles && roles.length > 1 && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link to="/select-role" className="cursor-pointer">
+                          <ArrowLeftRight className="mr-2 h-4 w-4" />
+                          Ganti Peran
+                        </Link>
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="cursor-pointer text-red-600 focus:text-red-600"
+                    onClick={onLogout}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </header>
 
-      {/* Mobile Search Bar */}
+      {/* Mobile Search Bar */} 
       {searchOpen && (
         <div className="fixed inset-x-0 top-16 z-20 border-b bg-white p-4 shadow-sm md:hidden">
           <div className="relative">

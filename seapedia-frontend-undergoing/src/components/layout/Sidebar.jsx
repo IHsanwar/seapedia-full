@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,7 +18,10 @@ import {
   LogOut,
   Store,
   Settings,
+  Loader2,
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { ArrowLeftRight } from "lucide-react";
 
 // Import role-specific menu configurations
 import {
@@ -159,9 +162,11 @@ export function Sidebar({
   userRole = "buyer",
   userName = "User",
   userAvatar,
+  roles = [],
   className,
   ...props
 }) {
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   // Get menu items based on user role
@@ -253,27 +258,6 @@ export function Sidebar({
                 />
               ))}
             </div>
-
-            {/* Settings Section - Only show for admin */}
-            {userRole === 'admin' && (
-              <div className="mt-6 pt-6 border-t border-slate-200">
-                {!isCollapsed && (
-                  <h3 className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                    System
-                  </h3>
-                )}
-                <div className="space-y-1">
-                  {settingsMenuItems.map((item) => (
-                    <NavItemComponent
-                      key={item.href}
-                      item={item}
-                      isCollapsed={isCollapsed}
-                      userRole={userRole}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
           </nav>
 
           {/* User Profile */}

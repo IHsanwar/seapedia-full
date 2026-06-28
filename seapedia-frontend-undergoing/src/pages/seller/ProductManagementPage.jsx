@@ -39,7 +39,7 @@ import { toast } from 'react-toastify';
 function resolveImageUrl(image) {
   if (!image) return null;
   if (image.startsWith('http')) return image;
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
   return `${baseUrl}/storage/${image}`;
 }
 

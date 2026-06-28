@@ -11,14 +11,16 @@ import { Checkbox } from '../components/ui/checkbox';
 import {
   Loader2, Eye, EyeOff, Mail, Lock, User, ArrowRight,
   ShoppingBag, Truck, Shield, Headphones, Phone,
-  CheckCircle, ChevronLeft, ChevronRight
+  CheckCircle, ChevronLeft, ChevronRight, AtSign
 } from 'lucide-react';
 import { toast } from 'react-toastify';
+import AuthSidebar from '../components/layout/AuthSidebar';
 
 // ─── Validation Schema ────────────────────────────────────────────────────────
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Nama lengkap minimal 2 karakter').max(100, 'Nama terlalu panjang'),
+  username: z.string().min(3, 'Username minimal 3 karakter').max(30, 'Username maksimal 30 karakter').regex(/^[a-zA-Z0-9_]+$/, 'Username hanya boleh huruf, angka, dan underscore'),
   email: z.string().min(1, 'Email wajib diisi').email('Format email tidak valid'),
   phone: z.string().min(10, 'Nomor telepon minimal 10 digit').max(15, 'Nomor telepon terlalu panjang'),
   password: z.string().min(8, 'Password minimal 8 karakter').regex(/[A-Z]/, 'Password harus mengandung huruf besar').regex(/[0-9]/, 'Password harus mengandung angka'),
@@ -45,11 +47,13 @@ export default function RegisterPage() {
     handleSubmit,
     formState: { errors, isSubmitting },
     trigger,
-    watch
+    watch,
+    setValue
   } = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       name: '',
+      username: '',
       email: '',
       phone: '',
       password: '',
@@ -64,8 +68,8 @@ export default function RegisterPage() {
     try {
       const res = await authRegister({
         name: data.name,
+        username: data.username,
         email: data.email,
-        username: data.email.split('@')[0],
         phone: data.phone,
         password: data.password,
         password_confirmation: data.confirmPassword
@@ -89,13 +93,6 @@ export default function RegisterPage() {
     }
   };
 
-  const features = [
-    { icon: ShoppingBag, title: "Jutaan Produk", desc: "Pilihan produk terlengkap" },
-    { icon: Truck, title: "Pengiriman Cepat", desc: "Sampai dalam 1-3 hari" },
-    { icon: Shield, title: "100% Aman", desc: "Garansi uang kembali" },
-    { icon: Headphones, title: "24/7 Support", desc: "Bantuan kapan saja" }
-  ];
-
   const passwordRequirements = [
     { label: 'Minimal 8 karakter', met: password?.length >= 8 },
     { label: 'Mengandung huruf besar', met: /[A-Z]/.test(password || '') },
@@ -103,61 +100,9 @@ export default function RegisterPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Left Side - Image & Branding */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-        {/* Background Image with Overlay */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: 'url("https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&h=800&fit=crop")'
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0066FF]/90 to-blue-800/90" />
-        
-        {/* Content */}
-        <div className="relative z-10 flex flex-col justify-between p-12 text-white w-full">
-          {/* Top - Logo */}
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
-              <ShoppingBag className="h-6 w-6 text-[#0066FF]" />
-            </div>
-            <span className="text-2xl font-bold">SEAPEDIA</span>
-          </div>
-
-          {/* Middle - Quote */}
-          <div className="max-w-md">
-            <blockquote className="text-2xl font-light italic mb-6 leading-relaxed">
-              "Bergabung dengan SEAPEDIA dan nikmati pengalaman belanja online terbaik."
-            </blockquote>
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-lg font-bold">
-                S
-              </div>
-              <div>
-                <p className="font-semibold">Seapedia Team</p>
-                <p className="text-sm text-white/70">E-Commerce Platform</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom - Features */}
-          <div className="grid grid-cols-2 gap-4">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <div key={index} className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-xl p-3">
-                  <Icon className="h-5 w-5 text-cyan-300" />
-                  <div>
-                    <p className="font-semibold text-sm">{feature.title}</p>
-                    <p className="text-xs text-white/70">{feature.desc}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+    <div className="fixed inset-0 bg-gray-50 flex"> 
+      {/* Left Side */}
+      <AuthSidebar quote="Bergabung dengan SEAPEDIA dan nikmati pengalaman belanja online terbaik." />
 
       {/* Right Side - Register Form */}
       <div className="flex-1 flex items-center justify-center p-4 sm:p-8 lg:p-12">
@@ -208,6 +153,22 @@ export default function RegisterPage() {
                     {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
                   </div>
 
+                  {/* Username */}
+                  <div className="space-y-2">
+                    <Label htmlFor="username" className="text-gray-700">Username</Label>
+                    <div className="relative">
+                      <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                      <Input
+                        id="username"
+                        type="text"
+                        placeholder="username_anda"
+                        {...register('username')}
+                        className={`pl-10 h-12 border-gray-200 focus:border-[#0066FF] focus:ring-[#0066FF]/20 rounded-xl ${errors.username ? 'border-red-500' : ''}`}
+                      />
+                    </div>
+                    {errors.username && <p className="text-red-500 text-xs">{errors.username.message}</p>}
+                  </div>
+
                   {/* Email */}
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-gray-700">Email</Label>
@@ -244,7 +205,7 @@ export default function RegisterPage() {
                   <Button
                     type="button"
                     onClick={async () => {
-                      const valid = await trigger(['name', 'email', 'phone']);
+                      const valid = await trigger(['name', 'username', 'email', 'phone']);
                       if (valid) setCurrentStep(2);
                     }}
                     className="w-full h-12 bg-[#0066FF] hover:bg-[#0052CC] text-white font-semibold rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
@@ -315,7 +276,8 @@ export default function RegisterPage() {
                 <div className="flex items-start gap-3">
                   <Checkbox
                     id="acceptTerms"
-                    {...register('acceptTerms')}
+                    checked={watch('acceptTerms')}
+                    onCheckedChange={(checked) => setValue('acceptTerms', checked, { shouldValidate: true })}
                     className="mt-1 border-gray-300 data-[state=checked]:bg-[#0066FF] data-[state=checked]:border-[#0066FF]"
                   />
                   <Label htmlFor="acceptTerms" className="text-sm text-gray-600 cursor-pointer leading-relaxed">
@@ -377,16 +339,3 @@ export default function RegisterPage() {
 </div>
 );
 }
-
-const features = [
-  { icon: ShoppingBag, title: "Jutaan Produk", desc: "Pilihan produk terlengkap" },
-  { icon: Truck, title: "Pengiriman Cepat", desc: "Sampai dalam 1-3 hari" },
-  { icon: Shield, title: "100% Aman", desc: "Garansi uang kembali" },
-  { icon: Headphones, title: "24/7 Support", desc: "Bantuan kapan saja" }
-];
-
-const passwordRequirements = [
-  { label: 'Minimal 8 karakter', met: false },
-  { label: 'Mengandung huruf besar', met: false },
-  { label: 'Mengandung angka', met: false }
-];

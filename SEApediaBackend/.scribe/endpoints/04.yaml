@@ -1,29 +1,23 @@
-name: 'Profile & Dashboard'
+name: 'Admin Monitoring'
 description: |-
 
-  APIs for viewing user profile and multi-role dashboard summaries.
+  APIs for monitoring marketplace entities: stores, products, orders, deliveries.
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/profile/dashboard
+    uri: api/v1/admin/stores
     metadata:
       custom: []
-      groupName: 'Profile & Dashboard'
+      groupName: 'Admin Monitoring'
       groupDescription: |-
 
-        APIs for viewing user profile and multi-role dashboard summaries.
+        APIs for monitoring marketplace entities: stores, products, orders, deliveries.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get multi-role dashboard summary.'
-      description: |-
-        Returns the user's basic profile, owned roles, current active role,
-        and a placeholder for financial summaries across all their roles
-        (e.g. Wallet, Seller Income, Driver Earnings).
-
-        A user with multiple roles needs to know their overall financial status,
-        even if their active role restricts their access to certain features.
+      title: 'List all stores.'
+      description: 'Get a paginated list of all stores with owner info.'
       authenticated: true
       deprecated: false
     headers:
@@ -55,17 +49,71 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/profile
+    uri: 'api/v1/admin/stores/{store_id}'
     metadata:
       custom: []
-      groupName: 'Profile & Dashboard'
+      groupName: 'Admin Monitoring'
       groupDescription: |-
 
-        APIs for viewing user profile and multi-role dashboard summaries.
+        APIs for monitoring marketplace entities: stores, products, orders, deliveries.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get user profile.'
-      description: "Returns the authenticated user's profile information."
+      title: 'Show store detail.'
+      description: 'Get details of a specific store with its products and owner.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      store_id:
+        custom: []
+        name: store_id
+        description: 'The ID of the store.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      store_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/products
+    metadata:
+      custom: []
+      groupName: 'Admin Monitoring'
+      groupDescription: |-
+
+        APIs for monitoring marketplace entities: stores, products, orders, deliveries.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List all products.'
+      description: 'Get a paginated list of all products with store info.'
       authenticated: true
       deprecated: false
     headers:
@@ -96,18 +144,18 @@ endpoints:
   -
     custom: []
     httpMethods:
-      - PUT
-    uri: api/v1/profile
+      - GET
+    uri: api/v1/admin/orders
     metadata:
       custom: []
-      groupName: 'Profile & Dashboard'
+      groupName: 'Admin Monitoring'
       groupDescription: |-
 
-        APIs for viewing user profile and multi-role dashboard summaries.
+        APIs for monitoring marketplace entities: stores, products, orders, deliveries.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update user profile.'
-      description: 'Allows the authenticated user to update their profile information.'
+      title: 'List all orders.'
+      description: 'Get a paginated list of all orders with buyer, store, and delivery info.'
       authenticated: true
       deprecated: false
     headers:
@@ -117,68 +165,169 @@ endpoints:
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters:
-      name:
-        custom: []
-        name: name
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: b
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      username:
-        custom: []
-        name: username
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      email:
-        custom: []
-        name: email
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      phone:
-        custom: []
-        name: phone
-        description: 'Must not be greater than 20 characters.'
-        required: false
-        example: ngzmiyvdljnikhwa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      avatar_url:
-        custom: []
-        name: avatar_url
-        description: 'Must be a valid URL. Must not be greater than 500 characters.'
-        required: false
-        example: 'http://breitenberg.com/nostrum-aut-adipisci-quidem-nostrum.html'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      name: b
-      phone: ngzmiyvdljnikhwa
-      avatar_url: 'http://breitenberg.com/nostrum-aut-adipisci-quidem-nostrum.html'
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
-    responses: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/admin/orders/{order_id}'
+    metadata:
+      custom: []
+      groupName: 'Admin Monitoring'
+      groupDescription: |-
+
+        APIs for monitoring marketplace entities: stores, products, orders, deliveries.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show order detail.'
+      description: 'Get full details of a specific order.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      order_id:
+        custom: []
+        name: order_id
+        description: 'The ID of the order.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      order_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/deliveries
+    metadata:
+      custom: []
+      groupName: 'Admin Monitoring'
+      groupDescription: |-
+
+        APIs for monitoring marketplace entities: stores, products, orders, deliveries.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List all deliveries.'
+      description: 'Get a paginated list of all delivery jobs with order and driver info.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/admin/deliveries/{delivery_id}'
+    metadata:
+      custom: []
+      groupName: 'Admin Monitoring'
+      groupDescription: |-
+
+        APIs for monitoring marketplace entities: stores, products, orders, deliveries.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show delivery detail.'
+      description: 'Get full details of a specific delivery job.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      delivery_id:
+        custom: []
+        name: delivery_id
+        description: 'The ID of the delivery.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      delivery_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
     responseFields: []
     auth: []
     controller: null

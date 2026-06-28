@@ -8,7 +8,7 @@ import { Label } from '../components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Loader2, User, Mail, Phone, MapPin, Store as StoreIcon, ShoppingBag, Truck, Shield, ArrowLeft, Save, Eye }from 'lucide-react';
-import { toast } from 'sonner';
+import { toast } from 'react-toastify';
 
 export default function ProfilePage() {
   const { isAuthenticated, activeRole } = useAuth();

@@ -287,7 +287,7 @@ endpoints:
         name: role
         description: ''
         required: true
-        example: seller
+        example: driver
         type: string
         enumValues:
           - buyer
@@ -297,7 +297,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      role: seller
+      role: driver
     fileParameters: []
     responses: []
     responseFields: []

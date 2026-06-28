@@ -80,7 +80,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: percent
+        example: fixed
         type: string
         enumValues:
           - fixed
@@ -137,7 +137,7 @@ endpoints:
         name: expired_at
         description: 'Must be a valid date. Must be a date after <code>now</code>.'
         required: true
-        example: '2052-07-18'
+        example: '2052-07-21'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -148,7 +148,7 @@ endpoints:
         name: is_active
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -156,13 +156,13 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       code: architecto
-      type: percent
+      type: fixed
       value: 39
       max_discount: 84
       minimum_purchase: 12
       remaining_usage: 77
-      expired_at: '2052-07-18'
-      is_active: false
+      expired_at: '2052-07-21'
+      is_active: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -274,7 +274,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: percent
+        example: fixed
         type: string
         enumValues:
           - fixed
@@ -331,7 +331,7 @@ endpoints:
         name: expired_at
         description: 'Must be a valid date.'
         required: false
-        example: '2026-06-24T15:32:29'
+        example: '2026-06-28T08:24:06'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -349,12 +349,12 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      type: percent
+      type: fixed
       value: 27
       max_discount: 39
       minimum_purchase: 84
       remaining_usage: 12
-      expired_at: '2026-06-24T15:32:29'
+      expired_at: '2026-06-28T08:24:06'
       is_active: false
     fileParameters: []
     responses: []
@@ -485,7 +485,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: percent
+        example: fixed
         type: string
         enumValues:
           - fixed
@@ -531,7 +531,7 @@ endpoints:
         name: expired_at
         description: 'Must be a valid date. Must be a date after <code>now</code>.'
         required: true
-        example: '2052-07-18'
+        example: '2052-07-21'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -542,7 +542,7 @@ endpoints:
         name: is_active
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -550,12 +550,12 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       code: architecto
-      type: percent
+      type: fixed
       value: 39
       max_discount: 84
       minimum_purchase: 12
-      expired_at: '2052-07-18'
-      is_active: false
+      expired_at: '2052-07-21'
+      is_active: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -667,7 +667,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: percent
+        example: fixed
         type: string
         enumValues:
           - fixed
@@ -713,7 +713,7 @@ endpoints:
         name: expired_at
         description: 'Must be a valid date.'
         required: false
-        example: '2026-06-24T15:32:29'
+        example: '2026-06-28T08:24:06'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -724,19 +724,19 @@ endpoints:
         name: is_active
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      type: percent
+      type: fixed
       value: 27
       max_discount: 39
       minimum_purchase: 84
-      expired_at: '2026-06-24T15:32:29'
-      is_active: true
+      expired_at: '2026-06-28T08:24:06'
+      is_active: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -816,7 +816,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"success":true,"message":"Reviews retrieved successfully","data":[]}'
+        content: '{"success":true,"message":"Reviews retrieved successfully","data":[{"id":1,"user_id":6,"reviewer_name":"Cifera","rating":5,"comment":"Lumayan bagus","created_at":"2026-06-27T11:15:25.000000Z","updated_at":"2026-06-27T11:15:25.000000Z"}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1425,14 +1425,14 @@ endpoints:
         name: id
         description: 'The ID of the order.'
         required: true
-        example: architecto
-        type: string
+        example: 1
+        type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      id: architecto
+      id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2139,7 +2139,7 @@ endpoints:
         name: is_default
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -2164,7 +2164,7 @@ endpoints:
       city: 'n'
       postal_code: gzmiyv
       province: d
-      is_default: false
+      is_default: true
       notes: architecto
     fileParameters: []
     responses: []
@@ -2323,14 +2323,14 @@ endpoints:
         name: id
         description: 'The ID of the order.'
         required: true
-        example: architecto
-        type: string
+        example: 1
+        type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      id: architecto
+      id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2412,7 +2412,7 @@ endpoints:
         name: delivery_method
         description: ''
         required: true
-        example: regular
+        example: next_day
         type: string
         enumValues:
           - instant
@@ -2425,7 +2425,7 @@ endpoints:
       voucher_code: architecto
       promo_code: architecto
       address_id: 16
-      delivery_method: regular
+      delivery_method: next_day
     fileParameters: []
     responses: []
     responseFields: []
@@ -2824,7 +2824,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"success":true,"data":[{"id":31,"store_id":21,"name":"t4esgf","description":"gsdeg","price":"6000.00","stock":1332,"thumbnail_image":"http:\/\/127.0.0.1:8000\/storage\/products\/thumbnail\/xZOqi8svhvVuPcqZ3eEw2VsSXEnEc1MnQVzZJpSv.jpg","thumbnail_path":"products\/thumbnail\/xZOqi8svhvVuPcqZ3eEw2VsSXEnEc1MnQVzZJpSv.jpg","image_url":"http:\/\/127.0.0.1:8000\/storage\/products\/thumbnail\/xZOqi8svhvVuPcqZ3eEw2VsSXEnEc1MnQVzZJpSv.jpg","slug":"t4esgf","url_slug":"31-t4esgf","public_url":"http:\/\/127.0.0.1:8000\/api\/v1\/products\/31-t4esgf","is_active":1,"store":{"id":21,"store_name":"Aeter Store","slug":"aeter-store","description":"sedWD","logo":"http:\/\/127.0.0.1:8000\/storage\/stores\/logos\/GxWqbWOjpzgYJR7Wzkkl0r4NnllpeyLTpKVLE84Q.jpg"},"created_at":"2026-06-23T04:38:06.000000Z","updated_at":"2026-06-23T04:41:54.000000Z"}]}'
+        content: '{"success":true,"data":[{"id":1,"store_id":1,"name":"Ikan Salmon Segar 500gr","description":"Ikan salmon segar premium, kaya omega-3, cocok untuk sashimi, sushi, atau masakan sehari-hari. Dikirim dalam kondisi segar dan dingin.","price":"85000.00","stock":48,"thumbnail_image":null,"thumbnail_path":null,"image_url":null,"slug":"ikan-salmon-segar-500gr","url_slug":"1-ikan-salmon-segar-500gr","public_url":"http:\/\/127.0.0.1:8000\/api\/v1\/products\/1-ikan-salmon-segar-500gr","is_active":1,"store":{"id":1,"store_name":"Toko Seapedia 1","slug":"toko-seapedia-1","description":"Toko resmi yang dikelola secara profesional.","logo":null},"created_at":"2026-06-27T03:13:16.000000Z","updated_at":"2026-06-28T04:57:17.000000Z"},{"id":2,"store_id":1,"name":"Udang Vaname Beku 1kg","description":"Udang vaname kualitas ekspor, ukuran 60-70 ekor\/kg. Sudah dikupas, siap masak. Cocok untuk berbagai hidangan seafood.","price":"95000.00","stock":100,"thumbnail_image":null,"thumbnail_path":null,"image_url":null,"slug":"udang-vaname-beku-1kg","url_slug":"2-udang-vaname-beku-1kg","public_url":"http:\/\/127.0.0.1:8000\/api\/v1\/products\/2-udang-vaname-beku-1kg","is_active":1,"store":{"id":1,"store_name":"Toko Seapedia 1","slug":"toko-seapedia-1","description":"Toko resmi yang dikelola secara profesional.","logo":null},"created_at":"2026-06-27T03:13:16.000000Z","updated_at":"2026-06-27T03:13:16.000000Z"},{"id":3,"store_id":1,"name":"Cumi-Cumi Segar 500gr","description":"Cumi-cumi laut dalam kondisi segar, bersih dan bebas bau amis. Cocok untuk calamari, tumis, atau masakan berkuah.","price":"45000.00","stock":75,"thumbnail_image":null,"thumbnail_path":null,"image_url":null,"slug":"cumi-cumi-segar-500gr","url_slug":"3-cumi-cumi-segar-500gr","public_url":"http:\/\/127.0.0.1:8000\/api\/v1\/products\/3-cumi-cumi-segar-500gr","is_active":1,"store":{"id":1,"store_name":"Toko Seapedia 1","slug":"toko-seapedia-1","description":"Toko resmi yang dikelola secara profesional.","logo":null},"created_at":"2026-06-27T03:13:16.000000Z","updated_at":"2026-06-27T03:13:16.000000Z"},{"id":4,"store_id":1,"name":"Kepiting Bakau 1 ekor (500-700gr)","description":"Kepiting bakau hidup pilihan, berat berkisar 500-700gram per ekor. Segar dari tambak lokal. Tersedia bumbu saus tiram gratis.","price":"120000.00","stock":30,"thumbnail_image":null,"thumbnail_path":null,"image_url":null,"slug":"kepiting-bakau-1-ekor-500-700gr","url_slug":"4-kepiting-bakau-1-ekor-500-700gr","public_url":"http:\/\/127.0.0.1:8000\/api\/v1\/products\/4-kepiting-bakau-1-ekor-500-700gr","is_active":1,"store":{"id":1,"store_name":"Toko Seapedia 1","slug":"toko-seapedia-1","description":"Toko resmi yang dikelola secara profesional.","logo":null},"created_at":"2026-06-27T03:13:16.000000Z","updated_at":"2026-06-27T03:13:16.000000Z"},{"id":5,"store_id":1,"name":"Kerang Hijau Rebus 500gr","description":"Kerang hijau yang sudah direbus dan siap saji, disajikan dengan bumbu khas. Higienis dan lezat untuk camilan atau lauk.","price":"35000.00","stock":80,"thumbnail_image":null,"thumbnail_path":null,"image_url":null,"slug":"kerang-hijau-rebus-500gr","url_slug":"5-kerang-hijau-rebus-500gr","public_url":"http:\/\/127.0.0.1:8000\/api\/v1\/products\/5-kerang-hijau-rebus-500gr","is_active":1,"store":{"id":1,"store_name":"Toko Seapedia 1","slug":"toko-seapedia-1","description":"Toko resmi yang dikelola secara profesional.","logo":null},"created_at":"2026-06-27T03:13:16.000000Z","updated_at":"2026-06-27T03:13:16.000000Z"},{"id":6,"store_id":2,"name":"Kaos Polos Cotton 30s Unisex","description":"Kaos polos berbahan cotton 30s yang nyaman dan adem. Tersedia dalam berbagai warna dan ukuran (S, M, L, XL, XXL). Jahitan rapi, tidak mudah melar.","price":"75000.00","stock":200,"thumbnail_image":null,"thumbnail_path":null,"image_url":null,"slug":"kaos-polos-cotton-30s-unisex","url_slug":"6-kaos-polos-cotton-30s-unisex","public_url":"http:\/\/127.0.0.1:8000\/api\/v1\/products\/6-kaos-polos-cotton-30s-unisex","is_active":1,"store":{"id":2,"store_name":"Toko Serba Ada","slug":"toko-serba-ada","description":"Toko resmi yang dikelola secara profesional.","logo":null},"created_at":"2026-06-27T03:13:16.000000Z","updated_at":"2026-06-27T03:13:16.000000Z"},{"id":7,"store_id":2,"name":"Sepatu Casual Sneakers Pria","description":"Sepatu sneakers kasual pria dengan sol karet tebal dan bahan kanvas berkualitas. Cocok untuk kegiatan sehari-hari, santai, maupun semi-formal.","price":"250000.00","stock":45,"thumbnail_image":null,"thumbnail_path":null,"image_url":null,"slug":"sepatu-casual-sneakers-pria","url_slug":"7-sepatu-casual-sneakers-pria","public_url":"http:\/\/127.0.0.1:8000\/api\/v1\/products\/7-sepatu-casual-sneakers-pria","is_active":1,"store":{"id":2,"store_name":"Toko Serba Ada","slug":"toko-serba-ada","description":"Toko resmi yang dikelola secara profesional.","logo":null},"created_at":"2026-06-27T03:13:16.000000Z","updated_at":"2026-06-27T03:13:16.000000Z"},{"id":8,"store_id":2,"name":"Tas Ransel Laptop 14 inch Anti Air","description":"Tas ransel dengan kompartemen laptop hingga 14 inch, bahan anti air. Dilengkapi port USB charging dan slot kartu. Kapasitas 30 liter.","price":"185000.00","stock":60,"thumbnail_image":null,"thumbnail_path":null,"image_url":null,"slug":"tas-ransel-laptop-14-inch-anti-air","url_slug":"8-tas-ransel-laptop-14-inch-anti-air","public_url":"http:\/\/127.0.0.1:8000\/api\/v1\/products\/8-tas-ransel-laptop-14-inch-anti-air","is_active":1,"store":{"id":2,"store_name":"Toko Serba Ada","slug":"toko-serba-ada","description":"Toko resmi yang dikelola secara profesional.","logo":null},"created_at":"2026-06-27T03:13:16.000000Z","updated_at":"2026-06-27T03:13:16.000000Z"},{"id":9,"store_id":2,"name":"Earphone Bluetooth 5.0 Wireless","description":"Earphone TWS Bluetooth 5.0 dengan casing charging magnetik. Daya tahan baterai 4+20 jam, noise cancellation aktif, dan kualitas suara Hi-Fi.","price":"149000.00","stock":120,"thumbnail_image":null,"thumbnail_path":null,"image_url":null,"slug":"earphone-bluetooth-50-wireless","url_slug":"9-earphone-bluetooth-50-wireless","public_url":"http:\/\/127.0.0.1:8000\/api\/v1\/products\/9-earphone-bluetooth-50-wireless","is_active":1,"store":{"id":2,"store_name":"Toko Serba Ada","slug":"toko-serba-ada","description":"Toko resmi yang dikelola secara profesional.","logo":null},"created_at":"2026-06-27T03:13:16.000000Z","updated_at":"2026-06-27T03:13:16.000000Z"},{"id":10,"store_id":2,"name":"Minyak Zaitun Extra Virgin 500ml","description":"Minyak zaitun cold-pressed extra virgin murni, kaya antioksidan dan vitamin E. Cocok untuk memasak, salad dressing, atau perawatan kulit.","price":"110000.00","stock":90,"thumbnail_image":null,"thumbnail_path":null,"image_url":null,"slug":"minyak-zaitun-extra-virgin-500ml","url_slug":"10-minyak-zaitun-extra-virgin-500ml","public_url":"http:\/\/127.0.0.1:8000\/api\/v1\/products\/10-minyak-zaitun-extra-virgin-500ml","is_active":1,"store":{"id":2,"store_name":"Toko Serba Ada","slug":"toko-serba-ada","description":"Toko resmi yang dikelola secara profesional.","logo":null},"created_at":"2026-06-27T03:13:16.000000Z","updated_at":"2026-06-27T03:13:16.000000Z"}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -2859,14 +2859,14 @@ endpoints:
         name: productSlug
         description: ''
         required: true
-        example: 31
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      productSlug: 31
+      productSlug: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2876,7 +2876,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"success":true,"data":{"id":31,"store_id":21,"name":"t4esgf","description":"gsdeg","price":"6000.00","stock":1332,"thumbnail_image":"http:\/\/127.0.0.1:8000\/storage\/products\/thumbnail\/xZOqi8svhvVuPcqZ3eEw2VsSXEnEc1MnQVzZJpSv.jpg","thumbnail_path":"products\/thumbnail\/xZOqi8svhvVuPcqZ3eEw2VsSXEnEc1MnQVzZJpSv.jpg","image_url":"http:\/\/127.0.0.1:8000\/storage\/products\/thumbnail\/xZOqi8svhvVuPcqZ3eEw2VsSXEnEc1MnQVzZJpSv.jpg","slug":"t4esgf","url_slug":"31-t4esgf","public_url":"http:\/\/127.0.0.1:8000\/api\/v1\/products\/31-t4esgf","is_active":1,"store":{"id":21,"store_name":"Aeter Store","slug":"aeter-store","description":"sedWD","logo":"http:\/\/127.0.0.1:8000\/storage\/stores\/logos\/GxWqbWOjpzgYJR7Wzkkl0r4NnllpeyLTpKVLE84Q.jpg"},"created_at":"2026-06-23T04:38:06.000000Z","updated_at":"2026-06-23T04:41:54.000000Z"}}'
+        content: '{"success":true,"data":{"id":1,"store_id":1,"name":"Ikan Salmon Segar 500gr","description":"Ikan salmon segar premium, kaya omega-3, cocok untuk sashimi, sushi, atau masakan sehari-hari. Dikirim dalam kondisi segar dan dingin.","price":"85000.00","stock":48,"thumbnail_image":null,"thumbnail_path":null,"image_url":null,"slug":"ikan-salmon-segar-500gr","url_slug":"1-ikan-salmon-segar-500gr","public_url":"http:\/\/127.0.0.1:8000\/api\/v1\/products\/1-ikan-salmon-segar-500gr","is_active":1,"store":{"id":1,"store_name":"Toko Seapedia 1","slug":"toko-seapedia-1","description":"Toko resmi yang dikelola secara profesional.","logo":null},"created_at":"2026-06-27T03:13:16.000000Z","updated_at":"2026-06-28T04:57:17.000000Z"}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -2911,14 +2911,14 @@ endpoints:
         name: storeSlug
         description: ''
         required: true
-        example: 21
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      storeSlug: 21
+      storeSlug: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -2961,10 +2961,78 @@ endpoints:
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
+    bodyParameters:
+      vehicle_type:
+        custom: []
+        name: vehicle_type
+        description: ''
+        required: true
+        example: truck
+        type: string
+        enumValues:
+          - motor
+          - mobil
+          - van
+          - truck
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      vehicle_plate_number:
+        custom: []
+        name: vehicle_plate_number
+        description: 'Must be at least 5 characters. Must not be greater than 15 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      vehicle_type: truck
+      vehicle_plate_number: b
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/driver/profile
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
-    responses: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
     responseFields: []
     auth: []
     controller: null
@@ -2981,7 +3049,10 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'List available delivery jobs'
+      title: |-
+        List available delivery jobs
+        Hanya tampilkan job dengan status 'waiting_driver' dan
+        order dengan status 'Menunggu Pengirim' (sesuai lifecycle SEAPEDIA)
       description: ''
       authenticated: false
       deprecated: false
@@ -3021,7 +3092,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'List jobs currently assigned to authenticated driver'
+      title: 'List all jobs assigned to authenticated driver (active + history)'
       description: ''
       authenticated: false
       deprecated: false
@@ -3061,7 +3132,10 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Driver takes a delivery job'
+      title: |-
+        Driver takes a delivery job
+        Menggunakan DB transaction + lockForUpdate untuk mencegah race condition
+        (dua driver tidak bisa ambil job yang sama secara bersamaan)
       description: ''
       authenticated: false
       deprecated: false
@@ -3074,14 +3148,14 @@ endpoints:
         name: delivery_id
         description: 'The ID of the delivery.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      delivery_id: 16
+      delivery_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -3117,14 +3191,14 @@ endpoints:
         name: delivery_id
         description: 'The ID of the delivery.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      delivery_id: 16
+      delivery_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

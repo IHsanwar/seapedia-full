@@ -1,622 +1,546 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { productsAPI } from '../api/products';
+import { reviewsAPI } from '../api/reviews';
 import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Textarea } from '../components/ui/textarea';
+import { Label } from '../components/ui/label';
+import { Skeleton } from '../components/ui/skeleton';
 import {
-  ShoppingBag, Truck, Store, ShieldCheck, Star,
-  Search, ChevronRight, Heart, ShoppingCart,
-  Smartphone, Shirt, Utensils, Heart as HeartIcon,
-  Car, Dumbbell, Home, Book, Gamepad2, Sparkles,
-  Zap, Clock, Headphones, CreditCard, Package,
-  MapPin, Award, Users, TrendingUp, ArrowRight
+  Search, ArrowRight, Star, ShoppingCart, Store,
+  Truck, ShieldCheck, Users, Headphones, Package,
+  Smartphone, Shirt, Home as HomeIcon, Sparkles,
+  Dumbbell, Utensils, BookOpen, Car, Wrench, MoreHorizontal,
+  Bike, Shield, TrendingUp, Send, Loader2, MessageSquarePlus
 } from 'lucide-react';
 
-// ─── Dummy Data ───────────────────────────────────────────────────────────────
-
 const categories = [
-  { id: 1, name: "Elektronik", icon: Smartphone, color: "bg-blue-500", count: 1240 },
-  { id: 2, name: "Fashion", icon: Shirt, color: "bg-pink-500", count: 3500 },
-  { id: 3, name: "Makanan", icon: Utensils, color: "bg-orange-500", count: 890 },
-  { id: 4, name: "Kesehatan", icon: HeartIcon, color: "bg-red-500", count: 450 },
-  { id: 5, name: "Otomotif", icon: Car, color: "bg-purple-500", count: 320 },
-  { id: 6, name: "Olahraga", icon: Dumbbell, color: "bg-green-500", count: 670 },
-  { id: 7, name: "Rumah Tangga", icon: Home, color: "bg-teal-500", count: 980 },
-  { id: 8, name: "Buku", icon: Book, color: "bg-indigo-500", count: 450 },
-  { id: 9, name: "Mainan", icon: Gamepad2, color: "bg-yellow-500", count: 560 },
-  { id: 10, name: "Kecantikan", icon: Sparkles, color: "bg-rose-500", count: 780 }
+  { id: 1, name: "Elektronik", icon: Smartphone },
+  { id: 2, name: "Fashion", icon: Shirt },
+  { id: 3, name: "Rumah Tangga", icon: HomeIcon },
+  { id: 4, name: "Kecantikan", icon: Sparkles },
+  { id: 5, name: "Olahraga", icon: Dumbbell },
+  { id: 6, name: "Makanan", icon: Utensils },
+  { id: 7, name: "Buku", icon: BookOpen },
+  { id: 8, name: "Otomotif", icon: Car },
+  { id: 9, name: "Perkakas", icon: Wrench },
+  { id: 10, name: "Lainnya", icon: MoreHorizontal },
 ];
 
-const flashSaleProducts = [
+const roleFeatures = [
   {
-    id: 1,
-    name: "iPhone 15 Pro Max",
-    originalPrice: 20000000,
-    salePrice: 18500000,
-    discount: 7,
-    image: "https://images.unsplash.com/photo-1696446701796-da61225697cc?w=400&h=400&fit=crop",
-    rating: 4.9,
-    sold: 850,
-    endTime: "2024-01-31T23:59:59"
+    icon: ShoppingCart,
+    title: "Buyer",
+    desc: "Jelajahi produk, checkout mudah, lacak pesanan, dan kelola dompet digital dalam satu platform.",
+    color: "text-primary",
+    bg: "bg-primary/10",
   },
   {
-    id: 2,
-    name: "MacBook Air M3",
-    originalPrice: 18000000,
-    salePrice: 15900000,
-    discount: 12,
-    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop",
-    rating: 4.8,
-    sold: 420,
-    endTime: "2024-01-31T23:59:59"
+    icon: Store,
+    title: "Seller",
+    desc: "Kelola toko, upload produk, proses pesanan, dan pantau laporan penjualan secara real-time.",
+    color: "text-secondary",
+    bg: "bg-secondary/10",
   },
   {
-    id: 3,
-    name: "AirPods Pro 2",
-    originalPrice: 3500000,
-    salePrice: 2800000,
-    discount: 20,
-    image: "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=400&h=400&fit=crop",
-    rating: 4.9,
-    sold: 1200,
-    endTime: "2024-01-31T23:59:59"
+    icon: Bike,
+    title: "Driver",
+    desc: "Terima job pengiriman, lacak rute, dan terima penghasilan dengan sistem yang transparan.",
+    color: "text-accent",
+    bg: "bg-accent/10",
   },
   {
-    id: 4,
-    name: "iPad Air 5",
-    originalPrice: 9500000,
-    salePrice: 8200000,
-    discount: 14,
-    image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=400&fit=crop",
-    rating: 4.7,
-    sold: 680,
-    endTime: "2024-01-31T23:59:59"
-  }
+    icon: Shield,
+    title: "Admin",
+    desc: "Monitor marketplace, kelola voucher & promosi, verifikasi toko, dan atur pengguna.",
+    color: "text-foreground",
+    bg: "bg-muted",
+  },
 ];
 
-const featuredProducts = [
-  {
-    id: 1,
-    name: "Sony WH-1000XM5 Headphone",
-    price: 4800000,
-    originalPrice: 5500000,
-    image: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=400&h=400&fit=crop",
-    rating: 4.8,
-    reviews: 320,
-    store: "Sony Official",
-    location: "Jakarta",
-    isWishlist: false
-  },
-  {
-    id: 2,
-    name: "Samsung Galaxy S24 Ultra",
-    price: 16500000,
-    originalPrice: 18000000,
-    image: "https://images.unsplash.com/photo-1610945265078-3858a0828671?w=400&h=400&fit=crop",
-    rating: 4.9,
-    reviews: 520,
-    store: "Samsung Store",
-    location: "Bandung",
-    isWishlist: true
-  },
-  {
-    id: 3,
-    name: "Nike Air Jordan 1 High",
-    price: 2800000,
-    originalPrice: 3500000,
-    image: "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=400&h=400&fit=crop",
-    rating: 4.7,
-    reviews: 180,
-    store: "Nike Official",
-    location: "Surabaya",
-    isWishlist: false
-  },
-  {
-    id: 4,
-    name: "Dyson V15 Detect Vacuum",
-    price: 12000000,
-    originalPrice: 13500000,
-    image: "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=400&h=400&fit=crop",
-    rating: 4.9,
-    reviews: 95,
-    store: "Dyson Official",
-    location: "Jakarta",
-    isWishlist: false
-  },
-  {
-    id: 5,
-    name: "Logitech MX Master 3S",
-    price: 1200000,
-    originalPrice: 1500000,
-    image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&h=400&fit=crop",
-    rating: 4.8,
-    reviews: 410,
-    store: "Logitech Store",
-    location: "Jakarta",
-    isWishlist: true
-  },
-  {
-    id: 6,
-    name: "Herman Miller Aeron Chair",
-    price: 18000000,
-    originalPrice: 22000000,
-    image: "https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?w=400&h=400&fit=crop",
-    rating: 4.9,
-    reviews: 67,
-    store: "Herman Miller",
-    location: "Jakarta",
-    isWishlist: false
-  },
-  {
-    id: 7,
-    name: "Canon EOS R6 Camera",
-    price: 28000000,
-    originalPrice: 32000000,
-    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&h=400&fit=crop",
-    rating: 4.8,
-    reviews: 43,
-    store: "Canon Official",
-    location: "Bandung",
-    isWishlist: true
-  },
-  {
-    id: 8,
-    name: "PlayStation 5 Console",
-    price: 8500000,
-    originalPrice: 9500000,
-    image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=400&h=400&fit=crop",
-    rating: 4.9,
-    reviews: 890,
-    store: "Sony Official",
-    location: "Jakarta",
-    isWishlist: false
-  }
+const advantages = [
+  { icon: ShieldCheck, title: "Transaksi Aman", desc: "Sistem pembayaran wallet terjamin keamanan" },
+  { icon: Truck, title: "Pengiriman Terintegrasi", desc: "Driver dedicated untuk setiap pengiriman" },
+  { icon: TrendingUp, title: "Laporan Real-time", desc: "Dashboard analytics untuk seller & admin" },
+  { icon: Headphones, title: "Dukungan 24/7", desc: "Tim support siap membantu kapan saja" },
 ];
 
-const testimonials = [
-  {
-    id: 1,
-    name: "Budi Santoso",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
-    rating: 5,
-    review: "SEAPEDIA sangat memudahkan saya dalam berbelanja online. Pengiriman cepat dan produk berkualitas! Highly recommended!",
-    date: "2024-01-15",
-    role: "Buyer"
-  },
-  {
-    id: 2,
-    name: "Siti Rahayu",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face",
-    rating: 5,
-    review: "Sebagai seller, platform ini sangat membantu mengembangkan bisnis saya. Fitur dashboard yang lengkap dan mudah digunakan.",
-    date: "2024-01-10",
-    role: "Seller"
-  },
-  {
-    id: 3,
-    name: "Ahmad Wijaya",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face",
-    rating: 4,
-    review: "Driver app-nya sangat membantu mencari order pengiriman. Penghasilan yang kompetitif dan sistem yang transparan.",
-    date: "2024-01-08",
-    role: "Driver"
-  },
-  {
-    id: 4,
-    name: "Maya Indah",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
-    rating: 5,
-    review: "Customer service sangat responsif! Ada masalah dengan pesanan, langsung di-resolve dengan cepat. Love it!",
-    date: "2024-01-05",
-    role: "Buyer"
-  }
-];
+function formatPrice(price) {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
+}
 
-// ─── Helper Components ────────────────────────────────────────────────────────
+function ProductCard({ product }) {
+  return (
+    <Link
+      to={`/products/${product.url_slug || product.id}`}
+      className="group bg-card border border-border rounded-sm overflow-hidden hover:shadow-md transition-shadow"
+    >
+      <div className="aspect-square overflow-hidden bg-muted relative">
+        {product.thumbnail_image || product.image_url ? (
+          <img
+            src={product.thumbnail_image || product.image_url}
+            alt={product.name}
+            className="object-cover w-full h-full group-hover:scale-[1.02] transition-transform duration-300"
+            loading="lazy"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-muted">
+            <Package className="h-10 w-10 text-muted-foreground/40" />
+          </div>
+        )}
+        {product.stock <= 0 && (
+          <div className="absolute inset-0 bg-background/70 flex items-center justify-center">
+            <span className="text-sm font-semibold text-destructive">Stok Habis</span>
+          </div>
+        )}
+      </div>
+      <div className="p-4">
+        <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-snug min-h-[2.5rem]">
+          {product.name}
+        </h3>
+        <p className="text-xs text-muted-foreground mt-1.5 truncate">
+          {product.store?.store_name || 'Unknown Store'}
+        </p>
+        <p className="font-bold text-primary mt-2 text-base">
+          {formatPrice(product.price)}
+        </p>
+        {product.stock > 0 && (
+          <p className="text-xs text-muted-foreground mt-1">
+            Stok: {product.stock}
+          </p>
+        )}
+      </div>
+    </Link>
+  );
+}
 
-function CountdownTimer({ endTime }) {
-  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+function ProductCardSkeleton() {
+  return (
+    <div className="bg-card border border-border rounded-sm overflow-hidden">
+      <Skeleton className="aspect-square w-full" />
+      <div className="p-4 space-y-2">
+        <Skeleton className="h-4 w-3/4" />
+        <Skeleton className="h-3 w-1/2" />
+        <Skeleton className="h-5 w-2/3" />
+        <Skeleton className="h-3 w-1/3" />
+      </div>
+    </div>
+  );
+}
 
-  useEffect(() => {
-    const calculateTimeLeft = () => {
-      const end = new Date(endTime).getTime();
-      const now = new Date().getTime();
-      const difference = end - now;
+function ReviewCard({ review }) {
+  return (
+    <div className="bg-card border border-border rounded-sm p-5">
+      <div className="flex items-center gap-3 mb-3">
+        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+          <span className="text-sm font-bold text-primary">
+            {(review.reviewer_name || 'U').charAt(0).toUpperCase()}
+          </span>
+        </div>
+        <div>
+          <h4 className="font-semibold text-foreground text-sm">{review.reviewer_name || 'Anonim'}</h4>
+          <div className="flex gap-0.5 mt-0.5">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={`h-3 w-3 ${i < (review.rating || 0) ? 'fill-yellow-400 text-yellow-400' : 'text-border'}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+        "{review.comment}"
+      </p>
+    </div>
+  );
+}
 
-      if (difference > 0) {
-        setTimeLeft({
-          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60)
-        });
-      }
-    };
+function ReviewCardSkeleton() {
+  return (
+    <div className="bg-card border border-border rounded-sm p-5">
+      <div className="flex items-center gap-3 mb-3">
+        <Skeleton className="h-10 w-10 rounded-full" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-3 w-16" />
+        </div>
+      </div>
+      <Skeleton className="h-3 w-full" />
+      <Skeleton className="h-3 w-4/5 mt-2" />
+    </div>
+  );
+}
 
-    calculateTimeLeft();
-    const timer = setInterval(calculateTimeLeft, 1000);
-    return () => clearInterval(timer);
-  }, [endTime]);
+function StarRatingInput({ value, onChange }) {
+  const [hovered, setHovered] = useState(0);
 
   return (
-    <div className="flex gap-2">
-      {Object.entries(timeLeft).map(([unit, value]) => (
-        <div key={unit} className="bg-white text-red-600 rounded-lg px-3 py-2 min-w-[50px] text-center">
-          <div className="text-xl font-bold">{String(value).padStart(2, '0')}</div>
-          <div className="text-xs capitalize">{unit === 'hours' ? 'Jam' : unit === 'minutes' ? 'Menit' : 'Detik'}</div>
-        </div>
+    <div className="flex gap-1">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <button
+          key={star}
+          type="button"
+          onClick={() => onChange(star)}
+          onMouseEnter={() => setHovered(star)}
+          onMouseLeave={() => setHovered(0)}
+          className="p-0.5 transition-transform hover:scale-110"
+        >
+          <Star
+            className={`h-6 w-6 transition-colors ${
+              star <= (hovered || value)
+                ? 'fill-yellow-400 text-yellow-400'
+                : 'text-border'
+            }`}
+          />
+        </button>
       ))}
     </div>
   );
 }
 
-function ProductCard({ product, variant = "default" }) {
-  const [isWishlist, setIsWishlist] = useState(product.isWishlist || false);
-  const [isHovered, setIsHovered] = useState(false);
+function ReviewForm({ onSubmitSuccess }) {
+  const [reviewerName, setReviewerName] = useState('');
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(price);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (!reviewerName.trim()) {
+      setError('Nama harus diisi');
+      return;
+    }
+    if (rating === 0) {
+      setError('Pilih rating');
+      return;
+    }
+    if (!comment.trim()) {
+      setError('Komentar harus diisi');
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await reviewsAPI.submitReview({
+        reviewer_name: reviewerName.trim(),
+        rating,
+        comment: comment.trim(),
+      });
+      setSuccess(true);
+      setReviewerName('');
+      setRating(0);
+      setComment('');
+      if (onSubmitSuccess) onSubmitSuccess();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Gagal mengirim review');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  if (variant === "flash") {
+  if (success) {
     return (
-      <div 
-        className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <div className="relative overflow-hidden">
-          <img 
-            src={product.image} 
-            alt={product.name}
-            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-          <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-            -{product.discount}%
-          </div>
-          <button 
-            onClick={() => setIsWishlist(!isWishlist)}
-            className="absolute top-3 right-3 bg-white/90 p-2 rounded-full hover:bg-white transition-colors"
-          >
-            <Heart className={`h-4 w-4 ${isWishlist ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
-          </button>
+      <div className="bg-card border border-border rounded-sm p-6 text-center">
+        <div className="w-12 h-12 bg-secondary/10 flex items-center justify-center rounded-full mx-auto mb-3">
+          <Star className="h-6 w-6 text-secondary fill-secondary" />
         </div>
-        <div className="p-4">
-          <h3 className="font-semibold text-gray-900 truncate">{product.name}</h3>
-          <div className="flex items-center gap-2 mt-1">
-            <span className="text-red-500 font-bold">{formatPrice(product.salePrice)}</span>
-            <span className="text-gray-400 line-through text-sm">{formatPrice(product.originalPrice)}</span>
-          </div>
-          <div className="flex items-center justify-between mt-3">
-            <div className="flex items-center gap-1">
-              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-              <span className="text-sm text-gray-600">{product.rating}</span>
-            </div>
-            <span className="text-xs text-gray-400">{product.sold} terjual</span>
-          </div>
-          <div className={`mt-3 transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-            <Button className="w-full bg-[#0066FF] hover:bg-[#0052CC]">
-              <ShoppingCart className="h-4 w-4 mr-2" />
-              Masukkan Keranjang
-            </Button>
-          </div>
-        </div>
+        <h3 className="font-semibold text-foreground mb-1">Terima Kasih!</h3>
+        <p className="text-sm text-muted-foreground mb-4">Review Anda berhasil dikirim.</p>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => setSuccess(false)}
+          className="rounded-sm"
+        >
+          Tulis Review Lagi
+        </Button>
       </div>
     );
   }
 
   return (
-    <div 
-      className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="relative overflow-hidden">
-        <img 
-          src={product.image} 
-          alt={product.name}
-          className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
-        />
-        <button 
-          onClick={() => setIsWishlist(!isWishlist)}
-          className="absolute top-3 right-3 bg-white/90 p-2 rounded-full hover:bg-white transition-colors"
+    <form onSubmit={handleSubmit} className="bg-card border border-border rounded-sm p-6">
+      <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+        <MessageSquarePlus className="h-5 w-5 text-primary" />
+        Tulis Review
+      </h3>
+
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="reviewer-name" className="mb-1.5 block text-sm font-medium text-foreground">
+            Nama
+          </Label>
+          <Input
+            id="reviewer-name"
+            value={reviewerName}
+            onChange={(e) => setReviewerName(e.target.value)}
+            placeholder="Masukkan nama Anda"
+            className="rounded-sm"
+            maxLength={100}
+            disabled={submitting}
+          />
+        </div>
+
+        <div>
+          <Label className="mb-1.5 block text-sm font-medium text-foreground">
+            Rating
+          </Label>
+          <StarRatingInput value={rating} onChange={setRating} />
+        </div>
+
+        <div>
+          <Label htmlFor="review-comment" className="mb-1.5 block text-sm font-medium text-foreground">
+            Komentar
+          </Label>
+          <Textarea
+            id="review-comment"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Bagikan pengalaman Anda tentang SEAPEDIA..."
+            className="rounded-sm min-h-[80px]"
+            rows={3}
+            disabled={submitting}
+          />
+        </div>
+
+        {error && (
+          <p className="text-sm text-destructive">{error}</p>
+        )}
+
+        <Button
+          type="submit"
+          disabled={submitting}
+          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-sm"
         >
-          <Heart className={`h-4 w-4 ${isWishlist ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
-        </button>
-      </div>
-      <div className="p-4">
-        <h3 className="font-semibold text-gray-900 line-clamp-2">{product.name}</h3>
-        <div className="flex items-center gap-2 mt-1">
-          <span className="text-[#0066FF] font-bold text-lg">{formatPrice(product.price)}</span>
-          {product.originalPrice && (
-            <span className="text-gray-400 line-through text-sm">{formatPrice(product.originalPrice)}</span>
+          {submitting ? (
+            <>
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              Mengirim...
+            </>
+          ) : (
+            <>
+              <Send className="h-4 w-4 mr-2" />
+              Kirim Review
+            </>
           )}
-        </div>
-        <div className="flex items-center justify-between mt-3">
-          <div className="flex items-center gap-1">
-            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-            <span className="text-sm text-gray-600">{product.rating}</span>
-            <span className="text-xs text-gray-400">({product.reviews})</span>
-          </div>
-        </div>
-        <div className="mt-2 text-sm text-gray-500">
-          {product.store} • {product.location}
-        </div>
-        <div className={`mt-3 transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-          <Button className="w-full bg-[#0066FF] hover:bg-[#0052CC]">
-            <ShoppingCart className="h-4 w-4 mr-2" />
-            Masukkan Keranjang
-          </Button>
-        </div>
+        </Button>
       </div>
-    </div>
+    </form>
   );
 }
 
-// ─── Main HomePage ───────────────────────────────────────────────────────────
-
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [countdown, setCountdown] = useState({ hours: 4, minutes: 32, seconds: 18 });
-  const [email, setEmail] = useState('');
+  const [products, setProducts] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
+  const [productsError, setProductsError] = useState(null);
 
-  // Countdown timer effect
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCountdown(prev => {
-        let { hours, minutes, seconds } = prev;
-        seconds--;
-        if (seconds < 0) {
-          seconds = 59;
-          minutes--;
-        }
-        if (minutes < 0) {
-          minutes = 59;
-          hours--;
-        }
-        if (hours < 0) {
-          hours = 23;
-        }
-        return { hours, minutes, seconds };
-      });
-    }, 1000);
-    return () => clearInterval(timer);
+  const fetchReviews = useCallback(async () => {
+    try {
+      const res = await reviewsAPI.getReviews();
+      const items = Array.isArray(res?.data) ? res.data : [];
+      setReviews(items.slice(0, 4));
+    } catch {
+      // reviews are optional, fail silently
+    } finally {
+      setReviewsLoading(false);
+    }
   }, []);
 
-  const features = [
-    { icon: Truck, title: "Gratis Ongkir", desc: "Untuk pembelian di atas Rp 500.000" },
-    { icon: ShieldCheck, title: "100% Aman", desc: "Pembayaran terjamin aman" },
-    { icon: Headphones, title: "24/7 Support", desc: "Bantuan pelanggan 24 jam" },
-    { icon: TrendingUp, title: "Best Deals", desc: "Harga terbaik setiap hari" }
-  ];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await productsAPI.getProducts({ limit: 8 });
+        const items = Array.isArray(res?.data?.data)
+          ? res.data.data
+          : Array.isArray(res?.data)
+          ? res.data
+          : [];
+        setProducts(items.slice(0, 8));
+      } catch (err) {
+        setProductsError('Gagal memuat produk');
+      } finally {
+        setProductsLoading(false);
+      }
+    };
 
-  const whyChooseUs = [
-    { icon: Award, title: "Kualitas Terjamin", desc: "Produk original dengan garansi resmi dari brand terpercaya" },
-    { icon: Zap, title: "Pengiriman Cepat", desc: "Pesanan diproses dalam 24 jam dengan tracking real-time" },
-    { icon: Users, title: "Komunitas Aktif", desc: "Bergabung dengan jutaan pengguna aktif di seluruh Indonesia" },
-    { icon: CreditCard, title: "Pembayaran Aman", desc: "Berbagai metode pembayaran dengan sistem keamanan terkini" }
-  ];
+    fetchProducts();
+    fetchReviews();
+  }, [fetchReviews]);
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* ─── Hero Banner ───────────────────────────────────────────────────────*/}
-      <section className="relative min-h-[600px] bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-400 overflow-hidden">
-        {/* Animated floating shapes */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-300/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-400/10 rounded-full blur-3xl" />
-          {/* Floating dots */}
-          <div className="absolute top-32 right-1/4 w-4 h-4 bg-white/30 rounded-full animate-bounce" />
-          <div className="absolute bottom-32 left-1/3 w-3 h-3 bg-white/20 rounded-full animate-bounce" style={{ animationDelay: '0.5s' }} />
-          <div className="absolute top-1/2 right-20 w-2 h-2 bg-cyan-200/40 rounded-full animate-bounce" style={{ animationDelay: '1s' }} />
-        </div>
-
-        {/* Hero content */}
-        <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
-          <div className="max-w-3xl mx-auto text-center text-white">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              <span className="text-sm font-medium">Platform E-Commerce Terlengkap di Indonesia</span>
-            </div>
-
-            {/* Main headline */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-              SEAPEDIA - Platform
-              <span className="block bg-gradient-to-r from-yellow-300 to-cyan-300 bg-clip-text text-transparent">
-                E-Commerce Terlengkap
-              </span>
+    <div className="min-h-screen bg-background">
+      {/* ─── Hero Section ──────────────────────────────────────────────────── */}
+      <section className="relative bg-[#003f87] text-white overflow-hidden">
+        <div 
+          className="absolute inset-0 z-0 opacity-20"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        <div className="relative z-10 max-w-[1280px] mx-auto px-6 md:px-[24px] py-16 md:py-24">
+          <div className="max-w-2xl">
+            <span className="inline-block px-3 py-1 bg-primary-foreground/20 text-primary-foreground text-xs font-semibold tracking-wider uppercase mb-6">
+              Multi-Commerce Platform
+            </span>
+            <h1 className="text-3xl md:text-[40px] font-bold leading-tight mb-4">
+              Platform E-Commerce Terpadu untuk Buyer, Seller & Driver
             </h1>
-
-            {/* Subheadline */}
-            <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              Temukan jutaan produk berkualitas dengan harga terbaik. 
-              Belanja mudah, aman, dan terpercaya.
+            <p className="text-base md:text-lg text-primary-foreground/80 mb-8 leading-relaxed">
+              SEAPEDIA menyatukan seluruh ekosistem commerce dalam satu aplikasi.
+              Belanja, jualan, dan kirim pesanan tanpa berpindah platform.
             </p>
 
-            {/* Search bar */}
-            <div className="relative max-w-2xl mx-auto mb-8">
-              <div className="relative bg-white rounded-full shadow-2xl overflow-hidden">
-                <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Cari produk, brand, atau kategori..."
-                  className="w-full pl-14 pr-32 py-4 text-gray-800 placeholder-gray-400 focus:outline-none"
-                />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#0066FF] hover:bg-[#0052CC] text-white px-6 py-2 rounded-full font-medium transition-colors">
-                  Cari
-                </button>
-              </div>
-            </div>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link to="/products">
-                <Button className="bg-white text-[#0066FF] hover:bg-gray-100 px-8 py-6 text-lg font-semibold rounded-full shadow-xl transition-all hover:scale-105">
-                  <ShoppingBag className="mr-2 h-5 w-5" />
-                  Jelajahi
-                </Button>
-              </Link>
-              <Link to="/register">
-                <Button className="bg-transparent border-2 border-white text-white hover:bg-white/10 px-8 py-6 text-lg font-semibold rounded-full transition-all hover:scale-105">
-                  <Users className="mr-2 h-5 w-5" />
-                  Daftar Sekarang
-                </Button>
+            {/* Search Bar */}
+            <div className="relative max-w-xl">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Cari produk di SEAPEDIA..."
+                className="w-full h-12 pl-12 pr-28 bg-background text-foreground border border-border rounded-sm focus:outline-none focus:ring-2 focus:ring-ring text-sm"
+              />
+              <Link
+                to={searchQuery ? `/products?search=${encodeURIComponent(searchQuery)}` : '/products'}
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 h-9 px-5 bg-secondary text-secondary-foreground text-sm font-semibold rounded-sm hover:bg-secondary/90 transition-colors flex items-center"
+              >
+                Cari
               </Link>
             </div>
 
-            {/* Trust badges */}
-            <div className="flex flex-wrap justify-center gap-6 mt-12 pt-8 border-t border-white/20">
-              <div className="flex items-center gap-2 text-white/90">
-                <div className="bg-white/20 p-2 rounded-full">
-                  <Truck className="h-5 w-5" />
-                </div>
-                <div className="text-left">
-                  <p className="text-sm font-semibold">Gratis Ongkir</p>
-                  <p className="text-xs text-white/70">Min. Rp 500rb</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 text-white/90">
-                <div className="bg-white/20 p-2 rounded-full">
-                  <ShieldCheck className="h-5 w-5" />
-                </div>
-                <div className="text-left">
-                  <p className="text-sm font-semibold">100% Aman</p>
-                  <p className="text-xs text-white/70">Garansi Uang Kembali</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 text-white/90">
-                <div className="bg-white/20 p-2 rounded-full">
-                  <Headphones className="h-5 w-5" />
-                </div>
-                <div className="text-left">
-                  <p className="text-sm font-semibold">24/7 Support</p>
-                  <p className="text-xs text-white/70">Bantuan Kapan Saja</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Categories Carousel ─────────────────────────────────────────────*/}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Kategori Populer</h2>
-              <p className="text-gray-500 mt-1">Temukan produk dari berbagai kategori</p>
-            </div>
-            <Link to="/categories" className="flex items-center gap-1 text-[#0066FF] hover:underline font-medium">
-              Lihat Semua <ChevronRight className="h-4 w-4" />
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-4">
-            {categories.map((cat) => {
-              const Icon = cat.icon;
-              return (
-                <Link 
-                  key={cat.id} 
-                  to={`/category/${cat.id}`}
-                  className="group flex flex-col items-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
-                >
-                  <div className={`${cat.color} p-4 rounded-full mb-3 group-hover:scale-110 transition-transform`}>
-                    <Icon className="h-6 w-6 text-white" />
-                  </div>
-                  <span className="text-sm font-medium text-gray-700 text-center">{cat.name}</span>
-                  <span className="text-xs text-gray-400 mt-1">{cat.count} produk</span>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Flash Sale Section ──────────────────────────────────────────────*/}
-      <section className="py-16 bg-gradient-to-r from-red-500 to-pink-500">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-            <div className="flex items-center gap-4">
-              <div className="bg-white/20 p-3 rounded-full">
-                <Zap className="h-8 w-8 text-white" />
+            {/* Quick Stats */}
+            <div className="flex flex-wrap gap-8 mt-10 pt-8 border-t border-primary-foreground/20">
+              <div>
+                <p className="text-2xl font-bold">4</p>
+                <p className="text-xs text-primary-foreground/70 mt-0.5">User Roles</p>
               </div>
               <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-white">Flash Sale</h2>
-                <p className="text-white/80">Jangan lewatkan diskon spesial ini!</p>
+                <p className="text-2xl font-bold">1</p>
+                <p className="text-xs text-primary-foreground/70 mt-0.5">Ekosistem</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold">24/7</p>
+                <p className="text-xs text-primary-foreground/70 mt-0.5">Support</p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="text-white">
-                <p className="text-sm mb-1">Berakhir dalam:</p>
-                <CountdownTimer endTime="2024-01-31T23:59:59" />
-              </div>
-              <Link to="/flash-sale">
-                <Button className="bg-white text-red-500 hover:bg-gray-100 px-6">
-                  Lihat Semua
-                </Button>
-              </Link>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {flashSaleProducts.map(product => (
-              <ProductCard key={product.id} product={product} variant="flash" />
-            ))}
           </div>
         </div>
       </section>
 
-      {/* ─── Featured Products Grid ──────────────────────────────────────────*/}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
+    
+
+      {/* ─── Featured Products ─────────────────────────────────────────────── */}
+      <section className="bg-surface-container-low">
+        <div className="max-w-[1280px] mx-auto px-6 md:px-[24px] py-12">
+          <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Produk Unggulan</h2>
-              <p className="text-gray-500 mt-1">Pilihan terbaik untuk Anda</p>
+              <h2 className="text-xl md:text-2xl font-bold text-foreground">Produk Unggulan</h2>
+              <p className="text-sm text-muted-foreground mt-1">Produk terbaru dari toko terpercaya</p>
             </div>
-            <Link to="/products" className="flex items-center gap-1 text-[#0066FF] hover:underline font-medium">
+            <Link
+              to="/products"
+              className="flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
+            >
               Lihat Semua <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+          {productsLoading ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              {[...Array(8)].map((_, i) => (
+                <ProductCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : productsError ? (
+            <div className="bg-card border border-border p-8 rounded-sm text-center">
+              <Package className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
+              <p className="text-sm text-muted-foreground">{productsError}</p>
+            </div>
+          ) : products.length === 0 ? (
+            <div className="bg-card border border-border p-8 rounded-sm text-center">
+              <Package className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
+              <h3 className="font-semibold text-foreground mb-1">Belum Ada Produk</h3>
+              <p className="text-sm text-muted-foreground">Produk akan muncul setelah seller menambahkan produk.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ─── Multi-Role System ─────────────────────────────────────────────── */}
+      <section className="bg-background">
+        <div className="max-w-[1280px] mx-auto px-6 md:px-[24px] py-12">
+          <div className="text-center mb-8">
+            <h2 className="text-xl md:text-2xl font-bold text-foreground">Satu Platform, Banyak Peran</h2>
+            <p className="text-sm text-muted-foreground mt-2 max-w-xl mx-auto">
+              SEAPEDIA menyatukan seluruh partisipan commerce dalam ekosistem terintegrasi
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            {roleFeatures.map((role, idx) => {
+              const Icon = role.icon;
+              return (
+                <div
+                  key={idx}
+                  className="bg-card border border-border rounded-sm p-6"
+                >
+                  <div className={`w-12 h-12 ${role.bg} flex items-center justify-center rounded-sm mb-4`}>
+                    <Icon className={`h-6 w-6 ${role.color}`} />
+                  </div>
+                  <h3 className="font-bold text-foreground mb-2">{role.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{role.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+          <div className="text-center mt-8">
+            <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-sm">
+              <Link to="/register">
+                Bergabung Sekarang <ArrowRight className="h-4 w-4 ml-2" />
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* ─── Why Choose Us ─────────────────────────────────────────────────────*/}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">Mengapa Memilih Kami?</h2>
-            <p className="text-gray-500 max-w-2xl mx-auto">Kami berkomitmen memberikan pengalaman belanja online terbaik dengan berbagai keunggulan</p>
+      {/* ─── Marketplace Advantages ────────────────────────────────────────── */}
+      <section className="bg-surface-container-low">
+        <div className="max-w-[1280px] mx-auto px-6 md:px-[24px] py-12">
+          <div className="text-center mb-8">
+            <h2 className="text-xl md:text-2xl font-bold text-foreground">Keunggulan Platform</h2>
+            <p className="text-sm text-muted-foreground mt-2 max-w-xl mx-auto">
+              Dirancang untuk pengalaman commerce yang profesional dan terpercaya
+            </p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {whyChooseUs.map((item, index) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            {advantages.map((item, idx) => {
               const Icon = item.icon;
               return (
-                <div 
-                  key={index}
-                  className="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#0066FF]/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="relative">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#0066FF] to-cyan-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                      <Icon className="h-7 w-7 text-white" />
-                    </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">{item.title}</h3>
-                    <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
-                  </div>
+                <div key={idx} className="bg-card border border-border rounded-sm p-5">
+                  <Icon className="h-6 w-6 text-primary mb-3" />
+                  <h3 className="font-semibold text-foreground text-sm mb-1">{item.title}</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
                 </div>
               );
             })}
@@ -624,189 +548,73 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── Testimonials Section ────────────────────────────────────────────*/}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">Apa Kata Mereka?</h2>
-            <p className="text-gray-500 max-w-2xl mx-auto">Testimoni dari pengguna yang telah merasakan kemudahan berbelanja di SEAPEDIA</p>
+      {/* ─── Reviews / Testimonials ────────────────────────────────────────── */}
+      <section className="bg-background">
+        <div className="max-w-[1280px] mx-auto px-6 md:px-[24px] py-12">
+          <div className="mb-6">
+            <h2 className="text-xl md:text-2xl font-bold text-foreground">Testimoni Pengguna</h2>
+            <p className="text-sm text-muted-foreground mt-1">Apa kata mereka tentang SEAPEDIA</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {testimonials.map((testimonial) => (
-              <div 
-                key={testimonial.id}
-                className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <img 
-                    src={testimonial.avatar} 
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div>
-                    <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
-                    <span className="text-xs text-[#0066FF] bg-[#0066FF]/10 px-2 py-0.5 rounded-full">
-                      {testimonial.role}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex gap-0.5 mb-3">
-                  {[...Array(5)].map((_, i) => (
-                    <Star 
-                      key={i} 
-                      className={`h-4 w-4 ${i < testimonial.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-                    />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Review Form */}
+            <div className="lg:col-span-1">
+              <ReviewForm onSubmitSuccess={fetchReviews} />
+            </div>
+
+            {/* Review List */}
+            <div className="lg:col-span-2">
+              {reviewsLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {[...Array(4)].map((_, i) => (
+                    <ReviewCardSkeleton key={i} />
                   ))}
                 </div>
-                <p className="text-gray-600 text-sm leading-relaxed line-clamp-4">
-                  "{testimonial.review}"
-                </p>
-              </div>
-            ))}
+              ) : reviews.length === 0 ? (
+                <div className="bg-card border border-border p-8 rounded-sm text-center">
+                  <Users className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
+                  <h3 className="font-semibold text-foreground mb-1">Belum Ada Testimoni</h3>
+                  <p className="text-sm text-muted-foreground">Jadilah yang pertama memberikan review!</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {reviews.map((review) => (
+                    <ReviewCard key={review.id} review={review} />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ─── Newsletter CTA ────────────────────────────────────────────────────*/}
-      <section className="py-16 bg-gradient-to-r from-[#0066FF] to-cyan-500">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center text-white">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Berlangganan Newsletter Kami</h2>
-            <p className="text-lg text-white/90 mb-8">
-              Dapatkan info terbaru tentang produk, promo, dan diskon eksklusif langsung ke inbox Anda
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Masukkan email Anda..."
-                className="flex-1 px-6 py-4 rounded-full text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-white/30"
-              />
-              <Button className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-4 rounded-full font-semibold transition-all hover:scale-105">
-                Subscribe
-              </Button>
-            </div>
-            <p className="text-sm text-white/70 mt-4">
-              Gratis berlangganan • Bisa berhenti kapan saja • Tidak ada spam
-            </p>
+      {/* ─── CTA Section ───────────────────────────────────────────────────── */}
+      <section className="relative bg-[#003f87] text-white overflow-hidden">
+        <div 
+          className="absolute inset-0 z-0 opacity-20"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        <div className="relative z-10 max-w-[1280px] mx-auto px-6 md:px-[24px] py-16 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold mb-3">
+            Mulai Berjualan atau Belanja di SEAPEDIA
+          </h2>
+          <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
+            Daftar gratis dan nikmati ekosistem commerce terpadu dengan pembayaran wallet, pengiriman terintegrasi, dan dashboard profesional.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button asChild className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 rounded-sm h-11 px-8 font-semibold">
+              <Link to="/register">Daftar Sekarang</Link>
+            </Button>
+            <Button asChild variant="outline" className="bg-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 rounded-sm h-11 px-8 font-semibold">
+              <Link to="/products">Jelajahi Produk</Link>
+            </Button>
           </div>
         </div>
       </section>
-
-      {/* ─── Footer ─────────────────────────────────────────────────────────────*/}
-      <footer className="bg-gray-900 text-white">
-        <div className="container mx-auto px-4 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Brand */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-[#0066FF] to-cyan-400 rounded-xl flex items-center justify-center">
-                  <ShoppingBag className="h-5 w-5 text-white" />
-                </div>
-                <span className="text-2xl font-bold">SEAPEDIA</span>
-              </div>
-              <p className="text-gray-400 text-sm mb-6 leading-relaxed">
-                Platform e-commerce terlengkap di Indonesia. Belanja mudah, aman, dan terpercaya dengan jutaan produk berkualitas.
-              </p>
-              <div className="flex gap-3">
-                {['facebook', 'twitter', 'instagram', 'youtube'].map((social) => (
-                  <a 
-                    key={social}
-                    href={`#${social}`}
-                    className="w-9 h-9 bg-gray-800 hover:bg-[#0066FF] rounded-lg flex items-center justify-center transition-colors"
-                  >
-                    <span className="text-xs font-bold uppercase">{social[0]}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Links */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Tautan Cepat</h3>
-              <ul className="space-y-3">
-                {['Tentang Kami', 'Karir', 'Kebijakan Privasi', 'Syarat & Ketentuan', 'Pusat Bantuan', 'Kontak Kami'].map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-gray-400 hover:text-[#0066FF] transition-colors text-sm">
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Categories */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Kategori Populer</h3>
-              <ul className="space-y-3">
-                {['Elektronik', 'Fashion Pria', 'Fashion Wanita', 'Kecantikan', 'Rumah Tangga', 'Olahraga'].map((cat) => (
-                  <li key={cat}>
-                    <a href="#" className="text-gray-400 hover:text-[#0066FF] transition-colors text-sm">
-                      {cat}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Contact */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Hubungi Kami</h3>
-              <ul className="space-y-4">
-                <li className="flex items-start gap-3">
-                  <MapPin className="h-5 w-5 text-[#0066FF] shrink-0 mt-0.5" />
-                  <span className="text-gray-400 text-sm">
-                    Jl. Sudirman No. 123, Jakarta Pusat, Indonesia 10220
-                  </span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="h-5 w-5 flex items-center justify-center shrink-0">
-                    <span className="text-[#0066FF] font-bold text-lg">@</span>
-                  </div>
-                  <span className="text-gray-400 text-sm">support@seapedia.id</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="h-5 w-5 flex items-center justify-center shrink-0">
-                    <span className="text-[#0066FF] font-bold text-sm">TEL</span>
-                  </div>
-                  <span className="text-gray-400 text-sm">+62 21 1234 5678</span>
-                </li>
-              </ul>
-
-              {/* Payment methods */}
-              <div className="mt-6">
-                <p className="text-sm font-medium mb-3">Metode Pembayaran:</p>
-                <div className="flex flex-wrap gap-2">
-                  {['BCA', 'Mandiri', 'BRI', 'BNI', 'OVO', 'Gopay', 'DANA', 'Visa'].map((payment) => (
-                    <span 
-                      key={payment}
-                      className="px-3 py-1 bg-gray-800 text-gray-400 text-xs rounded"
-                    >
-                      {payment}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom bar */}
-          <div className="border-t border-gray-800 mt-12 pt-8">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <p className="text-gray-500 text-sm text-center md:text-left">
-                © {new Date().getFullYear()} SEAPEDIA. All rights reserved. Platform E-Commerce Indonesia.
-              </p>
-              <div className="flex items-center gap-6">
-                <a href="#" className="text-gray-500 hover:text-[#0066FF] text-sm transition-colors">Privacy</a>
-                <a href="#" className="text-gray-500 hover:text-[#0066FF] text-sm transition-colors">Terms</a>
-                <a href="#" className="text-gray-500 hover:text-[#0066FF] text-sm transition-colors">Sitemap</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

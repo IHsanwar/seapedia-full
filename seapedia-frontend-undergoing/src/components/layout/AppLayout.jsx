@@ -28,10 +28,11 @@ import { Sidebar } from "./Sidebar";
 export function AppLayout({
   children,
   breadcrumbs,
-  userName = "John Doe",
-  userEmail = "john@example.com",
+  userName = "User",
+  userEmail = "Loading...",
   userAvatar,
   userRole = "admin",
+  roles = [],
   notificationCount = 0,
   onLogout,
   defaultSidebarCollapsed = false,
@@ -72,6 +73,7 @@ export function AppLayout({
         userRole={userRole}
         userName={userName}
         userAvatar={userAvatar}
+        roles={roles}
         className={cn(
           // Mobile sidebar handling
           isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
@@ -102,6 +104,7 @@ export function AppLayout({
           userEmail={userEmail}
           userAvatar={userAvatar}
           userRole={userRole}
+          roles={roles}
           notificationCount={notificationCount}
           onLogout={onLogout}
         />
