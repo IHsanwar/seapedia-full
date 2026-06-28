@@ -8,11 +8,13 @@ import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
 import { Store, Loader2, ArrowLeft } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'react-toastify';
 
 export default function StoreFormPage() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { fetchMe } = useAuth();
   const isEdit = pathname.includes('/edit');
 
   const [form, setForm] = useState({
@@ -90,6 +92,7 @@ export default function StoreFormPage() {
         await storeAPI.createStore(payload);
         toast.success('Toko berhasil dibuat!');
       }
+      await fetchMe();
       navigate('/seller/dashboard');
     } catch (err) {
       const res = err.response?.data;

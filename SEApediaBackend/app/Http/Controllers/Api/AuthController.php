@@ -39,7 +39,7 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token', ['role:buyer'])->plainTextToken;
 
         return $this->success([
-            'user' => new \App\Http\Resources\UserResource($user->load('roles', 'driver')),
+            'user' => new \App\Http\Resources\UserResource($user->load('roles', 'driver', 'store')),
             'access_token' => $token,
             'token_type' => 'Bearer',
         ], 'User registered successfully.', 201);
@@ -84,7 +84,7 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token', $abilities)->plainTextToken;
 
         return $this->success([
-            'user' => new \App\Http\Resources\UserResource($user->load('roles', 'driver')),
+            'user' => new \App\Http\Resources\UserResource($user->load('roles', 'driver', 'store')),
             'access_token' => $token,
             'token_type' => 'Bearer',
         ], 'Logged in successfully.');
@@ -102,7 +102,7 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         return $this->success(
-            new \App\Http\Resources\UserResource($request->user()->load('roles', 'driver')),
+            new \App\Http\Resources\UserResource($request->user()->load('roles', 'driver', 'store')),
             'Authenticated user data retrieved.'
         );
     }
@@ -131,7 +131,7 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token', ['role:' . $roleName])->plainTextToken;
 
         return $this->success([
-            'user' => new \App\Http\Resources\UserResource($user->load('roles', 'driver')),
+            'user' => new \App\Http\Resources\UserResource($user->load('roles', 'driver', 'store')),
             'access_token' => $token,
             'token_type' => 'Bearer',
         ], 'Role switched successfully.');
@@ -178,7 +178,7 @@ class AuthController extends Controller
                 $user->roles()->attach($role);
             }
             return $this->success([
-                'user'              => new \App\Http\Resources\UserResource($user->load('roles', 'driver')),
+                'user'              => new \App\Http\Resources\UserResource($user->load('roles', 'driver', 'store')),
                 'requires_profile'  => true,
                 'registration_url'  => '/driver/register',
             ], 'Driver role assigned. Please complete your driver registration with vehicle details.');
@@ -200,7 +200,7 @@ class AuthController extends Controller
         }
 
         return $this->success([
-            'user' => new \App\Http\Resources\UserResource($user->load('roles', 'driver')),
+            'user' => new \App\Http\Resources\UserResource($user->load('roles', 'driver', 'store')),
         ], 'Role registered successfully.');
     }
 }

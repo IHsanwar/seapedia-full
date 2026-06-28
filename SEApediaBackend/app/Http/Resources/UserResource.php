@@ -43,6 +43,7 @@ class UserResource extends JsonResource
             'roles'              => $this->whenLoaded('roles', fn () => $this->roles->pluck('name')->values()),
             // Flag untuk frontend: apakah user sudah terdaftar di tabel drivers
             'has_driver_profile' => $this->driver !== null,
+            'has_store'          => $this->store !== null,
             'created_at'         => $this->created_at?->toDateTimeString(),
             'updated_at'         => $this->updated_at?->toDateTimeString(),
         ];

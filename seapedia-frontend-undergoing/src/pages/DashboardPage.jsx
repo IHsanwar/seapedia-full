@@ -167,6 +167,13 @@ export default function DashboardPage() {
     }
   }, [role, user, navigate]);
 
+  // Redirect seller to store creation if they don't have a store yet
+  useEffect(() => {
+    if (role === 'seller' && user && user.has_store === false) {
+      navigate('/seller/store/create', { replace: true });
+    }
+  }, [role, user, navigate]);
+
   useEffect(() => {
     if (!activeRole || activeRole === 'none') return;
     if (role && role !== activeRole) return;
@@ -243,7 +250,6 @@ export default function DashboardPage() {
       
       // Driver memerlukan step tambahan: isi data kendaraan
       if (role === 'driver') {
-        // Coba switch ke driver role dulu (sudah di-attach oleh addRole)
         try {
           await switchRole('driver');
         } catch {
@@ -251,6 +257,18 @@ export default function DashboardPage() {
         }
         toast.success('Role driver berhasil ditambahkan! Silakan lengkapi data kendaraan.');
         navigate('/driver/register', { replace: true });
+        return;
+      }
+
+      // Seller memerlukan step tambahan: buat toko
+      if (role === 'seller') {
+        try {
+          await switchRole('seller');
+        } catch {
+          // Jika gagal, fetchMe sudah update state
+        }
+        toast.success('Role seller berhasil ditambahkan! Silakan buat toko terlebih dahulu.');
+        navigate('/seller/store/create', { replace: true });
         return;
       }
 
@@ -273,6 +291,11 @@ export default function DashboardPage() {
 
   // Jika user memiliki role driver tapi belum memiliki profil driver (kendaraan) → arahkan ke registrasi (di-handle oleh useEffect)
   if (role === 'driver' && user?.has_driver_profile === false) {
+    return null;
+  }
+
+  // Jika user memiliki role seller tapi belum memiliki toko → arahkan ke buat toko (di-handle oleh useEffect)
+  if (role === 'seller' && user?.has_store === false) {
     return null;
   }
 
@@ -449,6 +472,9 @@ export default function DashboardPage() {
                 <ShoppingCart className="h-4 w-4 mr-2" />
                 Keranjang Belanja
               </Button>
+
+              
+
               <Button
                 variant="outline"
                 className="flex-1 border-[#006b5f] text-[#006b5f] hover:bg-[#006b5f] hover:text-white rounded-sm"
@@ -554,6 +580,7 @@ export default function DashboardPage() {
             </div>
           )}
         </CardContent>
+        
       </Card>
 
       </div>

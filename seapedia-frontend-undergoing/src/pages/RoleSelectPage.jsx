@@ -62,6 +62,19 @@ export default function RoleSelectPage() {
     setIsSwitching(role);
     try {
       await switchRole(role);
+
+      if (role === 'seller' && user?.has_store === false) {
+        toast.success('Selamat datang sebagai Seller! Silakan buat toko terlebih dahulu.');
+        navigate('/seller/store/create');
+        return;
+      }
+
+      if (role === 'driver' && user?.has_driver_profile === false) {
+        toast.success('Selamat datang sebagai Driver! Silakan lengkapi data kendaraan.');
+        navigate('/driver/register');
+        return;
+      }
+
       toast.success(`Selamat datang sebagai ${ROLE_META[role]?.label ?? role}!`);
       navigate(`/${role}/dashboard`);
     } catch (err) {
@@ -76,9 +89,7 @@ export default function RoleSelectPage() {
       await authAPI.addRole(role);
       await fetchMe();
 
-      // Driver memerlukan langkah tambahan: isi data kendaraan
       if (role === 'driver') {
-        // Switch ke role driver dulu agar token memiliki ability role:driver
         try {
           await switchRole('driver');
         } catch {
@@ -86,6 +97,17 @@ export default function RoleSelectPage() {
         }
         toast.success('Role driver berhasil ditambahkan! Silakan lengkapi data kendaraan.');
         navigate('/driver/register');
+        return;
+      }
+
+      if (role === 'seller') {
+        try {
+          await switchRole('seller');
+        } catch {
+          // Jika switchRole gagal, fetchMe sudah cukup untuk update state
+        }
+        toast.success('Role seller berhasil ditambahkan! Silakan buat toko terlebih dahulu.');
+        navigate('/seller/store/create');
         return;
       }
 

@@ -263,30 +263,45 @@ export function Sidebar({
           {/* User Profile */}
           <div className="border-t border-slate-200 p-3">
             {isCollapsed ? (
-              <Tooltip delayDuration={0}>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-10 w-10 rounded-full"
-                  >
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={userAvatar} alt={userName} />
-                      <AvatarFallback className="bg-blue-600 text-white text-xs">
-                        {userName
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          .toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  <p className="font-medium">{userName}</p>
-                  <p className="text-xs text-slate-500 capitalize">{userRole}</p>
-                </TooltipContent>
-              </Tooltip>
+              <div className="flex flex-col items-center gap-2">
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-10 w-10 rounded-full"
+                    >
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={userAvatar} alt={userName} />
+                        <AvatarFallback className="bg-blue-600 text-white text-xs">
+                          {userName
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p className="font-medium">{userName}</p>
+                    <p className="text-xs text-slate-500 capitalize">{userRole}</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-slate-500 hover:text-blue-600"
+                      onClick={() => navigate('/select-role')}
+                    >
+                      <ArrowLeftRight className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Ganti Peran</TooltipContent>
+                </Tooltip>
+              </div>
             ) : (
               <div className="flex items-center gap-3">
                 <Avatar className="h-9 w-9">
@@ -307,6 +322,19 @@ export function Sidebar({
                     {userRole}
                   </p>
                 </div>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-slate-500 hover:text-blue-600"
+                      onClick={() => navigate('/select-role')}
+                    >
+                      <ArrowLeftRight className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Ganti Peran</TooltipContent>
+                </Tooltip>
                 <Tooltip delayDuration={0}>
                   <TooltipTrigger asChild>
                     <Button
