@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { authAPI } from '../api/auth';
-import { walletAPI } from '../api/wallet';
-import { addressAPI } from '../api/address';
 import {
   Card, CardContent, CardDescription, CardHeader, CardTitle,
 } from '../components/ui/card';
@@ -61,14 +59,14 @@ function BuyerCards({ financial, addressCount }) {
   );
 }
 
-function SellerCards({ financial }) {
+function SellerCards({ financial, sellerStats }) {
   return (
     <>
       <StatCard icon={TrendingUp} label="Pendapatan Seller"
         value={`Rp ${(financial?.seller_income ?? 0).toLocaleString('id-ID')}`}
         colorClass="text-[#006b5f]" bgClass="bg-[#e0f2ef]" />
-      <StatCard icon={Package} label="Total Produk" value="—" colorClass="text-[#006b5f]" bgClass="bg-[#e0f2ef]" comingSoon />
-      <StatCard icon={ShoppingBag} label="Pesanan Masuk" value="—" colorClass="text-[#006b5f]" bgClass="bg-[#e0f2ef]" comingSoon />
+      <StatCard icon={Package} label="Total Produk" value={sellerStats?.total_products ?? 0} colorClass="text-[#006b5f]" bgClass="bg-[#e0f2ef]" />
+      <StatCard icon={ShoppingBag} label="Pesanan Masuk" value={sellerStats?.pending_orders ?? 0} colorClass="text-[#006b5f]" bgClass="bg-[#e0f2ef]" />
     </>
   );
 }
@@ -185,15 +183,16 @@ export default function DashboardPage() {
 
     authAPI.getDashboard({ signal })
       .then((res) => {
-        // Backend: { success, message, data: { user, financial_summaries, driver_stats } }
-        // res dari axios = HTTP response object, res.data = body JSON
-        // Maka data ada di res.data.data (nested karena ApiResponse wrapper)
         const data = res?.data?.data ?? res?.data ?? res;
         if (data && typeof data === 'object') {
           setDashboard({
             financial_summaries: data.financial_summaries ?? null,
-            driver_stats: data.driver_stats ?? null
+            driver_stats: data.driver_stats ?? null,
+            seller_stats: data.seller_stats ?? null,
           });
+          if (typeof data.address_count === 'number') {
+            setAddressCount(data.address_count);
+          }
         } else {
           setDashboard(null);
         }
@@ -209,20 +208,6 @@ export default function DashboardPage() {
           setLoadingDash(false);
         }
       });
-
-    if (activeRole === 'buyer') {
-      addressAPI.getAddresses({ signal })
-        .then((res) => {
-          const addresses = res?.data ?? [];
-          setAddressCount(Array.isArray(addresses) ? addresses.length : 0);
-        })
-        .catch((err) => {
-          if (err.name !== 'AbortError') {
-            toast.error(err.response?.data?.message || 'Gagal memuat alamat');
-            setAddressCount(0);
-          }
-        });
-    }
 
     return () => {
       abortController.abort();
@@ -390,7 +375,7 @@ export default function DashboardPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           {activeRole === 'buyer'  && <BuyerCards  financial={financialData} addressCount={addressCount} />}
-          {activeRole === 'seller' && <SellerCards financial={financialData} />}
+          {activeRole === 'seller' && <SellerCards financial={financialData} sellerStats={dashboard?.seller_stats} />}
           {activeRole === 'driver' && <DriverCards financial={financial_summaries} driverStats={driver_stats} />}
           {activeRole === 'admin'  && <AdminCards />}
           {(!activeRole || activeRole === 'none') && (

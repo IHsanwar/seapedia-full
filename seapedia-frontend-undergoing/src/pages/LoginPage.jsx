@@ -49,7 +49,8 @@ export default function LoginPage() {
     try {
       const res = await login({
         login: data.login,
-        password: data.password
+        password: data.password,
+        rememberMe: data.rememberMe,   // ← diteruskan ke AuthContext
       });
       
       toast.success('Login berhasil! Selamat datang kembali.');

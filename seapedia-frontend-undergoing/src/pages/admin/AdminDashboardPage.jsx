@@ -73,7 +73,7 @@ export default function AdminDashboardPage() {
       icon: Users,
       color: 'text-[#003f87]',
       bg: 'bg-[#003f87]/10',
-      link: '/admin/users',
+      link: null,
     },
     {
       title: 'Total Stores',

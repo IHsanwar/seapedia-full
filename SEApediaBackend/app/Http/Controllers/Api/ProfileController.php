@@ -30,7 +30,7 @@ class ProfileController extends Controller
      */
     public function dashboard(Request $request)
     {
-        $user = $request->user()->load(['roles', 'driver', 'wallet']);
+        $user = $request->user()->load(['roles', 'driver', 'wallet', 'store', 'addresses']);
         
         $activeRole = null;
         if ($user->currentAccessToken()) {
@@ -64,9 +64,32 @@ class ProfileController extends Controller
             $driverStats = null;
         }
 
+        $sellerIncome = 0;
+        $sellerStats = null;
+
+        try {
+            if ($user->store) {
+                $sellerIncome = (float) $user->store->orders()
+                    ->where('status', 'Pesanan Selesai')
+                    ->sum('total');
+                $sellerStats = [
+                    'total_products' => $user->store->products()->count(),
+                    'total_orders' => $user->store->orders()->count(),
+                    'pending_orders' => $user->store->orders()
+                        ->whereIn('status', ['Menunggu Pembayaran', 'Sedang Dikemas'])
+                        ->count(),
+                ];
+            }
+        } catch (\Exception $e) {
+            $sellerIncome = 0;
+            $sellerStats = null;
+        }
+
+        $addressCount = $user->addresses()->count();
+
         $financialSummaries = [
             'wallet_balance' => $walletBalance,
-            'seller_income' => 0,
+            'seller_income' => $sellerIncome,
             'driver_earnings' => $driverEarnings,
         ];
 
@@ -75,10 +98,15 @@ class ProfileController extends Controller
             'active_role' => $activeRole,
             'owned_roles' => $ownedRoles,
             'financial_summaries' => $financialSummaries,
+            'address_count' => $addressCount,
         ];
 
         if ($driverStats) {
             $response['driver_stats'] = $driverStats;
+        }
+
+        if ($sellerStats) {
+            $response['seller_stats'] = $sellerStats;
         }
 
         return $this->success($response, 'Dashboard summary retrieved successfully.');
