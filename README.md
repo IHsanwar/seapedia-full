@@ -1,23 +1,6 @@
 <div align="center">
 
-# 🌊 SEAPEDIA
-
-### Modern Multi-Role Marine Marketplace
-
-A full-stack marketplace platform built with **Laravel 11**, **React**, and **MySQL** for the **SEAPEDIA Technical Challenge**.
-
-![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?logo=laravel&logoColor=white)
-![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
-![Vite](https://img.shields.io/badge/Vite-Frontend-646CFF?logo=vite)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4-06B6D4?logo=tailwindcss)
-![Sanctum](https://img.shields.io/badge/Auth-Sanctum-red)
-![Status](https://img.shields.io/badge/Status-Completed-success)
-
-</div>
-
----
-
-# 📖 Overview
+# Overview
 
 SEAPEDIA is a modern marketplace platform that simulates a complete e-commerce ecosystem for marine products and services.
 
