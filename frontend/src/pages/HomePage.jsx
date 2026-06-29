@@ -12,7 +12,8 @@ import {
   Truck, ShieldCheck, Users, Headphones, Package,
   Smartphone, Shirt, Home as HomeIcon, Sparkles,
   Dumbbell, Utensils, BookOpen, Car, Wrench, MoreHorizontal,
-  Bike, Shield, TrendingUp, Send, Loader2, MessageSquarePlus
+  Bike, Shield, TrendingUp, Send, Loader2, MessageSquarePlus,
+  Play
 } from 'lucide-react';
 
 const categories = [
@@ -548,6 +549,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      
+
       {/* ─── Reviews / Testimonials ────────────────────────────────────────── */}
       <section className="bg-background">
         <div className="max-w-[1280px] mx-auto px-6 md:px-[24px] py-12">
@@ -610,7 +613,7 @@ export default function HomePage() {
               <Link to="/register">Daftar Sekarang</Link>
             </Button>
             <Button asChild variant="outline" className="bg-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 rounded-sm h-11 px-8 font-semibold">
-              <Link to="/products">Jelajahi Produk</Link>
+              <Link to="/video-demo">Lihat Demo Aplikasi</Link>
             </Button>
           </div>
         </div>

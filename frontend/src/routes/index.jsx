@@ -66,7 +66,7 @@ export default function AppRoutes() {
         <Route path="/products" element={<ProductListPage />} />
         <Route path="/products/:productSlug" element={<ProductDetailPage />} />
         <Route path="/stores/:storeSlug" element={<StoreDetailPage />} />
-        
+        <Route path="/video-demo" element={<VideoDemoPage />} />
       </Route>
 
       {/* Protected Routes with Dashboard Layout (Sidebar) */}

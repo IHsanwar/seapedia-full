@@ -13,6 +13,16 @@ Unlike a traditional online store, SEAPEDIA supports multiple actors within one 
 The platform implements a complete transaction lifecycle—from product browsing, shopping cart, checkout, seller processing, delivery assignment, until administrative monitoring and overdue handling.
 
 ---
+# Live Demo
+
+## Frontend
+Deployed with vercel
+https://seapedia.ihsanwardhana.web.id/
+
+## Backend API
+https://seapedia.ciphera.my.id/
+
+---
 
 #  Features
 
@@ -206,6 +216,14 @@ php artisan migrate --seed
 php artisan serve
 ```
 
+### Admin Account & Seed Data
+Running the seed command automatically generates demo accounts, including the **Admin** account:
+- **Email:** `admin@seapedia.com`
+- **Password:** `password`
+- **Role:** Admin
+
+For a complete list of demo accounts for Sellers, Buyers, and Drivers, please refer to the `docs/SEEDER_GUIDE.md` or check `DatabaseSeeder.php`.
+
 ---
 
 ## Frontend
@@ -272,7 +290,5 @@ This project implements all major challenge levels including:
 <div align="center">
 
 **SEAPEDIA**
-
-Built with ❤️ using Laravel & React
 
 </div>
