@@ -1,8 +1,10 @@
 
 # Overview
 
-SEAPEDIA is a modern marketplace platform that simulates a complete e-commerce ecosystem for marine products and services.
 # CHECK /DOCS FOR MORE DOCUMENTATION INFORMATION
+
+
+SEAPEDIA is a modern marketplace platform that simulates a complete e-commerce ecosystem for marine products and services.
 Unlike a traditional online store, SEAPEDIA supports multiple actors within one integrated system:
 
 -  Buyer
