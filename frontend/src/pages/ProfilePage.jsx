@@ -7,22 +7,13 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
-import { Loader2, User, Mail, Phone, MapPin, Store as StoreIcon, ShoppingBag, Truck, Shield, ArrowLeft, Save, Eye }from 'lucide-react';
+import { Loader2, User, Mail, Phone, MapPin, Store as StoreIcon, ShoppingBag, Truck, Shield, ArrowLeft }from 'lucide-react';
 import { toast } from 'react-toastify';
 
 export default function ProfilePage() {
   const { isAuthenticated, activeRole } = useAuth();
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    username: '',
-    email: '',
-    phone: '',
-    avatar_url: '',
-  });
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -30,13 +21,6 @@ export default function ProfilePage() {
         const res = await authAPI.getMe();
         const userData = res.data?.user || res.data || res;
         setProfile(userData);
-        setFormData({
-          name: userData.name || '',
-          username: userData.username || '',
-          email: userData.email || '',
-          phone: userData.phone || '',
-          avatar_url: userData.avatar_url || '',
-        });
       } catch (err) {
         toast.error('Gagal memuat profil: ' + (err.response?.data?.message || err.message));
       } finally {
@@ -50,36 +34,6 @@ export default function ProfilePage() {
       setIsLoading(false);
     }
   }, [isAuthenticated]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSave = async () => {
-    setIsSaving(true);
-    try {
-      toast.info('Fitur pembaruan profil segera hadir!');
-      setIsEditing(false);
-    } catch (err) {
-      toast.error('Gagal memperbarui profil: ' + (err.response?.data?.message || err.message.message));
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const handleCancel = () => {
-    if (profile) {
-      setFormData({
-        name: profile.name || '',
-        username: profile.username || '',
-        email: profile.email || '',
-        phone: profile.phone || '',
-        avatar_url: profile.avatar_url || '',
-      });
-    }
-    setIsEditing(false);
-  };
 
   if (!isAuthenticated) {
     return (
@@ -118,61 +72,35 @@ export default function ProfilePage() {
         </Link>
 
         <div className="space-y-6">
-          {/* Profile Header */}
           <Card className="bg-white border border-border shadow-sm rounded-sm">
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 bg-gradient-to-br from-[#003f87]/20 to-[#003f87]/10 rounded-full overflow-hidden border-4 border-white shadow-lg flex items-center justify-center">
-                    {profile?.avatar_url ? (
-                      <img src={profile.avatar_url} alt={profile.name} className="object-cover w-full h-full" />
-                    ) : (
-                      <User className="h-10 w-10 text-[#003f87]" />
-                    )}
-                  </div>
-                  <div>
-                    <CardTitle className="text-2xl text-[#003f87]">{profile?.name || 'User'}</CardTitle>
-                    <CardDescription className="flex items-center gap-2 mt-1">
-                      <span>@{profile?.username || 'username'}</span>
-                      {activeRole && (
-                        <Badge variant="secondary" className="capitalize bg-[#003f87]/10 text-[#003f87]">
-                          {activeRole}
-                        </Badge>
-                      )}
-                    </CardDescription>
-                  </div>
+              <div className="flex items-center gap-4">
+                <div className="w-20 h-20 bg-gradient-to-br from-[#003f87]/20 to-[#003f87]/10 rounded-full overflow-hidden border-4 border-white shadow-lg flex items-center justify-center">
+                  {profile?.avatar_url ? (
+                    <img src={profile.avatar_url} alt={profile.name} className="object-cover w-full h-full" />
+                  ) : (
+                    <User className="h-10 w-10 text-[#003f87]" />
+                  )}
                 </div>
-                {!isEditing ? (
-                  <Button onClick={() => setIsEditing(true)} className="bg-[#003f87] hover:bg-[#002f65]">
-                    <Eye className="h-4 w-4 mr-2" />
-                    Edit Profil
-                  </Button>
-                ) : (
-                  <div className="flex gap-2">
-                    <Button variant="outline" onClick={handleCancel} disabled={isSaving} className="border-[#003f87] text-[#003f87]">
-                      Batal
-                    </Button>
-                    <Button onClick={handleSave} disabled={isSaving} className="bg-[#006b5f] hover:bg-[#005a50]">
-                      {isSaving ? (
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      ) : (
-                        <Save className="h-4 w-4 mr-2" />
-                      )}
-                      Simpan Perubahan
-                    </Button>
-                  </div>
-                )}
+                <div>
+                  <CardTitle className="text-2xl text-[#003f87]">{profile?.name || 'User'}</CardTitle>
+                  <CardDescription className="flex items-center gap-2 mt-1">
+                    <span>@{profile?.username || 'username'}</span>
+                    {activeRole && (
+                      <Badge variant="secondary" className="capitalize bg-[#003f87]/10 text-[#003f87]">
+                        {activeRole}
+                      </Badge>
+                    )}
+                  </CardDescription>
+                </div>
               </div>
             </CardHeader>
           </Card>
 
-          {/* Profile Information */}
           <Card className="bg-white border border-border shadow-sm rounded-sm">
             <CardHeader>
               <CardTitle className="text-[#003f87]">Informasi Profil</CardTitle>
-              <CardDescription>
-                {isEditing ? 'Perbarui informasi pribadi kamu' : 'Informasi pribadi kamu'}
-              </CardDescription>
+              <CardDescription>Informasi pribadi kamu</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -182,10 +110,8 @@ export default function ProfilePage() {
                     <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
+                      value={profile?.name || ''}
+                      disabled
                       className="pl-9 border-border bg-background rounded-sm"
                     />
                   </div>
@@ -197,10 +123,8 @@ export default function ProfilePage() {
                     <span className="absolute left-3 top-3 text-muted-foreground">@</span>
                     <Input
                       id="username"
-                      name="username"
-                      value={formData.username}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
+                      value={profile?.username || ''}
+                      disabled
                       className="pl-9 border-border bg-background rounded-sm"
                     />
                   </div>
@@ -212,11 +136,9 @@ export default function ProfilePage() {
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="email"
-                      name="email"
                       type="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
+                      value={profile?.email || ''}
+                      disabled
                       className="pl-9 border-border bg-background rounded-sm"
                     />
                   </div>
@@ -228,10 +150,8 @@ export default function ProfilePage() {
                     <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
+                      value={profile?.phone || ''}
+                      disabled
                       className="pl-9 border-border bg-background rounded-sm"
                     />
                   </div>
@@ -244,10 +164,8 @@ export default function ProfilePage() {
                   <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="avatar_url"
-                    name="avatar_url"
-                    value={formData.avatar_url}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
+                    value={profile?.avatar_url || ''}
+                    disabled
                     className="pl-9 border-border bg-background rounded-sm"
                     placeholder="https://example.com/avatar.jpg"
                   />
@@ -256,7 +174,6 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
 
-          {/* Roles Information */}
           <Card className="bg-white border border-border shadow-sm rounded-sm">
             <CardHeader>
               <CardTitle className="text-[#003f87]">Role Kamu</CardTitle>
