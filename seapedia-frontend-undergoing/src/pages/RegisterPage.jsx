@@ -15,6 +15,14 @@ import {
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import AuthSidebar from '../components/layout/AuthSidebar';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '../components/ui/dialog';
 
 // ─── Validation Schema ────────────────────────────────────────────────────────
 
@@ -41,6 +49,7 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const [showTermsModal, setShowTermsModal] = useState(false);
 
   const {
     register,
@@ -282,9 +291,21 @@ export default function RegisterPage() {
                   />
                   <Label htmlFor="acceptTerms" className="text-sm text-gray-600 cursor-pointer leading-relaxed">
                     Saya menyetujui{' '}
-                    <Link to="/terms" className="text-[#0066FF] hover:underline">Syarat dan Ketentuan</Link>
+                    <button
+                      type="button"
+                      onClick={() => setShowTermsModal(true)}
+                      className="text-[#0066FF] hover:underline bg-transparent border-none p-0 inline font-normal"
+                    >
+                      Syarat dan Ketentuan
+                    </button>
                     {' '}serta{' '}
-                    <Link to="/privacy" className="text-[#0066FF] hover:underline">Kebijakan Privasi</Link>
+                    <button
+                      type="button"
+                      onClick={() => setShowTermsModal(true)}
+                      className="text-[#0066FF] hover:underline bg-transparent border-none p-0 inline font-normal"
+                    >
+                      Kebijakan Privasi
+                    </button>
                     {' '}SEAPEDIA
                   </Label>
                 </div>
@@ -336,6 +357,33 @@ export default function RegisterPage() {
       </div>
     </div>
   </div>
+
+  {/* Modal Syarat & Ketentuan */}
+  <Dialog open={showTermsModal} onOpenChange={setShowTermsModal}>
+    <DialogContent className="sm:max-w-md">
+      <DialogHeader className="flex flex-col items-center text-center">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 mb-4">
+          <Shield className="h-6 w-6 text-blue-600" aria-hidden="true" />
+        </div>
+        <DialogTitle className="text-xl">Syarat & Ketentuan Simulasi</DialogTitle>
+      </DialogHeader>
+      <DialogDescription className="text-center text-base py-4 text-foreground/80 leading-relaxed">
+        Dengan mendaftar di <strong>SEAPEDIA</strong>, Anda memahami dan menyetujui bahwa:
+        <br /><br />
+        1. Platform ini sepenuhnya merupakan <strong>aplikasi demonstrasi / simulasi</strong>.
+        <br />
+        2. Tidak ada transaksi keuangan riil, pengiriman barang nyata, atau aktivitas komersial asli yang dilakukan di platform ini.
+        <br />
+        3. Seluruh data yang diisi (termasuk saldo dompet simulasi) bersifat fiktif dan hanya digunakan untuk keperluan pengujian dan demonstrasi sistem.
+      </DialogDescription>
+      <DialogFooter className="sm:justify-center">
+        <Button onClick={() => setShowTermsModal(false)} className="w-full sm:w-auto bg-[#0066FF] hover:bg-[#0052CC]">
+          Saya Mengerti & Setuju
+        </Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 </div>
 );
 }
+

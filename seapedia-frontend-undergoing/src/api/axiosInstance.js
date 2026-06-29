@@ -56,24 +56,32 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      const status = error.response.status;
+      const status   = error.response.status;
+      const url      = error.config?.url ?? '';
 
-      if (status === 401) {
-        // Token expired / invalid → sesi berakhir
+      // Endpoint autentikasi — 401/403 bukan berarti sesi expired,
+      // melainkan kredensial salah / akses ditolak oleh logika bisnis.
+      // Biarkan error mengalir ke catch block komponen agar bisa tampilkan
+      // pesan yang tepat (contoh: "Password salah").
+      const isAuthEndpoint = /\/auth\/(login|register|switch-role|add-role)/.test(url);
+
+      if (status === 401 && !isAuthEndpoint) {
+        // Token expired / dicabut → sesi sungguhan berakhir
         clearToken();
         window.dispatchEvent(
           new CustomEvent('auth-session-ended', {
             detail: { reason: 'expired' },
           })
         );
-      } else if (status === 403) {
-        // Akses ditolak — kemungkinan role berubah dari backend
+      } else if (status === 403 && !isAuthEndpoint) {
+        // Role / izin berubah dari backend
         window.dispatchEvent(
           new CustomEvent('auth-session-ended', {
             detail: { reason: 'forbidden' },
           })
         );
       }
+      // Untuk auth endpoint, tidak ada side-effect — error diteruskan biasa.
     }
     return Promise.reject(error);
   }
