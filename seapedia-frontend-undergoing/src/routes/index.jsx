@@ -21,6 +21,7 @@ import ProfilePage from '../pages/ProfilePage';
 import DashboardRedirect from '../components/DashboardRedirect';
 import LogoutPage from '../pages/LogoutPage';
 import NotFoundPage from '../pages/NotFoundPage';
+import UnauthorizedPage from '../pages/UnauthorizedPage';
 import VideoDemoPage from '../pages/VideoDemoPage';
 
 // Pages - Seller
@@ -138,6 +139,9 @@ export default function AppRoutes() {
           <Route path="/logout" element={<LogoutPage />} />
         </Route>
       </Route>
+
+      {/* 403 - Unauthorized / Akses Ditolak */}
+      <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
       {/* 404 - Not Found */}
       <Route path="*" element={<NotFoundPage />} />
