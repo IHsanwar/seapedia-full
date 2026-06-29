@@ -43,6 +43,13 @@ export default function VoucherManagementPage() {
       } else if (Array.isArray(response)) {
         vouchersData = response;
       }
+      
+      // Ensure is_active is boolean
+      vouchersData = vouchersData.map(v => ({
+        ...v,
+        is_active: v.is_active === 1 || v.is_active === '1' || v.is_active === true || v.is_active === 'true'
+      }));
+      
       setVouchers(vouchersData);
     } catch (error) {
       console.error('Error fetching vouchers:', error);
@@ -63,10 +70,15 @@ export default function VoucherManagementPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const payload = {
+        ...formData,
+        is_active: !!formData.is_active,
+      };
+
       if (editingVoucher) {
-        await adminVoucherAPI.updateVoucher(editingVoucher.id, formData);
+        await adminVoucherAPI.updateVoucher(editingVoucher.id, payload);
       } else {
-        await adminVoucherAPI.createVoucher(formData);
+        await adminVoucherAPI.createVoucher(payload);
       }
       setIsDialogOpen(false);
       resetForm();
@@ -128,12 +140,10 @@ export default function VoucherManagementPage() {
           <p className="text-muted-foreground">Create and manage global voucher codes</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger>
-            <Button onClick={() => { resetForm(); setIsDialogOpen(true); }} className="bg-[#0066FF] hover:bg-[#0052CC] text-white rounded-lg">
-              <Plus className="mr-2 h-4 w-4" />
-              Add Voucher
-            </Button>
-          </DialogTrigger>
+          <Button onClick={() => { resetForm(); setIsDialogOpen(true); }} className="bg-[#0066FF] hover:bg-[#0052CC] text-white rounded-lg">
+            <Plus className="mr-2 h-4 w-4" />
+            Add Voucher
+          </Button>
           <DialogContent className="rounded-lg max-w-lg">
             <DialogHeader>
               <DialogTitle className="text-[#0066FF]">{editingVoucher ? 'Edit Voucher' : 'Add New Voucher'}</DialogTitle>

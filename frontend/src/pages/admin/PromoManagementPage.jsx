@@ -32,7 +32,15 @@ export default function PromoManagementPage() {
     try {
       setLoading(true);
       const response = await promosAPI.getAllPromos();
-      setPromos(response.data?.data || response.data || []);
+      let promosData = response.data?.data || response.data || [];
+      if (!Array.isArray(promosData)) promosData = [];
+      
+      promosData = promosData.map(p => ({
+        ...p,
+        is_active: p.is_active === 1 || p.is_active === '1' || p.is_active === true || p.is_active === 'true'
+      }));
+      
+      setPromos(promosData);
     } catch (error) {
       console.error('Error fetching promos:', error);
     } finally {
@@ -122,12 +130,10 @@ export default function PromoManagementPage() {
           <p className="text-muted-foreground">Create and manage global promo codes</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={() => { resetForm(); setIsDialogOpen(true); }} className="bg-[#003f87] hover:bg-[#002f65] text-white rounded-sm">
-              <Plus className="mr-2 h-4 w-4" />
-              Add Promo
-            </Button>
-          </DialogTrigger>
+          <Button onClick={() => { resetForm(); setIsDialogOpen(true); }} className="bg-[#003f87] hover:bg-[#002f65] text-white rounded-sm">
+            <Plus className="mr-2 h-4 w-4" />
+            Add Promo
+          </Button>
           <DialogContent className="rounded-sm">
             <DialogHeader>
               <DialogTitle className="text-[#003f87]">{editingPromo ? 'Edit Promo' : 'Add New Promo'}</DialogTitle>

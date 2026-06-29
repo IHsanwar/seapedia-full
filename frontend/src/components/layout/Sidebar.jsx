@@ -167,38 +167,19 @@ export function Sidebar({
   ...props
 }) {
   const navigate = useNavigate();
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   // Get menu items based on user role
   const mainNavItems = React.useMemo(() => getMenuItemsByRole(userRole), [userRole]);
 
   return (
     <>
-      {/* Mobile menu button */}
-      <Button
-        variant="ghost"
-        size="icon"
-        className="fixed left-4 top-4 z-50 md:hidden"
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-      >
-        {mobileMenuOpen ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
-      </Button>
-
-      {/* Mobile overlay */}
-      {mobileMenuOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/50 md:hidden"
-          onClick={() => setMobileMenuOpen(false)}
-        />
-      )}
-
       {/* Sidebar */}
       <TooltipProvider delayDuration={0}>
         <aside
           className={cn(
             "fixed left-0 top-0 z-40 flex h-screen flex-col border-r bg-white transition-all duration-300 ease-in-out",
             isCollapsed ? "w-[72px]" : "w-64",
-            mobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
+            // For mobile, classes like -translate-x-full are passed via className prop from AppLayout
             className
           )}
           {...props}
