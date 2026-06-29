@@ -17,20 +17,4 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          // Mengelompokkan library-library besar ke dalam chunk terpisah
-          'react-vendor': ['react', 'react-dom'],
-          'router-vendor': ['react-router-dom', 'react-router'],
-          'ui-components': [
-            '@headlessui/react', 'lucide-react', '@tailwindcss/forms',
-            '@heroicons/react', 'clsx', 'tailwind-merge', 'framer-motion'
-          ],
-          'chartjs': ['chart.js', 'react-chartjs-2']
-        }
-      }
-    }
-  }
 })
