@@ -1,19 +1,33 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { authAPI } from '../api/auth';
+import { profileAPI } from '../api/profile';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
-import { Loader2, User, Mail, Phone, MapPin, Store as StoreIcon, ShoppingBag, Truck, Shield, ArrowLeft }from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../components/ui/dialog';
+import { Loader2, User, Mail, Phone, MapPin, Store as StoreIcon, ShoppingBag, Truck, Shield, ArrowLeft, Pencil, Trash2, Image } from 'lucide-react';
 import { toast } from 'react-toastify';
 
 export default function ProfilePage() {
-  const { isAuthenticated, activeRole } = useAuth();
+  const { isAuthenticated, activeRole, fetchMe, logout } = useAuth();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    username: '',
+    email: '',
+    phone: '',
+    avatar_url: '',
+  });
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -21,19 +35,83 @@ export default function ProfilePage() {
         const res = await authAPI.getMe();
         const userData = res.data?.user || res.data || res;
         setProfile(userData);
+        setFormData({
+          name: userData.name || '',
+          username: userData.username || '',
+          email: userData.email || '',
+          phone: userData.phone || '',
+          avatar_url: userData.avatar_url || '',
+        });
       } catch (err) {
         toast.error('Gagal memuat profil: ' + (err.response?.data?.message || err.message));
       } finally {
         setIsLoading(false);
       }
     };
-    
+
     if (isAuthenticated) {
       fetchProfile();
     } else {
       setIsLoading(false);
     }
   }, [isAuthenticated]);
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleEditToggle = () => {
+    if (isEditing) {
+      setFormData({
+        name: profile?.name || '',
+        username: profile?.username || '',
+        email: profile?.email || '',
+        phone: profile?.phone || '',
+        avatar_url: profile?.avatar_url || '',
+      });
+    }
+    setIsEditing((prev) => !prev);
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await profileAPI.updateProfile(formData);
+      await fetchMe();
+      const res = await authAPI.getMe();
+      const userData = res.data?.user || res.data || res;
+      setProfile(userData);
+      setFormData({
+        name: userData.name || '',
+        username: userData.username || '',
+        email: userData.email || '',
+        phone: userData.phone || '',
+        avatar_url: userData.avatar_url || '',
+      });
+      setIsEditing(false);
+      toast.success('Profil berhasil diperbarui!');
+    } catch (err) {
+      toast.error('Gagal memperbarui profil: ' + (err.response?.data?.message || err.message));
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    setIsDeleting(true);
+    try {
+      await profileAPI.deleteProfile();
+      toast.success('Akun berhasil dihapus.');
+      await logout();
+      navigate('/');
+    } catch (err) {
+      toast.error('Gagal menghapus akun: ' + (err.response?.data?.message || err.message));
+    } finally {
+      setIsDeleting(false);
+      setDeleteDialogOpen(false);
+    }
+  };
 
   if (!isAuthenticated) {
     return (
@@ -74,25 +152,40 @@ export default function ProfilePage() {
         <div className="space-y-6">
           <Card className="bg-white border border-border shadow-sm rounded-sm">
             <CardHeader>
-              <div className="flex items-center gap-4">
-                <div className="w-20 h-20 bg-gradient-to-br from-[#003f87]/20 to-[#003f87]/10 rounded-full overflow-hidden border-4 border-white shadow-lg flex items-center justify-center">
-                  {profile?.avatar_url ? (
-                    <img src={profile.avatar_url} alt={profile.name} className="object-cover w-full h-full" />
-                  ) : (
-                    <User className="h-10 w-10 text-[#003f87]" />
-                  )}
-                </div>
-                <div>
-                  <CardTitle className="text-2xl text-[#003f87]">{profile?.name || 'User'}</CardTitle>
-                  <CardDescription className="flex items-center gap-2 mt-1">
-                    <span>@{profile?.username || 'username'}</span>
-                    {activeRole && (
-                      <Badge variant="secondary" className="capitalize bg-[#003f87]/10 text-[#003f87]">
-                        {activeRole}
-                      </Badge>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-20 h-20 bg-gradient-to-br from-[#003f87]/20 to-[#003f87]/10 rounded-full overflow-hidden border-4 border-white shadow-lg flex items-center justify-center">
+                    {profile?.avatar_url ? (
+                      <img src={profile.avatar_url} alt={profile.name} className="object-cover w-full h-full" />
+                    ) : (
+                      <User className="h-10 w-10 text-[#003f87]" />
                     )}
-                  </CardDescription>
+                  </div>
+                  <div>
+                    <CardTitle className="text-2xl text-[#003f87]">{profile?.name || 'User'}</CardTitle>
+                    <CardDescription className="flex items-center gap-2 mt-1">
+                      <span>@{profile?.username || 'username'}</span>
+                      {activeRole && (
+                        <Badge variant="secondary" className="capitalize bg-[#003f87]/10 text-[#003f87]">
+                          {activeRole}
+                        </Badge>
+                      )}
+                    </CardDescription>
+                  </div>
                 </div>
+                <Button
+                  variant="outline"
+                  onClick={handleEditToggle}
+                  className="border-[#003f87] text-[#003f87] hover:bg-[#003f87]/10"
+                >
+                  {isEditing ? (
+                    'Batal'
+                  ) : (
+                    <>
+                      <Pencil className="h-4 w-4 mr-2" /> Edit Profil
+                    </>
+                  )}
+                </Button>
               </div>
             </CardHeader>
           </Card>
@@ -100,7 +193,7 @@ export default function ProfilePage() {
           <Card className="bg-white border border-border shadow-sm rounded-sm">
             <CardHeader>
               <CardTitle className="text-[#003f87]">Informasi Profil</CardTitle>
-              <CardDescription>Informasi pribadi kamu</CardDescription>
+              <CardDescription>{isEditing ? 'Edit informasi pribadi kamu' : 'Informasi pribadi kamu'}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -110,8 +203,9 @@ export default function ProfilePage() {
                     <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="name"
-                      value={profile?.name || ''}
-                      disabled
+                      value={isEditing ? formData.name : (profile?.name || '')}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
                       className="pl-9 border-border bg-background rounded-sm"
                     />
                   </div>
@@ -123,8 +217,9 @@ export default function ProfilePage() {
                     <span className="absolute left-3 top-3 text-muted-foreground">@</span>
                     <Input
                       id="username"
-                      value={profile?.username || ''}
-                      disabled
+                      value={isEditing ? formData.username : (profile?.username || '')}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
                       className="pl-9 border-border bg-background rounded-sm"
                     />
                   </div>
@@ -137,8 +232,9 @@ export default function ProfilePage() {
                     <Input
                       id="email"
                       type="email"
-                      value={profile?.email || ''}
-                      disabled
+                      value={isEditing ? formData.email : (profile?.email || '')}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
                       className="pl-9 border-border bg-background rounded-sm"
                     />
                   </div>
@@ -150,8 +246,9 @@ export default function ProfilePage() {
                     <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="phone"
-                      value={profile?.phone || ''}
-                      disabled
+                      value={isEditing ? formData.phone : (profile?.phone || '')}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
                       className="pl-9 border-border bg-background rounded-sm"
                     />
                   </div>
@@ -161,17 +258,42 @@ export default function ProfilePage() {
               <div className="space-y-2">
                 <Label htmlFor="avatar_url">URL Avatar</Label>
                 <div className="relative">
-                  <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Image className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="avatar_url"
-                    value={profile?.avatar_url || ''}
-                    disabled
+                    value={isEditing ? formData.avatar_url : (profile?.avatar_url || '')}
+                    onChange={handleInputChange}
+                    disabled={!isEditing}
                     className="pl-9 border-border bg-background rounded-sm"
                     placeholder="https://example.com/avatar.jpg"
                   />
                 </div>
               </div>
             </CardContent>
+            {isEditing && (
+              <CardFooter className="flex justify-end gap-3 border-t pt-6">
+                <Button
+                  variant="outline"
+                  onClick={handleEditToggle}
+                  disabled={isSaving}
+                >
+                  Batal
+                </Button>
+                <Button
+                  className="bg-[#003f87] hover:bg-[#002f65]"
+                  onClick={handleSave}
+                  disabled={isSaving}
+                >
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" /> Menyimpan...
+                    </>
+                  ) : (
+                    'Simpan Perubahan'
+                  )}
+                </Button>
+              </CardFooter>
+            )}
           </Card>
 
           <Card className="bg-white border border-border shadow-sm rounded-sm">
@@ -183,8 +305,8 @@ export default function ProfilePage() {
               <div className="flex flex-wrap gap-3">
                 {profile?.roles && profile.roles.length > 0 ? (
                   profile.roles.map((role) => (
-                    <Badge 
-                      key={role} 
+                    <Badge
+                      key={role}
                       variant={role === activeRole ? "default" : "outline"}
                       className={`text-sm py-2 px-4 ${role === activeRole ? 'bg-[#003f87] text-white' : 'border-[#003f87] text-[#003f87]'}`}
                     >
@@ -207,8 +329,62 @@ export default function ProfilePage() {
               )}
             </CardContent>
           </Card>
+
+          <Card className="bg-white border border-red-200 shadow-sm rounded-sm">
+            <CardHeader>
+              <CardTitle className="text-red-600">Zona Berbahaya</CardTitle>
+              <CardDescription>Tindakan berikut bersifat permanen dan tidak dapat dibatalkan.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-foreground">Hapus Akun</p>
+                  <p className="text-sm text-muted-foreground">Hapus akun kamu secara permanen beserta semua data yang terkait.</p>
+                </div>
+                <Button
+                  variant="destructive"
+                  onClick={() => setDeleteDialogOpen(true)}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" /> Hapus Akun
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
+
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent showCloseButton={!isDeleting}>
+          <DialogHeader>
+            <DialogTitle>Hapus Akun?</DialogTitle>
+            <DialogDescription>
+              Tindakan ini tidak dapat dibatalkan. Semua data kamu akan dihapus secara permanen, termasuk pesanan, dompet, dan informasi toko.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+              disabled={isDeleting}
+            >
+              Batal
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteAccount}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" /> Menghapus...
+                </>
+              ) : (
+                'Ya, Hapus Akun'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

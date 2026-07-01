@@ -5,9 +5,9 @@ use App\Http\Controllers\Api\AuthController;
 
 Route::prefix('v1/auth')->group(function () {
 
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/register', [AuthController::class, 'register'])->middleware('turnstile');
 
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login'])->middleware('turnstile');
 
     Route::middleware('auth:sanctum')->group(function () {
 

@@ -22,6 +22,7 @@ class LoginRequest extends FormRequest
         return [
             'login' => ['required'],
             'password' => ['required'],
+            'cf-turnstile-response' => ['required', 'string'],
         ];
     }
 
@@ -33,6 +34,7 @@ class LoginRequest extends FormRequest
         return [
             'login.required' => 'Username or email is required.',
             'password.required' => 'Password is required.',
+            'cf-turnstile-response.required' => 'Captcha verification is required.',
         ];
     }
 }

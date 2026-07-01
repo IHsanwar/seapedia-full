@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import AuthSidebar from '../components/layout/AuthSidebar';
+import { Turnstile } from '@marsidev/react-turnstile';
 
 // ─── Validation Schema ────────────────────────────────────────────────────────
 
@@ -29,6 +30,8 @@ export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState(null);
+  const turnstileRef = useRef(null);
 
   const {
     register,
@@ -44,13 +47,18 @@ export default function LoginPage() {
   });
 
   const rememberMe = watch('rememberMe');
-
+  const TURNSTILE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
   const onSubmit = async (data) => {
+    if (!turnstileToken) {
+      toast.error('Silakan selesaikan verifikasi captcha terlebih dahulu.');
+      return;
+    }
     try {
       const res = await login({
         login: data.login,
         password: data.password,
-        rememberMe: data.rememberMe,   // ← diteruskan ke AuthContext
+        rememberMe: data.rememberMe,
+        'cf-turnstile-response': turnstileToken,
       });
       
       toast.success('Login berhasil! Selamat datang kembali.');
@@ -63,6 +71,8 @@ export default function LoginPage() {
         navigate('/dashboard');
       }
     } catch (err) {
+      turnstileRef.current?.reset();
+      setTurnstileToken(null);
       toast.error(
         err.response?.data?.message || 
         'Login gagal. Periksa kembali username/email dan password Anda.'
@@ -70,7 +80,7 @@ export default function LoginPage() {
     }
   };
 
-  return (
+  return ( 
     <div className="fixed inset-0 bg-gray-50 flex">
       {/* Left Side */}
       <AuthSidebar quote="Platform e-commerce terbaik untuk berbelanja online di Indonesia." />
@@ -131,7 +141,16 @@ export default function LoginPage() {
                 </div>
                 {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
               </div>
-
+              {/* Turnstile captcha */}
+              <div className="mt-4">
+                <Turnstile
+                  ref={turnstileRef}
+                  siteKey={TURNSTILE_KEY}
+                  onSuccess={(token) => setTurnstileToken(token)}
+                  onError={() => setTurnstileToken(null)}
+                  onExpire={() => setTurnstileToken(null)}
+                />
+              </div>
               {/* Remember Me & Forgot Password */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">

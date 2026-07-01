@@ -11,4 +11,5 @@ Route::prefix('v1/profile')->middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard', [ProfileController::class, 'dashboard']);
     Route::get('/', [ProfileController::class, 'show']);
     Route::put('/', [ProfileController::class, 'update']);
+    Route::delete('/', [ProfileController::class, 'deleteAccount']);
 });

@@ -26,6 +26,7 @@ class RegisterRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:20'],
             'password' => ['required', 'string', 'min:8'],
             'password_confirmation' => ['required', 'string', 'min:8'],
+            'cf-turnstile-response' => ['required', 'string'],
         ];
     }
 

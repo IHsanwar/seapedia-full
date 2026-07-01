@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import AuthSidebar from '../components/layout/AuthSidebar';
+import { Turnstile } from '@marsidev/react-turnstile';
 import {
   Dialog,
   DialogContent,
@@ -50,6 +51,8 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [showTermsModal, setShowTermsModal] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState(null);
+  const turnstileRef = useRef(null);
 
   const {
     register,
@@ -72,8 +75,13 @@ export default function RegisterPage() {
   });
 
   const password = watch('password');
+  const TURNSTILE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
   const onSubmit = async (data) => {
+    if (!turnstileToken) {
+      toast.error('Silakan selesaikan verifikasi captcha terlebih dahulu.');
+      return;
+    }
     try {
       const res = await authRegister({
         name: data.name,
@@ -81,7 +89,8 @@ export default function RegisterPage() {
         email: data.email,
         phone: data.phone,
         password: data.password,
-        password_confirmation: data.confirmPassword
+        password_confirmation: data.confirmPassword,
+        'cf-turnstile-response': turnstileToken
       });
       
       toast.success('Akun berhasil dibuat! Selamat datang di SEAPEDIA.');
@@ -94,6 +103,8 @@ export default function RegisterPage() {
         navigate('/dashboard');
       }
     } catch (err) {
+      turnstileRef.current?.reset();
+      setTurnstileToken(null);
       const msg = err.response?.data?.message;
       const firstError = err.response?.data?.errors
         ? Object.values(err.response.data.errors)[0]?.[0]
@@ -280,7 +291,18 @@ export default function RegisterPage() {
                     {errors.confirmPassword && <p className="text-red-500 text-xs">{errors.confirmPassword.message}</p>}
                   </div>
 
-              {/* Terms & Conditions */}
+                  {/* Turnstile captcha */}
+                  <div className="mt-2">
+                    <Turnstile
+                      ref={turnstileRef}
+                      siteKey={TURNSTILE_KEY}
+                      onSuccess={(token) => setTurnstileToken(token)}
+                      onError={() => setTurnstileToken(null)}
+                      onExpire={() => setTurnstileToken(null)}
+                    />
+                  </div>
+
+               {/* Terms & Conditions */}
               <div className="space-y-2">
                 <div className="flex items-start gap-3">
                   <Checkbox

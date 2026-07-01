@@ -149,4 +149,12 @@ class ProfileController extends Controller
             'user' => new UserResource($user->fresh()->load('roles', 'driver')),
         ], 'Profile updated successfully.');
     }
+    public function deleteAccount(Request $request)
+    {
+        $user = $request->user();
+
+        $user->delete();
+        
+        return $this->success(null, 'Account deleted successfully.');
+    }
 }
